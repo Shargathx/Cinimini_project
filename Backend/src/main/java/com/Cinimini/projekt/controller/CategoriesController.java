@@ -17,7 +17,6 @@ public class CategoriesController {
     @Autowired
     CategoryInterface categoryInterface;
 
-
     @GetMapping("/categories/active")
     private List<Category> findAll() {
         List<Category> categories = categoryInterface.findAll();
