@@ -4,6 +4,7 @@ package com.Cinimini.projekt.controller;
 import com.Cinimini.projekt.entity.Category;
 import com.Cinimini.projekt.repository.CategoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +17,7 @@ public class CategoriesController {
     @Autowired
     CategoryInterface categoryInterface;
 
+
     @GetMapping("/categories/active")
     private List<Category> findAll() {
         List<Category> categories = categoryInterface.findAll();
@@ -26,6 +28,5 @@ public class CategoriesController {
             }
         }
         return active_categories;
-
     }
 }
