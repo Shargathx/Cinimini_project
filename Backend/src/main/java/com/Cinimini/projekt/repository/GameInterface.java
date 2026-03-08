@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface GameInterface extends JpaRepository<Game, Long> {
 
-    List<Game> findAllByactiveTrue();
+    List<Game> findAllByActiveTrue();
 }

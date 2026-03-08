@@ -19,6 +19,7 @@ public class Game {
     private String name;
     private int categoryId;
     private String description;
-    private boolean is_active;
+    @Column(name = "is_active")
+    private boolean active;
 
 }

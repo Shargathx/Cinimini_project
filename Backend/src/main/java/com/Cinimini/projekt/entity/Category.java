@@ -18,6 +18,7 @@ public class Category {
     private int id;
     private String name;
     private String description;
-    private boolean is_active;
+    @Column(name = "is_active")
+    private boolean active;
 
 }
