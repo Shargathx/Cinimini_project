@@ -19,5 +19,4 @@ public class GameController {
         return gameService.getAllActive();
     }
 
-
 }
