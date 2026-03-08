@@ -3,8 +3,10 @@ package com.Cinimini.projekt.service;
 import com.Cinimini.projekt.entity.Category;
 import com.Cinimini.projekt.entity.Game;
 import com.Cinimini.projekt.repository.CategoryInterface;
+import com.Cinimini.projekt.repository.GameInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,9 @@ public class GameService {
 
     @Autowired
     CategoryInterface categoryInterface;
+
+    @Autowired
+    GameInterface gameInterface;
 
     private void gameValidator(Game game){
         List<Long> catIds = new ArrayList<>();
@@ -26,7 +31,11 @@ public class GameService {
         if(!catIds.contains(game.getId())){
             throw new RuntimeException("Category id does not exist");
         }
+    }
 
 
+    @GetMapping("/games/active")
+    public List<Game> findAll(){
+        return gameInterface.findAllByactiveTrue();
     }
 }
