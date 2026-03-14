@@ -6,21 +6,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Entity
-@Table(name = "game")
+@Table(name = "media")
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Game {
+public class MediaElement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private int categoryId;
-    private String description;
-    @Column(name = "is_active")
-    private boolean active;
+    @Column(name = "media_type")
+    private String mediaType;
+
+    @Column(name = "file_url")
+    private String fileUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "game_step_id")
+    private GameStep gameStep;
 
 }

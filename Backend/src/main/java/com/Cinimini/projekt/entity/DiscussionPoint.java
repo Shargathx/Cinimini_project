@@ -6,21 +6,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Entity
-@Table(name = "game")
+@Table(name = "discussion_point")
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Game {
+public class DiscussionPoint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private int categoryId;
-    private String description;
-    @Column(name = "is_active")
-    private boolean active;
+    private String discussionText;
+    private Boolean isActive;
+    private Integer discussionOrder;
 
+    @ManyToOne
+    @JoinColumn(name = "game_step_id")
+    GameStep gameStep;
 }

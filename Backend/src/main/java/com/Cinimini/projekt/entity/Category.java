@@ -20,5 +20,4 @@ public class Category {
     private String description;
     @Column(name = "is_active")
     private boolean active;
-
 }

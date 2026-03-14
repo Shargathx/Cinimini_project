@@ -3,7 +3,6 @@ package com.Cinimini.projekt.controller;
 import com.Cinimini.projekt.entity.Category;
 import com.Cinimini.projekt.service.CategoryService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
