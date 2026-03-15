@@ -1,5 +1,6 @@
 package com.Cinimini.projekt.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,17 +14,21 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MediaElement {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "media_type")
-    private String mediaType;
 
-    @Column(name = "file_url")
-    private String fileUrl;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "game_step_id")
     private GameStep gameStep;
 
+    private String mediaType;
+
+    private String fileName;
+
+    @Lob
+    @Column(name = "file_data")
+    private byte[] fileData;
 }

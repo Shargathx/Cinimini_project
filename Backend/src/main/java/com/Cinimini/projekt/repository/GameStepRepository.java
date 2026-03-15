@@ -9,4 +9,6 @@ import java.util.List;
 public interface GameStepRepository extends JpaRepository<GameStep, Long> {
     @EntityGraph(attributePaths = {"discussionPoints", "mediaElements"})
     List<GameStep> findAll();
+
+    List<GameStep> findAllById(Long gameId);
 }

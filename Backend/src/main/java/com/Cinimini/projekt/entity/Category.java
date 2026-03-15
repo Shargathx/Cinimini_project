@@ -19,5 +19,5 @@ public class Category {
     private String name;
     private String description;
     @Column(name = "is_active")
-    private boolean active;
+    private Boolean active;
 }

@@ -30,4 +30,7 @@ public class GameStep {
 
     @OneToMany(mappedBy = "gameStep")
     private List<MediaElement> mediaElements;
+
+    @OneToMany(mappedBy = "gameStep")
+    private List<Question> questions;
 }

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface DiscussionPointRepository extends JpaRepository<DiscussionPoint, Long> {
     List<DiscussionPoint> findAllByGameStepIdAndIsActiveTrue(Long gameStepId);
+
 }

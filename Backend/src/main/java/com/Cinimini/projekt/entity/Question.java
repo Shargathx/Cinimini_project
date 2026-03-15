@@ -7,19 +7,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Table(name = "discussion_point")
-@Setter
 @Getter
-@NoArgsConstructor
+@Setter
 @AllArgsConstructor
-public class DiscussionPoint {
+@NoArgsConstructor
+@Entity
+public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String discussionText;
+
+    private String questionText;
+    @Column(name = "is_active")
     private Boolean isActive;
-    private Integer discussionOrder;
+    private Integer questionOrder;
 
     @JsonIgnore
     @ManyToOne
