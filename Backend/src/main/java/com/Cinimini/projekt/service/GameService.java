@@ -17,7 +17,8 @@ public class GameService {
     private final QuestionRepository questionRepository;
     GameRepository gameRepository;
 
-    public List<Game> getAllActive() {
+    public List<Game> getAllActiveGames() {
+        // TODO: get active games by categoryId
         return gameRepository.findAllByActiveTrue();
     }
 
@@ -36,7 +37,7 @@ public class GameService {
         for (GameStep step : allSteps) {
             List<DiscussionPoint> activeDiscussionPoints = discussionPointRepository.findAllByGameStepIdAndIsActiveTrue(step.getId());
             List<MediaElement> mediaElements = mediaRepository.findAllByGameStepId(step.getId());
-            List<Question> activeQuestions = questionRepository.getOrderedActiveQuestions(gameId);
+            List<Question> activeQuestions = questionRepository.getOrderedActiveQuestions(step.getId());
             step.setDiscussionPoints(activeDiscussionPoints);
             step.setQuestions(activeQuestions);
         }

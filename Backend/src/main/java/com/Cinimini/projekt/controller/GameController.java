@@ -18,7 +18,7 @@ public class GameController {
 
     @GetMapping("games")
     public List<Game> getActiveGames() {
-        return gameService.getAllActive();
+        return gameService.getAllActiveGames();
     }
 
     @GetMapping("games/{gameId}/steps")
