@@ -40,9 +40,9 @@ VALUES (default, 3, 1);
 INSERT INTO public.discussion_point (id, game_step_id, discussion_text, is_active, discussion_order)
 VALUES (default, 1, 'Küsi lastelt, mis emotsioone see pilt tekitab.', true, 1);
 INSERT INTO public.discussion_point (id, game_step_id, discussion_text, is_active, discussion_order)
-VALUES (default, 1, 'Teine küsimus.', true, 3);
+VALUES (default, 1, 'Kolmas küsimus.', true, 3);
 INSERT INTO public.discussion_point (id, game_step_id, discussion_text, is_active, discussion_order)
-VALUES (default, 1, 'Kolmas vestlus.', false, 2);
+VALUES (default, 1, 'Teine küsimus.', false, 2);
 
 
 INSERT INTO public.media (id, game_step_id, media_type, file_name)

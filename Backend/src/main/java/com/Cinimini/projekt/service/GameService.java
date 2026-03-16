@@ -1,10 +1,13 @@
 package com.Cinimini.projekt.service;
 
+import com.Cinimini.projekt.controller.dto.GameStepDto;
+import com.Cinimini.projekt.controller.dto.*;
 import com.Cinimini.projekt.entity.*;
 import com.Cinimini.projekt.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -22,25 +25,68 @@ public class GameService {
         return gameRepository.findAllByActiveTrue();
     }
 
-    public List<GameStep> getActiveGameSteps(Long gameId) {
+    public GameDto getActiveGameSteps(Long gameId) {
+        Game game = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
         List<GameStep> allSteps = gameStepRepository.findAllById(gameId);
-
         if (allSteps.isEmpty()) {
             throw new RuntimeException("No active steps found for game: " + gameId);
         }
+        List<GameStepDto> gameStepDtos = new ArrayList<>();
 
-        // TODO: make DTOs of all objects that are being sent back and send back a DTO per for cycle
-        // TODO: order DiscussionPoints from lowest to highest
-        // TODO: order gameStep from lowest to highest (i think?)
-//        ArrayList<GameStep> responses = new ArrayList<>();
+        createAndMapDtos(allSteps, gameStepDtos);
 
+        GameDto gameDto = new GameDto();
+        gameDto.setGameId(game.getId());
+        gameDto.setName(game.getName());
+        gameDto.setCategoryId(game.getCategoryId());
+        gameDto.setDescription(game.getDescription());
+        gameDto.setGameSteps(gameStepDtos);
+        return gameDto;
+    }
+
+    private void createAndMapDtos(List<GameStep> allSteps, List<GameStepDto> gameStepDtos) {
         for (GameStep step : allSteps) {
-            List<DiscussionPoint> activeDiscussionPoints = discussionPointRepository.findAllByGameStepIdAndIsActiveTrue(step.getId());
-            List<MediaElement> mediaElements = mediaRepository.findAllByGameStepId(step.getId());
-            List<Question> activeQuestions = questionRepository.getOrderedActiveQuestions(step.getId());
-            step.setDiscussionPoints(activeDiscussionPoints);
-            step.setQuestions(activeQuestions);
+            List<DiscussionDto> discussionDtos = new ArrayList<>();
+            List<QuestionDto> questionDtos = new ArrayList<>();
+            ArrayList<MediaDto> mediaDtos = new ArrayList<>();
+
+            handleDiscussionDtoMapping(step, discussionDtos);
+            handleQuestionDtoMapping(step, questionDtos);
+            handleMediaElementDtoMapping(step, mediaDtos);
+
+            GameStepDto gameStepDto = new GameStepDto();
+            gameStepDto.setStepId(step.getId());
+            gameStepDto.setDiscussionPoints(discussionDtos);
+            gameStepDto.setQuestions(questionDtos);
+            gameStepDto.setMediaElements(mediaDtos);
+            gameStepDtos.add(gameStepDto);
         }
-        return allSteps;
+    }
+
+    private void handleDiscussionDtoMapping(GameStep step, List<DiscussionDto> discussionDtos) {
+        for (DiscussionPoint discussionPoint : discussionPointRepository.findAllByGameStepIdAndIsActiveTrue(step.getId())) {
+            DiscussionDto discussionDto = new DiscussionDto();
+            discussionDto.setId(discussionPoint.getId());
+            discussionDto.setDiscussionText(discussionPoint.getDiscussionText());
+            discussionDtos.add(discussionDto);
+        }
+    }
+
+    private void handleMediaElementDtoMapping(GameStep step, List<MediaDto> mediaDtos) {
+        for (MediaElement mediaElement : mediaRepository.findAllByGameStepId(step.getId())) {
+            MediaDto mediaDto = new MediaDto();
+            mediaDto.setId(mediaElement.getId());
+            mediaDto.setUrl(mediaElement.getMediaType());
+            mediaDtos.add(mediaDto);
+        }
+    }
+
+    private void handleQuestionDtoMapping(GameStep step, List<QuestionDto> questionDtos) {
+        for (Question question : questionRepository.findOrderedActiveQuestions(step.getId())) {
+            QuestionDto questionDto = new QuestionDto();
+            questionDto.setId(question.getId());
+            questionDto.setQuestionText(question.getQuestionText());
+            questionDtos.add(questionDto);
+        }
     }
 }

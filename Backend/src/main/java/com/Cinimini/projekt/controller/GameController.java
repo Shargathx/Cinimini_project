@@ -1,7 +1,7 @@
 package com.Cinimini.projekt.controller;
 
+import com.Cinimini.projekt.controller.dto.GameDto;
 import com.Cinimini.projekt.entity.Game;
-import com.Cinimini.projekt.entity.GameStep;
 import com.Cinimini.projekt.service.GameService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +22,7 @@ public class GameController {
     }
 
     @GetMapping("games/{gameId}/steps")
-    public List<GameStep> getActiveGameSteps(@PathVariable Long gameId) {
+    public GameDto getActiveGameSteps(@PathVariable Long gameId) {
         return gameService.getActiveGameSteps(gameId);
     }
 

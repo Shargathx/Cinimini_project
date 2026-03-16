@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query("SELECT question FROM Question question WHERE question.gameStep.id = :stepId AND question.isActive = true ORDER BY question.questionOrder ASC")
-    List<Question> getOrderedActiveQuestions(@Param("stepId") Long stepId);
+    List<Question> findOrderedActiveQuestions(@Param("stepId") Long stepId);
 }
