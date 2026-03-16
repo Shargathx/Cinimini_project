@@ -18,7 +18,7 @@ public class GameService {
     private final DiscussionPointRepository discussionPointRepository;
     private final MediaRepository mediaRepository;
     private final QuestionRepository questionRepository;
-    GameRepository gameRepository;
+    private final GameRepository gameRepository;
 
     public List<Game> getAllActiveGames() {
         // TODO: get active games by categoryId
