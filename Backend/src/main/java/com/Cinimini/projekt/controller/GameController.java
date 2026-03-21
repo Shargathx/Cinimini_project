@@ -1,6 +1,6 @@
 package com.Cinimini.projekt.controller;
 
-import com.Cinimini.projekt.controller.dto.GameDto;
+import com.Cinimini.projekt.dto.GameDto;
 import com.Cinimini.projekt.entity.Game;
 import com.Cinimini.projekt.service.GameService;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,8 @@ public class GameController {
     }
 
     @GetMapping("games/category/{catId}")
-    public List<Game> getActiveGamesByCategory(@PathVariable Long catId) {return gameService.getAllActiveGamesByCategory(catId);
+    public List<Game> getActiveGamesByCategory(@PathVariable Long catId) {
+        return gameService.getAllActiveGamesByCategory(catId);
     }
 
     @GetMapping("games/{gameId}/steps")

@@ -1,4 +1,4 @@
-package com.Cinimini.projekt.controller.dto;
+package com.Cinimini.projekt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class DiscussionDto {
+public class MediaDto {
     private Long id;
-    private String discussionText;
+    private String url;
 }

@@ -1,4 +1,4 @@
-package com.Cinimini.projekt.controller.dto;
+package com.Cinimini.projekt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
