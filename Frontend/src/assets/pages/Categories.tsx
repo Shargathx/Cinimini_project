@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Category } from "../models/Category";
+import { Link } from "react-router-dom";
 
 function Categories() {
     // renderdamine -> esmakordne komponendi pealetulek (nt uuele lehele minnes tehakse üldine lehe renderdus)
@@ -18,7 +19,9 @@ function Categories() {
         <div>
             {categories.map(category =>
                 <div key={category.id}>
-                    {category.id} - {category.name} - {category.description} - {category.active ? "Active" : "Inactive"}
+                    <Link to={`/categories/${category.id}`}>
+                        {category.id} - {category.name} - {category.description} - {category.active ? "Active" : "Inactive"}
+                    </Link>
                 </div>)}
         </div>
     )
