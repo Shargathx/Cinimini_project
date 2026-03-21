@@ -21,6 +21,10 @@ public class GameController {
         return gameService.getAllActiveGames();
     }
 
+    @GetMapping("games/category/{catId}")
+    public List<Game> getActiveGamesByCategory(@PathVariable Long catId) {return gameService.getAllActiveGamesByCategory(catId);
+    }
+
     @GetMapping("games/{gameId}/steps")
     public GameDto getActiveGameSteps(@PathVariable Long gameId) {
         return gameService.getActiveGameSteps(gameId);
