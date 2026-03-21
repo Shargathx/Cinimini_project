@@ -5,6 +5,8 @@ import com.Cinimini.projekt.controller.dto.*;
 import com.Cinimini.projekt.entity.*;
 import com.Cinimini.projekt.repository.*;
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,8 +26,8 @@ public class GameService {
         return gameRepository.findAllByActiveTrue();
     }
 
-    public List<Game> getAllByCategory(Long catId){
-        return gameRepository.findAllByCategoryId(Math.toIntExact(catId));
+    public List<Game> getAllActiveGamesByCategory(Long catId){
+        return gameRepository.getActiveGamesByCategory(catId);
     }
 
     public GameDto getActiveGameSteps(Long gameId) {
