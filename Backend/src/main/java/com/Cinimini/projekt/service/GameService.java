@@ -21,8 +21,11 @@ public class GameService {
     private final GameRepository gameRepository;
 
     public List<Game> getAllActiveGames() {
-        // TODO: get active games by categoryId
         return gameRepository.findAllByActiveTrue();
+    }
+
+    public List<Game> getAllByCategory(Long catId){
+        return gameRepository.findAllByCategoryId(Math.toIntExact(catId));
     }
 
     public GameDto getActiveGameSteps(Long gameId) {

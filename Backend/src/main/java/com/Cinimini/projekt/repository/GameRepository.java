@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface GameRepository extends JpaRepository<Game, Long> {
 
+    List<Game> findAllByCategoryId(int categoryId);
+
     List<Game> findAllByActiveTrue();
 }
