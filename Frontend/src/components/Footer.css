@@ -8,6 +8,9 @@
 
 .footer-left {
   text-align: left;
+  font-size: 12px;
+  column-count: 2;
+  column-gap: 3px;
 }
 
 .footer-right {
@@ -15,5 +18,5 @@
 }
 
 .footer-logo {
-  height: 40px;
+  height: 20px;
 }
