@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 
 public class DiscussionDto {
     private Long id;
+
     private String discussionText;
 }
