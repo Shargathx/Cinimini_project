@@ -1,7 +1,7 @@
 import type { GameStep } from "./GameStep";
 
 export interface Game {
-    gameId: number;
+    id: number;
     name: string;
     categoryId: number;
     description: string;
