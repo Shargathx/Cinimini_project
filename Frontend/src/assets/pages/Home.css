@@ -1,0 +1,32 @@
+.game-start-container {
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-transform: uppercase;
+}
+
+.game-logo {
+    width: 600px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+#gameStart{
+    background: none;
+    border: none;
+    padding: 20px;
+    cursor: pointer;
+
+}
+#gameStart:hover {
+    transform: scale(1.05);
+}
+
+#gameStart img {
+    display: block; 
+    width: 175px;
+    height: auto;
+}

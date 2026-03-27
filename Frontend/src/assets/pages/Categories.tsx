@@ -15,34 +15,31 @@ function Categories() {
     const [categories, setCategories] = useState<Category[]>([]);
     // uef -> enter
     useEffect(() => {
-        console.log("Backend URL:", import.meta.env.VITE_BACK_URL);
         fetch(import.meta.env.VITE_BACK_URL + "/categories")
             .then(res => res.json())
             .then(json => setCategories(json))
             .catch(err => console.error(err));
     }, []);
 
-        const borderColors = [
-        "rgba(124, 234, 255, 0.55)",
-        "rgba(220, 205, 244, 0.8)",
-        "rgba(145, 242, 190, 0.55)"
-        ];
 
     return (
         <div className="categories-container">
-            {categories.map((category, index) => (
+            {categories.map((category) => (
                 <div
                     key={category.id}
-                    className="category-card"
-                    style={{ border: `10px solid ${borderColors[index % borderColors.length]}` }}
+                    className= {"category-card" +
+                    (category.name === "Heli" ? " heli" : "") + 
+                    (category.name === "Pilt" ? " pilt" : "") +
+                    (category.name === "Video" ? " video" : "")
+                    }
                 >
                     <Link to={`/categories/${category.id}`} className="category-link">
-                        <div className="icon-wrapper">
+                        <div>
                             {category.name === "Heli" && <img src={soundIcon} alt="Heli" className="icon" />}
                             {category.name === "Pilt" && <img src={imageIcon} alt="Pilt" className="icon" />}
                             {category.name === "Video" && <img src={videoIcon} alt="Video" className="icon" />}
                         <div className="category-info">
-                            {category.name} 
+                            {category.name}
                         </div>
                         </div>
                     </Link>

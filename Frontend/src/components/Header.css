@@ -2,8 +2,7 @@
     background-color:rgb(217,217,217,0.2);
     border-radius: 10px;
     border-bottom: 7px solid rgb(58,58,58,0.03);
-    padding: 20px;
-    margin: 10px;
+    padding: 25px;
 }
 
 .nav {
@@ -15,7 +14,7 @@
 
 .home-page-link, .categories-link {
     background-color: aquamarine;
-    color:black;
+    color: var(--text-h);
     font-family: 'Sono', sans-serif;
     font-weight: bold;
     font-size: 24px;
@@ -26,12 +25,16 @@
 
 }
 
-.home-page-link:hover, .categories-link:hover {
-    background-color: rgb(37, 255, 182);
-    color: black;
-}
-
 .home-page-link{
     align-items: left;
     text-align: left;
 }
+.categories-link{
+    align-items: right;
+    text-align: right;
+}
+.home-page-link:hover, .categories-link:hover {
+    background-color: rgb(37, 255, 182);
+    color: var(--text);
+}
+
