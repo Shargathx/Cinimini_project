@@ -25,25 +25,24 @@ function Categories() {
     return (
         <div className="categories-container">
             {categories.map((category) => (
-                <div
+                <Link
                     key={category.id}
-                    className= {"category-card" +
-                    (category.name === "Heli" ? " heli" : "") + 
-                    (category.name === "Pilt" ? " pilt" : "") +
-                    (category.name === "Video" ? " video" : "")
+                    to={`/categories/${category.id}`}
+                    className={
+                        "category-card category-link" +
+                        (category.name === "Heli" ? " heli" : "") +
+                        (category.name === "Pilt" ? " pilt" : "") +
+                        (category.name === "Video" ? " video" : "")
                     }
                 >
-                    <Link to={`/categories/${category.id}`} className="category-link">
-                        <div>
-                            {category.name === "Heli" && <img src={soundIcon} alt="Heli" className="icon" />}
-                            {category.name === "Pilt" && <img src={imageIcon} alt="Pilt" className="icon" />}
-                            {category.name === "Video" && <img src={videoIcon} alt="Video" className="icon" />}
-                        <div className="category-info">
-                            {category.name}
-                        </div>
-                        </div>
-                    </Link>
-                </div>
+                    {category.name === "Heli" && <img src={soundIcon} alt="Heli" className="icon" />}
+                    {category.name === "Pilt" && <img src={imageIcon} alt="Pilt" className="icon" />}
+                    {category.name === "Video" && <img src={videoIcon} alt="Video" className="icon" />}
+
+                    <div className="category-info">
+                        {category.name}
+                    </div>
+                </Link>
             ))}
         </div>
     );
