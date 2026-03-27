@@ -1,0 +1,40 @@
+.header {
+    background-color:rgb(217,217,217,0.2);
+    border-radius: 10px;
+    border-bottom: 7px solid rgb(58,58,58,0.03);
+    padding: 25px;
+}
+
+.nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.home-page-link, .categories-link {
+    background-color: aquamarine;
+    color: var(--text-h);
+    font-family: 'Sono', sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    border-radius: 24px;
+    padding: 10px 20px;
+    text-decoration: none;
+    display: inline-block;
+
+}
+
+.home-page-link{
+    align-items: left;
+    text-align: left;
+}
+.categories-link{
+    align-items: right;
+    text-align: right;
+}
+.home-page-link:hover, .categories-link:hover {
+    background-color: rgb(37, 255, 182);
+    color: var(--text);
+}
+

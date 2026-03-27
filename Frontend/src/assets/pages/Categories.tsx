@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import type { Category } from "../models/Category";
 import { Link } from "react-router-dom";
+import soundIcon from '../icons/sound.svg';
+import imageIcon from '../icons/picture.svg';
+import videoIcon from '../icons/video.svg';
+import './Categories.css';
+
+
 
 function Categories() {
     // renderdamine -> esmakordne komponendi pealetulek (nt uuele lehele minnes tehakse üldine lehe renderdus)
@@ -15,16 +21,32 @@ function Categories() {
             .catch(err => console.error(err));
     }, []);
 
+
     return (
-        <div>
-            {categories.map(category =>
-                <div key={category.id}>
-                    <Link to={`/categories/${category.id}`}>
-                        {category.id} - {category.name} - {category.description} - {category.active ? "Active" : "Inactive"}
+        <div className="categories-container">
+            {categories.map((category) => (
+                <div
+                    key={category.id}
+                    className= {"category-card" +
+                    (category.name === "Heli" ? " heli" : "") + 
+                    (category.name === "Pilt" ? " pilt" : "") +
+                    (category.name === "Video" ? " video" : "")
+                    }
+                >
+                    <Link to={`/categories/${category.id}`} className="category-link">
+                        <div>
+                            {category.name === "Heli" && <img src={soundIcon} alt="Heli" className="icon" />}
+                            {category.name === "Pilt" && <img src={imageIcon} alt="Pilt" className="icon" />}
+                            {category.name === "Video" && <img src={videoIcon} alt="Video" className="icon" />}
+                        <div className="category-info">
+                            {category.name}
+                        </div>
+                        </div>
                     </Link>
-                </div>)}
+                </div>
+            ))}
         </div>
-    )
+    );
 }
 
 export default Categories
