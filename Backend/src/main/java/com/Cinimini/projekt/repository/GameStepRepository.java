@@ -3,12 +3,14 @@ package com.Cinimini.projekt.repository;
 import com.Cinimini.projekt.entity.GameStep;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
 public interface GameStepRepository extends JpaRepository<GameStep, Long> {
     @EntityGraph(attributePaths = {"discussionPoints", "mediaElements"})
-    List<GameStep> findAll();
+    @Query("SELECT gs FROM GameStep gs")
+    List<GameStep> findAllRelated();
 
-    List<GameStep> findAllById(Long gameId);
+    List<GameStep> findAllByGameId(Long gameId);
 }

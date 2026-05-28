@@ -6,8 +6,9 @@ import com.Cinimini.projekt.entity.*;
 import com.Cinimini.projekt.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class GameService {
 
     public GameDto getActiveGameSteps(Long gameId) {
         Game game = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
-        List<GameStep> allSteps = gameStepRepository.findAllById(gameId);
+        List<GameStep> allSteps = gameStepRepository.findAllByGameId(gameId);
         if (allSteps.isEmpty()) {
             throw new RuntimeException("No active steps found for game: " + gameId);
         }
@@ -53,7 +54,7 @@ public class GameService {
         for (GameStep step : allSteps) {
             List<DiscussionDto> discussionDtos = new ArrayList<>();
             List<QuestionDto> questionDtos = new ArrayList<>();
-            ArrayList<MediaDto> mediaDtos = new ArrayList<>();
+            List<MediaDto> mediaDtos = new ArrayList<>();
 
             handleDiscussionDtoMapping(step, discussionDtos);
             handleQuestionDtoMapping(step, questionDtos);
@@ -65,6 +66,53 @@ public class GameService {
             gameStepDto.setQuestions(questionDtos);
             gameStepDto.setMediaElements(mediaDtos);
             gameStepDtos.add(gameStepDto);
+        }
+    }
+
+    public void addNewGame(CreateGameRequest gameRequest, List<MultipartFile> images) throws IOException {
+        validateGameData(gameRequest, images);
+
+        Game game = new Game();
+        game.setName(gameRequest.getName());
+        game.setCategoryId(gameRequest.getCategoryId());
+        game.setDescription(gameRequest.getDescription());
+        Game savedGame = gameRepository.save(game);
+
+        int stepOrder = 1;
+
+
+
+        for (MultipartFile file : images) {
+            GameStep gameStep = new GameStep();
+            gameStep.setGame(savedGame);
+            gameStep.setStepOrder(stepOrder++);
+            GameStep savedStep = gameStepRepository.save(gameStep);
+
+            MediaElement media = new MediaElement();
+            media.setFileName(file.getOriginalFilename());
+            media.setMediaType(file.getContentType());
+            media.setFileData(file.getBytes());
+            media.setGameStep(savedStep);
+            mediaRepository.save(media);
+        }
+    }
+
+
+    private static void validateGameData(CreateGameRequest gameRequest, List<MultipartFile> images) {
+        if (gameRequest.getName() == null || gameRequest.getName().isEmpty()) {
+            throw new RuntimeException("Game name is empty");
+        }
+        if (gameRequest.getCategoryId() <= 0 || gameRequest.getCategoryId() >= 4) {
+            throw new RuntimeException("Category id is out of range");
+        }
+        if (images == null || images.isEmpty() ) {
+            throw new RuntimeException("Game media elements is empty");
+        }
+        if (gameRequest.getQuestions() == null || gameRequest.getQuestions().isEmpty()) {
+            throw new RuntimeException("Game questions is empty");
+        }
+        if (gameRequest.getDiscussionPoints() == null || gameRequest.getDiscussionPoints().isEmpty()) {
+            throw new RuntimeException("Game discussion points is empty");
         }
     }
 
