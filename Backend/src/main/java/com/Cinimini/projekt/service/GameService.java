@@ -69,50 +69,82 @@ public class GameService {
         }
     }
 
-    public void addNewGame(CreateGameRequest gameRequest, List<MultipartFile> images) throws IOException {
-        validateGameData(gameRequest, images);
+    public void addNewGame(CreateGameRequest gameRequest) throws IOException {
+        System.out.println(MediaElement.class.getName());
+        System.out.println(MediaElement.class.getClassLoader());
+
+        validateGameData(gameRequest);
 
         Game game = new Game();
         game.setName(gameRequest.getName());
         game.setCategoryId(gameRequest.getCategoryId());
         game.setDescription(gameRequest.getDescription());
+        game.setActive(true);
         Game savedGame = gameRepository.save(game);
 
         int stepOrder = 1;
+        for (GameStepRequest stepRequest : gameRequest.getSteps()) {
 
-
-
-        for (MultipartFile file : images) {
+            // HANDLE GENERAL STEP LOGIC
             GameStep gameStep = new GameStep();
             gameStep.setGame(savedGame);
             gameStep.setStepOrder(stepOrder++);
             GameStep savedStep = gameStepRepository.save(gameStep);
 
+            // HANDLE MEDIA
+            MultipartFile multipartFile = stepRequest.getImage();
             MediaElement media = new MediaElement();
-            media.setFileName(file.getOriginalFilename());
-            media.setMediaType(file.getContentType());
-            media.setFileData(file.getBytes());
+            media.setFileName(multipartFile.getOriginalFilename());
+            media.setMediaType(multipartFile.getContentType());
+            media.setFileData(multipartFile.getBytes());
             media.setGameStep(savedStep);
             mediaRepository.save(media);
+
+            // HANDLE QUESTIONS
+            int questionOrder = 1;
+            for (String question : stepRequest.getQuestions()) {
+                Question questionEntity = new Question();
+                questionEntity.setQuestionText(question);
+                questionEntity.setIsActive(true);
+                questionEntity.setQuestionOrder(questionOrder++);
+                questionEntity.setGameStep(savedStep);
+                questionRepository.save(questionEntity);
+            }
+
+            // HANDLE DISCUSSIONS
+            int discussionPointOrder = 1;
+            for (String discussionPoint : stepRequest.getDiscussionPoints()) {
+                DiscussionPoint discussionText = new DiscussionPoint();
+                discussionText.setDiscussionText(discussionPoint);
+                discussionText.setIsActive(true);
+                discussionText.setDiscussionOrder(discussionPointOrder++);
+                discussionText.setGameStep(savedStep);
+                discussionPointRepository.save(discussionText);
+            }
         }
     }
 
 
-    private static void validateGameData(CreateGameRequest gameRequest, List<MultipartFile> images) {
+    private static void validateGameData(CreateGameRequest gameRequest) {
         if (gameRequest.getName() == null || gameRequest.getName().isEmpty()) {
             throw new RuntimeException("Game name is empty");
         }
         if (gameRequest.getCategoryId() <= 0 || gameRequest.getCategoryId() >= 4) {
             throw new RuntimeException("Category id is out of range");
         }
-        if (images == null || images.isEmpty() ) {
-            throw new RuntimeException("Game media elements is empty");
+        if (gameRequest.getSteps() == null || gameRequest.getSteps().isEmpty()) {
+            throw new RuntimeException("Game steps are empty");
         }
-        if (gameRequest.getQuestions() == null || gameRequest.getQuestions().isEmpty()) {
-            throw new RuntimeException("Game questions is empty");
-        }
-        if (gameRequest.getDiscussionPoints() == null || gameRequest.getDiscussionPoints().isEmpty()) {
-            throw new RuntimeException("Game discussion points is empty");
+        for (GameStepRequest stepRequest : gameRequest.getSteps()) {
+            if (stepRequest.getImage() == null || stepRequest.getImage().isEmpty()) {
+                throw new RuntimeException("Image is empty / Images are empty");
+            }
+            if (stepRequest.getDiscussionPoints() == null || stepRequest.getDiscussionPoints().isEmpty()) {
+                throw new RuntimeException("Discussion points are empty");
+            }
+            if (stepRequest.getQuestions() == null || stepRequest.getQuestions().isEmpty()) {
+                throw new RuntimeException("Questions are empty");
+            }
         }
     }
 

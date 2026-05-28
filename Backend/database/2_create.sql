@@ -52,12 +52,15 @@ CREATE TABLE game_step
 -- Table: media
 CREATE TABLE media
 (
-    id           bigserial    NOT NULL,
-    game_step_id bigint       NOT NULL,
-    media_type   varchar(50)  NOT NULL,
-    file_name    varchar(200) NOT NULL,
-    file_data    bytea,
-    CONSTRAINT media_pk PRIMARY KEY (id)
+    id           BIGSERIAL PRIMARY KEY,
+    game_step_id BIGINT       NOT NULL,
+    media_type   VARCHAR(50)  NOT NULL,
+    file_name    VARCHAR(200) NOT NULL,
+    file_data    BYTEA,
+    CONSTRAINT fk_media_game_step
+        FOREIGN KEY (game_step_id)
+            REFERENCES game_step (id)
+            ON DELETE CASCADE
 );
 
 -- Table: question

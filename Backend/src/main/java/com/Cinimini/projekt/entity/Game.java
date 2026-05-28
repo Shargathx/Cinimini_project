@@ -21,5 +21,4 @@ public class Game {
     private String description;
     @Column(name = "is_active")
     private boolean active;
-
 }

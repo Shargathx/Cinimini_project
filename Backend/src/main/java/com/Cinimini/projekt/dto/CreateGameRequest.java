@@ -14,6 +14,9 @@ public class CreateGameRequest {
     private int categoryId;
     private String description;
 
-    private List<String> questions;
-    private List<String> discussionPoints;
+    private List<GameStepRequest> steps;
+    /*
+    // COMMENT THIS IN FOR POSTMAN TESTING (COMMENT OUT THE ABOVE ONE)
+    private List<GameStepRequest> steps = new ArrayList<>();
+     */
 }

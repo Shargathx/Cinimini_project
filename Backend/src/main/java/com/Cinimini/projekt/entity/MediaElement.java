@@ -29,6 +29,8 @@ public class MediaElement {
     private String fileName;
 
     @Lob
-    @Column(name = "file_data")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "file_data", columnDefinition = "bytea")
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.BINARY)
     private byte[] fileData;
 }
