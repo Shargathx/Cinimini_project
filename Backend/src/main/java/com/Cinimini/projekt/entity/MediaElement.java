@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "media")
@@ -28,9 +30,10 @@ public class MediaElement {
 
     private String fileName;
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "file_data", columnDefinition = "bytea")
-    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.BINARY)
+    //    @Lob
+//    @Basic(fetch = FetchType.LAZY)
+    @JdbcTypeCode(SqlTypes.VARBINARY)
+    @Column(name = "file_data")
+//    @Column(name = "file_data", columnDefinition = "bytea")
     private byte[] fileData;
 }
