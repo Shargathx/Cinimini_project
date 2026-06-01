@@ -1,4 +1,3 @@
-import React from 'react'
 import { useEffect, useState } from 'react'
 
 function AddGame() {
@@ -44,19 +43,25 @@ function AddGame() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    let formValues = {
-      name: name,
-      description: description,
-      categoryId: category,
-      "steps[0].image": imgFile
-    }
+
+    const formData = new FormData()
+    formData.append("name", name)
+    formData.append("description", description)
+    formData.append("categoryId", category)
+    formData.append("steps[0].image", imgFile)
     for (let i = 0; i < questions.length; i++) {
-      formValues[`steps[0].question[${i}]`] = questions[i].question
+      formData.append(`steps[0].questions[${i}]`, questions[i].question)
     }
     for (let i = 0; i < discussionPoints.length; i++) {
-      formValues[`steps[0].discussionPoints[${i}]`] = discussionPoints[i].point
+      formData.append(`steps[0].discussionPoints[${i}]`, discussionPoints[i].point)
     }
-    console.log(formValues)
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ', ' + pair[1]);
+    }
+    fetch(import.meta.env.VITE_BACK_URL + "/games/add-game", {
+      method: "POST",
+      body: formData
+    })
   }
 
   function addDiscussionpoint(newPoint: string) {
