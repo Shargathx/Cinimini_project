@@ -113,7 +113,7 @@ function AddGame() {
         )
       }
       <hr></hr>
-      <button onClick={() => { handleSubmit(stepCounter) }} type='submit'>SALVESTA</button>
+      <button onClick={() => { handleSubmit() }} type='submit'>SALVESTA</button>
 
     </div>
   </>
