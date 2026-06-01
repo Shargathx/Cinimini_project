@@ -1,22 +1,28 @@
 import { useEffect, useState } from 'react'
+import type { Category } from '../models/Category'
+import type { CreateGameStep } from '../models/CreateGameStep'
 
 function AddGame() {
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState<Category[]>([])
   //Game file, name and category
-  const [imgFile, setImgFile] = useState()
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
-  const [category, setCategory] = useState("1")
+  const [category, setCategory] = useState<number>(1);
   //Game questions
-  const [questions, setQuestions] = useState([])
-  const [newQuestion, setNewQuestion] = useState()
+  const [newQuestion, setNewQuestion] = useState("")
   const [questionCounter, setQuestionCounter] = useState(0)
   //Discussion points
-  const [newPoint, setNewpoint] = useState()
-  const [discussionPoints, setDiscussionPoints] = useState([])
+  const [newPoint, setNewpoint] = useState("")
   const [discussionPointsCounter, setDiscussionPointsCounter] = useState(0)
+
+  const [steps, setSteps] = useState<CreateGameStep[]>([
+    {
+      image: null,
+      questions: [],
+      discussionPoints: []
+    }
+  ])
   //Form data
-  const formData = new FormData()
 
   useEffect(() => {
     fetch(import.meta.env.VITE_BACK_URL + "/categories")
@@ -26,51 +32,88 @@ function AddGame() {
   }, []);
 
   function addQuestion(newQuestion: string) {
-    setQuestionCounter(questionCounter + 1)
-    if (questions.length == 0) {
-      setQuestions([{ id: questionCounter, question: newQuestion }])
-    }
-    else {
-      setQuestions([...questions, { id: questionCounter, question: newQuestion }])
-    }
+    const newId = questionCounter + 1;
+
+    setQuestionCounter(newId);
+
+    setSteps(prev =>
+      prev.map((step, index) =>
+        index === 0 ? { ...step, questions: [...step.questions, { id: newId, questionText: newQuestion }] } : step));
   }
 
   function deleteQuestion(id: number) {
-    setQuestions(questions.filter(a => a.id != id))
+    setSteps(prev =>
+      prev.map((step, index) =>
+        index === 0 ? { ...step, questions: step.questions.filter(q => q.id !== id) } : step));
   }
 
-  const handleSubmit = (id: number) => {
-    formData.append("name", name)
-    formData.append("description", description)
-    formData.append("categoryId", category)
-    formData.append(`steps[${id}].image`, imgFile)
-    for (let i = 0; i < questions.length; i++) {
-      formData.append(`steps[${id}].questions[${i}]`, questions[i].question)
+  const handleSubmit = () => {
+
+    const missingImage = steps.some(step => !step.image);
+
+    if (missingImage) {
+      alert("Kõigil sammudel peab olema meediafail!");
+      return;
     }
-    for (let i = 0; i < discussionPoints.length; i++) {
-      formData.append(`steps[${id}].discussionPoints[${i}]`, discussionPoints[i].point)
-    }
-    for (let pair of formData.entries()) {
-      localStorage.setItem("formdata", pair[0] + ', ' + pair[1]);
-    }
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("categoryId", String(category));
+
+    steps.forEach((step, stepIndex) => {
+      if (step.image) {
+        formData.append(
+          `steps[${stepIndex}].image`, step.image);
+      }
+
+      step.questions.forEach((question, questionIndex) => {
+        formData.append(
+          `steps[${stepIndex}].questions[${questionIndex}]`, question.questionText);
+      });
+
+      step.discussionPoints.forEach((discussion, discussionIndex) => {
+        formData.append(
+          `steps[${stepIndex}].discussionPoints[${discussionIndex}]`, discussion.discussionText
+        );
+      });
+    });
+
     fetch(import.meta.env.VITE_BACK_URL + "/games/add-game", {
       method: "POST",
       body: formData
     })
+      .then(res => {
+        if (!res.ok) {
+          throw new Error("Failed to save game");
+        }
+        alert("Game saved!");
+        setName("");
+        setDescription("");
+        setSteps([
+          {
+            image: null,
+            questions: [],
+            discussionPoints: []
+          }
+        ]);
+      }).catch(err => console.error(err));
   }
 
   function addDiscussionpoint(newPoint: string) {
-    setDiscussionPointsCounter(discussionPointsCounter + 1)
-    if (discussionPoints.length == 0) {
-      setDiscussionPoints([{ id: discussionPointsCounter, point: newPoint }])
-    }
-    else {
-      setDiscussionPoints([...discussionPoints, { id: discussionPointsCounter, point: newPoint }])
-    }
+    const newId = discussionPointsCounter + 1;
+
+    setDiscussionPointsCounter(newId);
+
+    setSteps(prev =>
+      prev.map((step, index) =>
+        index === 0 ? { ...step, discussionPoints: [...step.discussionPoints, { id: newId, discussionText: newPoint }] } : step));
+    setNewpoint("");
   }
 
   function deletePoint(id: number) {
-    setDiscussionPoints(discussionPoints.filter(a => a.id != id))
+    setSteps(prev =>
+      prev.map((step, index) => index === 0 ? { ...step, discussionPoints: step.discussionPoints.filter(p => p.id !== id) } : step));
   }
 
   return (<>
@@ -78,7 +121,7 @@ function AddGame() {
     <label>Mängu nimi: </label>
     <input id='gameName' onChange={(e) => { setName(e.target.value) }}></input><br></br>
     <label>kategooria: </label>
-    <select onChange={(e) => { setCategory(e.target.value) }} id='gameCat' name='gameCat' >
+    <select onChange={(e) => { setCategory(Number(e.target.value)) }} id='gameCat' name='gameCat' >
       {categories.map((category) => (
         <option key={category.id} value={category.id}>{category.name}</option>
       ))}
@@ -90,26 +133,30 @@ function AddGame() {
 
     <div>
 
-      <h2>Lae ülesse pilt:</h2>
-      <input onChange={(e) => { setImgFile(e.target.files[0]) }} type='file'></input>
+      <h2>Lae üles pilt:</h2>
+      <input type="file"
+        onChange={(e) =>
+          setSteps(prev =>
+            prev.map((step, index) => index === 0 ? { ...step, image: e.target.files?.[0] ?? null } : step))}
+      />
 
       <h2>Lisa küsimus</h2>
-      <input onChange={(e) => { setNewQuestion(e.target.value), console.log(e.target.value) }} id='addQuestion' name='addQuestion' type='text'></input><br />
+      <input value={newQuestion} onChange={(e) => { setNewQuestion(e.target.value) }} id='addQuestion' name='addQuestion' type='text'></input><br />
       <button type='button' onClick={() => { addQuestion(newQuestion) }}>Lisa Küsimus</button>
       <div>Küsimused: </div>
       {
-        questions.map((question) =>
-          (<div key={question.id}>{question.question} <button onClick={() => { deleteQuestion(question.id) }}>Kustuda</button></div>)
+        steps[0].questions.map((question) =>
+          (<div key={question.id}>{question.questionText} <button onClick={() => { deleteQuestion(question.id) }}>Kustuta</button></div>)
         )
       }
 
       <h2>Lisa Arutelu</h2>
-      <input onChange={(e) => { setNewpoint(e.target.value) }} id='addQuestion' name='addQuestion' type='text'></input><br />
+      <input value={newPoint} onChange={(e) => { setNewpoint(e.target.value) }} id='addDiscussion' name='addQuestion' type='text'></input><br />
       <button type='button' onClick={() => { addDiscussionpoint(newPoint) }}>Lisa Arutelupunkt</button>
       <div>Arutelu punktid: </div>
       {
-        discussionPoints.map((discussionPoint) =>
-          (<div key={discussionPoint.id}>{discussionPoint.point} <button onClick={() => { deletePoint(discussionPoint.id) }}>Kustuda</button></div>)
+        steps[0].discussionPoints.map((discussionPoint) =>
+          (<div key={discussionPoint.id}>{discussionPoint.discussionText} <button onClick={() => { deletePoint(discussionPoint.id) }}>Kustuta</button></div>)
         )
       }
       <hr></hr>
