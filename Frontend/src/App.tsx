@@ -5,6 +5,7 @@ import Categories from './assets/pages/Categories'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Home from './assets/pages/Home'
+import AddGame from './assets/pages/AddGame'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <main style={{ flex: 1, padding: "20px" }}> 
           <Routes>
             <Route path='/' element={<Home />} />
+            <Route path='/add-game' element={<AddGame />} />
             <Route path='/categories' element={<Categories />} />
             <Route path='/categories/:id' element={<CategoryGame />} />
             {/* <Route path='/category/:id' element={<Game />} /> */}

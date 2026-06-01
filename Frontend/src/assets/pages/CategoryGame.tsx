@@ -8,7 +8,7 @@ function CategoryGame() {
     const [categoryGame, setCategoryGame] = useState<Game[]>([])
 
     useEffect(() => {
-        fetch(import.meta.env.VITE_BACK_URL + `/games/category/${id}`)
+        fetch(import.meta.env.VITE_BACK_URL + `/category/games/${id}`)
             .then(res => res.json())
             .then(json => setCategoryGame(json))
             .catch(err => console.error(err));
