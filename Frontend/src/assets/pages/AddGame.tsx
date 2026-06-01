@@ -11,14 +11,12 @@ function AddGame() {
   const [questions, setQuestions] = useState([])
   const [newQuestion, setNewQuestion] = useState()
   const [questionCounter, setQuestionCounter] = useState(0)
-  //Game steps
-  const [steps, setSteps] = useState([])
-  const [stepCounter, setStepCounter] = useState(1)
   //Discussion points
   const [newPoint, setNewpoint] = useState()
   const [discussionPoints, setDiscussionPoints] = useState([])
   const [discussionPointsCounter, setDiscussionPointsCounter] = useState(0)
-
+  //Form data
+  const formData = new FormData()
 
   useEffect(() => {
     fetch(import.meta.env.VITE_BACK_URL + "/categories")
@@ -41,22 +39,19 @@ function AddGame() {
     setQuestions(questions.filter(a => a.id != id))
   }
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault()
-
-    const formData = new FormData()
+  const handleSubmit = (id: number) => {
     formData.append("name", name)
     formData.append("description", description)
     formData.append("categoryId", category)
-    formData.append("steps[0].image", imgFile)
+    formData.append(`steps[${id}].image`, imgFile)
     for (let i = 0; i < questions.length; i++) {
-      formData.append(`steps[0].questions[${i}]`, questions[i].question)
+      formData.append(`steps[${id}].questions[${i}]`, questions[i].question)
     }
     for (let i = 0; i < discussionPoints.length; i++) {
-      formData.append(`steps[0].discussionPoints[${i}]`, discussionPoints[i].point)
+      formData.append(`steps[${id}].discussionPoints[${i}]`, discussionPoints[i].point)
     }
     for (let pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
+      localStorage.setItem("formdata", pair[0] + ', ' + pair[1]);
     }
     fetch(import.meta.env.VITE_BACK_URL + "/games/add-game", {
       method: "POST",
@@ -93,28 +88,34 @@ function AddGame() {
     <textarea onChange={(e) => { setDescription(e.target.value) }}></textarea>
     <hr></hr>
 
-    <h1>Mängu sammud</h1>
+    <div>
 
-    <h2>Lae ülesse pilt:</h2>
-    <input onChange={(e) => { setImgFile(e.target.files[0]) }} type='file'></input>
+      <h2>Lae ülesse pilt:</h2>
+      <input onChange={(e) => { setImgFile(e.target.files[0]) }} type='file'></input>
 
-    <h2>Lisa küsimus</h2>
-    <input onChange={(e) => { setNewQuestion(e.target.value) }} id='addQuestion' name='addQuestion' type='text'></input><br />
-    <button type='button' onClick={() => { addQuestion(newQuestion) }}>Lisa Küsimus</button>
-    <div>Küsimused: </div>
-    {questions.map((question) =>
-      (<div key={question.id}>{question.question} <button onClick={() => { deleteQuestion(question.id) }}>Kustuda</button></div>)
-    )}
+      <h2>Lisa küsimus</h2>
+      <input onChange={(e) => { setNewQuestion(e.target.value), console.log(e.target.value) }} id='addQuestion' name='addQuestion' type='text'></input><br />
+      <button type='button' onClick={() => { addQuestion(newQuestion) }}>Lisa Küsimus</button>
+      <div>Küsimused: </div>
+      {
+        questions.map((question) =>
+          (<div key={question.id}>{question.question} <button onClick={() => { deleteQuestion(question.id) }}>Kustuda</button></div>)
+        )
+      }
 
-    <h2>Lisa Arutelu</h2>
-    <input onChange={(e) => { setNewpoint(e.target.value) }} id='addQuestion' name='addQuestion' type='text'></input><br />
-    <button type='button' onClick={() => { addDiscussionpoint(newPoint) }}>Lisa Arutelupunkt</button>
-    <div>Arutelu punktid: </div>
-    {discussionPoints.map((discussionPoint) =>
-      (<div key={discussionPoint.id}>{discussionPoint.point} <button onClick={() => { deletePoint(discussionPoint.id) }}>Kustuda</button></div>)
-    )}
-    <hr></hr>
-    <button onClick={(e) => { handleSubmit(e) }} type='submit'>Lisa</button>
+      <h2>Lisa Arutelu</h2>
+      <input onChange={(e) => { setNewpoint(e.target.value) }} id='addQuestion' name='addQuestion' type='text'></input><br />
+      <button type='button' onClick={() => { addDiscussionpoint(newPoint) }}>Lisa Arutelupunkt</button>
+      <div>Arutelu punktid: </div>
+      {
+        discussionPoints.map((discussionPoint) =>
+          (<div key={discussionPoint.id}>{discussionPoint.point} <button onClick={() => { deletePoint(discussionPoint.id) }}>Kustuda</button></div>)
+        )
+      }
+      <hr></hr>
+      <button onClick={() => { handleSubmit(stepCounter) }} type='submit'>SALVESTA</button>
+
+    </div>
   </>
   )
 }
