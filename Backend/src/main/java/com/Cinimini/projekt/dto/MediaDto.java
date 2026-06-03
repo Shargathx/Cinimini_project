@@ -10,5 +10,8 @@ import lombok.NoArgsConstructor;
 
 public class MediaDto {
     private Long id;
-    private String url;
+    //    private String url; //TODO: comment in later, if cloud-based server is a thing
+    private String mediaType;
+    private String fileName;
+    private byte[] fileData;
 }

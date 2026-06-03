@@ -6,5 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MediaRepository extends JpaRepository<MediaElement, Long> {
-    List<MediaElement> findAllByGameStepId(Long gameStepId);
+    List<MediaElement> findByGameStep_Id(Long gameStepId);
+
+    List<MediaElement> findByGameStep_Game_Id(Long gameId);
+
+    MediaElement[] findAllByGameStep_Id(Long gameStepId);
 }

@@ -13,4 +13,8 @@ public interface GameStepRepository extends JpaRepository<GameStep, Long> {
     List<GameStep> findAllRelated();
 
     List<GameStep> findAllByGameId(Long gameId);
+
+//    List<GameStep> findByGame_Id(Long gameId);
+
+    List<GameStep> findAllByGame_Id(Long gameId);
 }

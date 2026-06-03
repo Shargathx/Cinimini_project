@@ -2,10 +2,12 @@ package com.Cinimini.projekt.controller;
 
 import com.Cinimini.projekt.dto.CreateGameRequest;
 import com.Cinimini.projekt.dto.GameDto;
+import com.Cinimini.projekt.dto.SingleGameDto;
 import com.Cinimini.projekt.entity.Game;
 import com.Cinimini.projekt.service.GameService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -28,7 +30,12 @@ public class GameController {
         return gameService.getAllActiveGamesByCategory(catId);
     }
 
-    @GetMapping("category/games/{gameId}/steps")
+    @GetMapping("/games/{categoryId}/{gameId}")
+    public SingleGameDto getGame(@PathVariable Long categoryId, @PathVariable Long gameId) {
+        return gameService.getSingleGame(categoryId, gameId);
+    }
+
+    @GetMapping("/category/games/{gameId}/steps")
     public GameDto getActiveGameSteps(@PathVariable Long gameId) {
         return gameService.getActiveGameSteps(gameId);
     }
@@ -44,9 +51,11 @@ public class GameController {
  */
 
     @PostMapping(value = "/games/add-game", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void addGame(
+    public ResponseEntity<String> addGame(
             @ModelAttribute CreateGameRequest gameRequest) throws IOException {
         gameService.addNewGame(gameRequest);
+        return ResponseEntity.ok("Game added successfully");
     }
+
 
 }

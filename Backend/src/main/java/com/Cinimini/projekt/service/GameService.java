@@ -22,6 +22,7 @@ public class GameService {
     private final MediaRepository mediaRepository;
     private final QuestionRepository questionRepository;
     private final GameRepository gameRepository;
+    private final CategoryRepository categoryRepository;
 
     public List<Game> getAllActiveGames() {
         return gameRepository.findAllByActiveTrue();
@@ -31,15 +32,81 @@ public class GameService {
         return gameRepository.getActiveGamesByCategory(catId);
     }
 
+    public SingleGameDto getSingleGame(Long categoryId, Long gameId) {
+        categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> new RuntimeException("Game not found"));
+
+        if (game.getCategoryId() != categoryId) {
+            throw new RuntimeException("Game does not belong to category");
+        }
+
+        List<GameStep> gameSteps = gameStepRepository.findAllByGame_Id(gameId);
+
+        if (gameSteps.isEmpty()) {
+            throw new RuntimeException("No steps found for game");
+        }
+
+        SingleGameDto singleGameDto = new SingleGameDto();
+        singleGameDto.setName(game.getName());
+        singleGameDto.setDescription(game.getDescription());
+
+        List<GameStepDto> stepDtos = new ArrayList<>();
+        for (GameStep gameStep : gameSteps) {
+            GameStepDto gameStepDto = new GameStepDto();
+            gameStepDto.setStepId(gameStep.getId());
+
+            List<QuestionDto> questionDtos = new ArrayList<>();
+            for (Question question : gameStep.getQuestions()) {
+                QuestionDto questionDto = new QuestionDto();
+                questionDto.setId(question.getId());
+                questionDto.setQuestionText(question.getQuestionText());
+                questionDtos.add(questionDto);
+            }
+
+            List<DiscussionDto> discussionDtos = new ArrayList<>();
+            for (DiscussionPoint discussion : gameStep.getDiscussionPoints()) {
+                DiscussionDto discussionPointDto = new DiscussionDto();
+                discussionPointDto.setId(discussion.getId());
+                discussionPointDto.setDiscussionText(discussion.getDiscussionText());
+                discussionDtos.add(discussionPointDto);
+            }
+
+            List<MediaDto> mediaDtos = new ArrayList<>();
+            for (MediaElement media : gameStep.getMediaElements()) {
+                MediaDto mediaDto = new MediaDto();
+                mediaDto.setId(media.getId());
+                mediaDto.setMediaType(media.getMediaType());
+                mediaDto.setFileName(media.getFileName());
+                mediaDto.setFileData(media.getFileData());
+                mediaDtos.add(mediaDto);
+            }
+            gameStepDto.setQuestions(questionDtos);
+            gameStepDto.setDiscussionPoints(discussionDtos);
+            gameStepDto.setMediaElements(mediaDtos);
+
+            stepDtos.add(gameStepDto);
+        }
+        singleGameDto.setGameSteps(stepDtos);
+        return singleGameDto;
+    }
+
     public GameDto getActiveGameSteps(Long gameId) {
         Game game = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
-        List<GameStep> allSteps = gameStepRepository.findAllByGameId(gameId);
+        List<GameStep> allSteps = gameStepRepository.findAllByGame_Id(gameId);
         if (allSteps.isEmpty()) {
-            throw new RuntimeException("No active steps found for game: " + gameId);
+            throw new RuntimeException("No steps found for game: " + gameId);
         }
         List<GameStepDto> gameStepDtos = new ArrayList<>();
 
-        createAndMapDtos(allSteps, gameStepDtos);
+        List<Question> questions = questionRepository.findByGameStep_Game_Id(gameId);
+
+        List<DiscussionPoint> discussions = discussionPointRepository.findByGameStep_Game_Id(gameId);
+
+        List<MediaElement> media = mediaRepository.findAll();
+
+        createAndMapDtos(allSteps, gameStepDtos, questions, discussions, media);
 
         GameDto gameDto = new GameDto();
         gameDto.setGameId(game.getId());
@@ -50,22 +117,53 @@ public class GameService {
         return gameDto;
     }
 
-    private void createAndMapDtos(List<GameStep> allSteps, List<GameStepDto> gameStepDtos) {
+    private void createAndMapDtos(List<GameStep> allSteps,
+                                  List<GameStepDto> gameStepDtos,
+                                  List<Question> questions,
+                                  List<DiscussionPoint> discussions,
+                                  List<MediaElement> media) {
         for (GameStep step : allSteps) {
-            List<DiscussionDto> discussionDtos = new ArrayList<>();
+
             List<QuestionDto> questionDtos = new ArrayList<>();
+            List<DiscussionDto> discussionDtos = new ArrayList<>();
             List<MediaDto> mediaDtos = new ArrayList<>();
 
-            handleDiscussionDtoMapping(step, discussionDtos);
-            handleQuestionDtoMapping(step, questionDtos);
-            handleMediaElementDtoMapping(step, mediaDtos);
+            for (Question question : questions) {
+                if (question.getGameStep().getId().equals(step.getId())) {
+                    QuestionDto dto = new QuestionDto();
+                    dto.setId(question.getId());
+                    dto.setQuestionText(question.getQuestionText());
+                    questionDtos.add(dto);
+                }
+            }
 
-            GameStepDto gameStepDto = new GameStepDto();
-            gameStepDto.setStepId(step.getId());
-            gameStepDto.setDiscussionPoints(discussionDtos);
-            gameStepDto.setQuestions(questionDtos);
-            gameStepDto.setMediaElements(mediaDtos);
-            gameStepDtos.add(gameStepDto);
+            for (DiscussionPoint discussionPoint : discussions) {
+                if (discussionPoint.getGameStep().getId().equals(step.getId())) {
+                    DiscussionDto dto = new DiscussionDto();
+                    dto.setId(discussionPoint.getId());
+                    dto.setDiscussionText(discussionPoint.getDiscussionText());
+                    discussionDtos.add(dto);
+                }
+            }
+
+            for (MediaElement mediaElement : media) {
+                if (mediaElement.getGameStep().getId().equals(step.getId())) {
+                    MediaDto dto = new MediaDto();
+                    dto.setId(mediaElement.getId());
+                    dto.setMediaType(mediaElement.getMediaType());
+                    dto.setFileName(mediaElement.getFileName());
+                    dto.setFileData(mediaElement.getFileData());
+                    mediaDtos.add(dto);
+                }
+            }
+
+            GameStepDto dto = new GameStepDto();
+            dto.setStepId(step.getId());
+            dto.setQuestions(questionDtos);
+            dto.setDiscussionPoints(discussionDtos);
+            dto.setMediaElements(mediaDtos);
+
+            gameStepDtos.add(dto);
         }
     }
 
@@ -124,7 +222,6 @@ public class GameService {
         }
     }
 
-
     private static void validateGameData(CreateGameRequest gameRequest) {
         if (gameRequest.getName() == null || gameRequest.getName().isEmpty()) {
             throw new RuntimeException("Game name is empty");
@@ -147,9 +244,9 @@ public class GameService {
             }
         }
     }
-
+/*
     private void handleDiscussionDtoMapping(GameStep step, List<DiscussionDto> discussionDtos) {
-        for (DiscussionPoint discussionPoint : discussionPointRepository.findAllByGameStepIdAndIsActiveTrue(step.getId())) {
+        for (DiscussionPoint discussionPoint : discussionPointRepository.findByGameStep_IdAndIsActiveTrue(step.getId())) {
             DiscussionDto discussionDto = new DiscussionDto();
             discussionDto.setId(discussionPoint.getId());
             discussionDto.setDiscussionText(discussionPoint.getDiscussionText());
@@ -158,10 +255,13 @@ public class GameService {
     }
 
     private void handleMediaElementDtoMapping(GameStep step, List<MediaDto> mediaDtos) {
-        for (MediaElement mediaElement : mediaRepository.findAllByGameStepId(step.getId())) {
+        for (MediaElement mediaElement : mediaRepository.findAllByGameStep_Id(step.getId())) {
             MediaDto mediaDto = new MediaDto();
             mediaDto.setId(mediaElement.getId());
-            mediaDto.setUrl(mediaElement.getMediaType());
+//            mediaDto.setUrl(mediaElement.getMediaType());
+            mediaDto.setMediaType(mediaElement.getMediaType());
+            mediaDto.setFileName(mediaElement.getFileName());
+            mediaDto.setFileData(mediaElement.getFileData());
             mediaDtos.add(mediaDto);
         }
     }
@@ -174,4 +274,6 @@ public class GameService {
             questionDtos.add(questionDto);
         }
     }
+
+ */
 }

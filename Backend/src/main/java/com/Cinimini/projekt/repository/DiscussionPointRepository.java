@@ -9,5 +9,9 @@ import java.util.List;
 
 public interface DiscussionPointRepository extends JpaRepository<DiscussionPoint, Long> {
     @Query("SELECT discussionPoint FROM DiscussionPoint discussionPoint WHERE discussionPoint.gameStep.id = :stepId AND discussionPoint.isActive = true ORDER BY discussionPoint.discussionOrder ASC")
-    List<DiscussionPoint> findAllByGameStepIdAndIsActiveTrue(@Param("stepId") Long gameStepId);
+    List<DiscussionPoint> findAllByGameStep_IdAndIsActiveTrue(@Param("stepId") Long gameStepId);
+
+    List<DiscussionPoint> findByGameStep_Game_Id(Long gameId);
+
+    List<DiscussionPoint> findByGameStep_IdAndIsActiveTrue(Long id);
 }
