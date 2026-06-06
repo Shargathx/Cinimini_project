@@ -20,14 +20,6 @@ function App() {
         <Header />
 
         {/* stiil tuleks pärast eraldi .css faili teha */}
-        <nav style={{margin: "10px 0"}}>
-          {/* <Link to="/"><button>Avaleht</button></Link> */}
-          {/* <Link to="/categories"><button>Kategooriad</button></Link> */}
-          <Link to="/category/1"><button>Valitud kategooria mängud (ignore this)</button></Link>
-          {/* <Link to="/game/:id"><button></button></Link> */}
-        </nav>
-
-        {/* stiil tuleks pärast eraldi .css faili teha */}
         <main style={{ flex: 1, padding: "20px" }}> 
           <Routes>
             <Route path='/' element={<Home />} />
