@@ -28,9 +28,12 @@ function Game() {
     function getPoints() {
         setPoints(data.gameSteps[0].discussionPoints)
     }
+    
 
 
     return (<>
+        <h1>Nimi: {data.name}</h1>
+        <h3>Kirjeldus: {data.description}</h3>
         <button onClick={() => { getQuestions() }}>Questions</button>
         <div>Küsimused: </div>
         {questions.map((question) => (
