@@ -6,6 +6,7 @@ import com.Cinimini.projekt.entity.*;
 import com.Cinimini.projekt.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -167,6 +168,7 @@ public class GameService {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void addNewGame(CreateGameRequest gameRequest) throws IOException {
         System.out.println(MediaElement.class.getName());
         System.out.println(MediaElement.class.getClassLoader());
@@ -180,6 +182,11 @@ public class GameService {
         game.setActive(true);
         Game savedGame = gameRepository.save(game);
 
+//        // testing rollback
+//        if (true) {
+//            throw new RuntimeException("Transaction test");
+//        }
+
         int stepOrder = 1;
         for (GameStepRequest stepRequest : gameRequest.getSteps()) {
 
@@ -190,37 +197,18 @@ public class GameService {
             GameStep savedStep = gameStepRepository.save(gameStep);
 
             // HANDLE MEDIA
-            MultipartFile multipartFile = stepRequest.getImage();
-            MediaElement media = new MediaElement();
-            media.setFileName(multipartFile.getOriginalFilename());
-            media.setMediaType(multipartFile.getContentType());
-            media.setFileData(multipartFile.getBytes());
-            media.setGameStep(savedStep);
-            mediaRepository.save(media);
+            handleAndSaveMediaFiles(stepRequest, savedStep);
 
             // HANDLE QUESTIONS
             int questionOrder = 1;
-            for (String question : stepRequest.getQuestions()) {
-                Question questionEntity = new Question();
-                questionEntity.setQuestionText(question);
-                questionEntity.setIsActive(true);
-                questionEntity.setQuestionOrder(questionOrder++);
-                questionEntity.setGameStep(savedStep);
-                questionRepository.save(questionEntity);
-            }
+            handleAndSaveQuestions(stepRequest, questionOrder, savedStep);
 
             // HANDLE DISCUSSIONS
             int discussionPointOrder = 1;
-            for (String discussionPoint : stepRequest.getDiscussionPoints()) {
-                DiscussionPoint discussionText = new DiscussionPoint();
-                discussionText.setDiscussionText(discussionPoint);
-                discussionText.setIsActive(true);
-                discussionText.setDiscussionOrder(discussionPointOrder++);
-                discussionText.setGameStep(savedStep);
-                discussionPointRepository.save(discussionText);
-            }
+            handleAndSaveDiscussionText(stepRequest, discussionPointOrder, savedStep);
         }
     }
+
 
     private static void validateGameData(CreateGameRequest gameRequest) {
         if (gameRequest.getName() == null || gameRequest.getName().isEmpty()) {
@@ -233,8 +221,28 @@ public class GameService {
             throw new RuntimeException("Game steps are empty");
         }
         for (GameStepRequest stepRequest : gameRequest.getSteps()) {
-            if (stepRequest.getImage() == null || stepRequest.getImage().isEmpty()) {
-                throw new RuntimeException("Image is empty / Images are empty");
+            MultipartFile mediaFile = stepRequest.getImage();
+            if (mediaFile == null || mediaFile.isEmpty()) {
+                throw new RuntimeException("Media file is empty");
+            }
+            String contentType = mediaFile.getContentType();
+
+            switch (gameRequest.getCategoryId()) {
+                case 1: // Check for audio
+                    if (contentType != null && !contentType.startsWith("audio/")) {
+                        throw new RuntimeException("CategoryId 1 requires audio");
+                    }
+                    break;
+                case 2:
+                    if (contentType != null && !contentType.startsWith("video/")) {
+                        throw new RuntimeException("CategoryId 2 requires video");
+                    }
+                    break;
+                case 3:
+                    if (contentType != null && !contentType.startsWith("image/")) {
+                        throw new RuntimeException("CategoryId 3 requires image");
+                    }
+                    break;
             }
             if (stepRequest.getDiscussionPoints() == null || stepRequest.getDiscussionPoints().isEmpty()) {
                 throw new RuntimeException("Discussion points are empty");
@@ -244,36 +252,38 @@ public class GameService {
             }
         }
     }
-/*
-    private void handleDiscussionDtoMapping(GameStep step, List<DiscussionDto> discussionDtos) {
-        for (DiscussionPoint discussionPoint : discussionPointRepository.findByGameStep_IdAndIsActiveTrue(step.getId())) {
-            DiscussionDto discussionDto = new DiscussionDto();
-            discussionDto.setId(discussionPoint.getId());
-            discussionDto.setDiscussionText(discussionPoint.getDiscussionText());
-            discussionDtos.add(discussionDto);
+
+    private void handleAndSaveMediaFiles(GameStepRequest stepRequest, GameStep savedStep) throws IOException {
+        MultipartFile multipartFile = stepRequest.getImage();
+        MediaElement media = new MediaElement();
+        media.setFileName(multipartFile.getOriginalFilename());
+        media.setMediaType(multipartFile.getContentType());
+        media.setFileData(multipartFile.getBytes());
+        media.setGameStep(savedStep);
+        mediaRepository.save(media);
+    }
+
+    private void handleAndSaveQuestions(GameStepRequest stepRequest, int questionOrder, GameStep savedStep) {
+        for (String question : stepRequest.getQuestions()) {
+            Question questionEntity = new Question();
+            questionEntity.setQuestionText(question);
+            questionEntity.setIsActive(true);
+            questionEntity.setQuestionOrder(questionOrder++);
+            questionEntity.setGameStep(savedStep);
+            questionRepository.save(questionEntity);
         }
     }
 
-    private void handleMediaElementDtoMapping(GameStep step, List<MediaDto> mediaDtos) {
-        for (MediaElement mediaElement : mediaRepository.findAllByGameStep_Id(step.getId())) {
-            MediaDto mediaDto = new MediaDto();
-            mediaDto.setId(mediaElement.getId());
-//            mediaDto.setUrl(mediaElement.getMediaType());
-            mediaDto.setMediaType(mediaElement.getMediaType());
-            mediaDto.setFileName(mediaElement.getFileName());
-            mediaDto.setFileData(mediaElement.getFileData());
-            mediaDtos.add(mediaDto);
+    private void handleAndSaveDiscussionText(GameStepRequest stepRequest, int discussionPointOrder, GameStep savedStep) {
+        for (String discussionPoint : stepRequest.getDiscussionPoints()) {
+            DiscussionPoint discussionText = new DiscussionPoint();
+            discussionText.setDiscussionText(discussionPoint);
+            discussionText.setIsActive(true);
+            discussionText.setDiscussionOrder(discussionPointOrder++);
+            discussionText.setGameStep(savedStep);
+            discussionPointRepository.save(discussionText);
         }
     }
 
-    private void handleQuestionDtoMapping(GameStep step, List<QuestionDto> questionDtos) {
-        for (Question question : questionRepository.findOrderedActiveQuestions(step.getId())) {
-            QuestionDto questionDto = new QuestionDto();
-            questionDto.setId(question.getId());
-            questionDto.setQuestionText(question.getQuestionText());
-            questionDtos.add(questionDto);
-        }
-    }
 
- */
 }
