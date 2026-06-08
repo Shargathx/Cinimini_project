@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CreateGameRequest {
     private String name;
-    private int categoryId;
+    private Long categoryId;
     private String description;
 
     private List<GameStepRequest> steps;

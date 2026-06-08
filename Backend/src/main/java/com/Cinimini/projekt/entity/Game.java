@@ -17,7 +17,7 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private int categoryId;
+    private Long categoryId;
     private String description;
     @Column(name = "is_active")
     private boolean active;

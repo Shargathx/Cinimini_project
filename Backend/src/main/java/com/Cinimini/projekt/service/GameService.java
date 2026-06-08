@@ -40,7 +40,7 @@ public class GameService {
         Game game = gameRepository.findById(gameId)
                 .orElseThrow(() -> new RuntimeException("Game not found"));
 
-        if (game.getCategoryId() != categoryId) {
+        if (game.getCategoryId().equals(categoryId)) {
             throw new RuntimeException("Game does not belong to category");
         }
 
@@ -104,7 +104,9 @@ public class GameService {
     }
 
     public GameDto getActiveGameSteps(Long gameId) {
-        Game game = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> new RuntimeException("Game not found"));
+
         List<GameStep> allSteps = gameStepRepository.findAllByGame_Id(gameId);
         if (allSteps.isEmpty()) {
             throw new RuntimeException("No steps found for game: " + gameId);
@@ -112,15 +114,51 @@ public class GameService {
 
         List<GameStepDto> gameStepDtos = new ArrayList<>();
 
-        List<Question> questions = questionRepository.findByGameStep_Game_Id(gameId);
+        for (GameStep step : allSteps) {
+            GameStepDto stepDto = new GameStepDto();
+            stepDto.setStepId(step.getId());
 
-        List<DiscussionPoint> discussions = discussionPointRepository.findByGameStep_Game_Id(gameId);
+            List<QuestionDto> questionDtos = new ArrayList<>();
+            for (Question question : step.getQuestions()) {
+                QuestionDto dto = new QuestionDto();
+                dto.setId(question.getId());
+                dto.setQuestionText(question.getQuestionText());
+                questionDtos.add(dto);
+            }
 
-        List<MediaElement> media = mediaRepository.findByGameStep_Game_Id(gameId);
+            List<DiscussionDto> discussionDtos = new ArrayList<>();
+            for (DiscussionPoint discussionPoint : step.getDiscussionPoints()) {
+                DiscussionDto dto = new DiscussionDto();
+                dto.setId(discussionPoint.getId());
+                dto.setDiscussionText(discussionPoint.getDiscussionText());
+                discussionDtos.add(dto);
+            }
 
-        List<TeacherText> teacherTexts = teacherTextRepository.findByGameStep_Game_Id(gameId);
+            List<TeacherTextDto> teacherTextDtos = new ArrayList<>();
+            for (TeacherText teacherText : step.getTeacherText()) {
+                TeacherTextDto teacherTextDto = new TeacherTextDto();
+                teacherTextDto.setId(teacherText.getId());
+                teacherTextDto.setTeacherText(teacherText.getTeacherText());
+                teacherTextDtos.add(teacherTextDto);
+            }
 
-        createAndMapDtos(allSteps, gameStepDtos, questions, discussions, teacherTexts, media);
+            List<MediaDto> mediaDtos = new ArrayList<>();
+            for (MediaElement mediaElement : step.getMediaElements()) {
+                MediaDto dto = new MediaDto();
+                dto.setId(mediaElement.getId());
+                dto.setMediaType(mediaElement.getMediaType());
+                dto.setFileName(mediaElement.getFileName());
+                dto.setFileData(mediaElement.getFileData());
+                mediaDtos.add(dto);
+            }
+
+            stepDto.setQuestions(questionDtos);
+            stepDto.setDiscussionPoints(discussionDtos);
+            stepDto.setTeacherTexts(teacherTextDtos);
+            stepDto.setMediaElements(mediaDtos);
+
+            gameStepDtos.add(stepDto);
+        }
 
         GameDto gameDto = new GameDto();
         gameDto.setGameId(game.getId());
@@ -129,67 +167,6 @@ public class GameService {
         gameDto.setDescription(game.getDescription());
         gameDto.setGameSteps(gameStepDtos);
         return gameDto;
-    }
-
-    private void createAndMapDtos(List<GameStep> allSteps,
-                                  List<GameStepDto> gameStepDtos,
-                                  List<Question> questions,
-                                  List<DiscussionPoint> discussions,
-                                  List<TeacherText> teacherTexts, List<MediaElement> media) {
-        for (GameStep step : allSteps) {
-
-            List<QuestionDto> questionDtos = new ArrayList<>();
-            List<DiscussionDto> discussionDtos = new ArrayList<>();
-            List<TeacherTextDto> teacherTextDtos = new ArrayList<>();
-            List<MediaDto> mediaDtos = new ArrayList<>();
-
-            for (Question question : questions) {
-                if (question.getGameStep().getId().equals(step.getId())) {
-                    QuestionDto dto = new QuestionDto();
-                    dto.setId(question.getId());
-                    dto.setQuestionText(question.getQuestionText());
-                    questionDtos.add(dto);
-                }
-            }
-
-            for (DiscussionPoint discussionPoint : discussions) {
-                if (discussionPoint.getGameStep().getId().equals(step.getId())) {
-                    DiscussionDto dto = new DiscussionDto();
-                    dto.setId(discussionPoint.getId());
-                    dto.setDiscussionText(discussionPoint.getDiscussionText());
-                    discussionDtos.add(dto);
-                }
-            }
-
-            for (TeacherText teacherText : teacherTexts) {
-                if (teacherText.getGameStep().getId().equals(step.getId())) {
-                    TeacherTextDto teacherTextDto = new TeacherTextDto();
-                    teacherTextDto.setId(teacherText.getId());
-                    teacherTextDto.setTeacherText(teacherText.getTeacherText());
-                    teacherTextDtos.add(teacherTextDto);
-                }
-            }
-
-            for (MediaElement mediaElement : media) {
-                if (mediaElement.getGameStep().getId().equals(step.getId())) {
-                    MediaDto dto = new MediaDto();
-                    dto.setId(mediaElement.getId());
-                    dto.setMediaType(mediaElement.getMediaType());
-                    dto.setFileName(mediaElement.getFileName());
-                    dto.setFileData(mediaElement.getFileData());
-                    mediaDtos.add(dto);
-                }
-            }
-
-            GameStepDto dto = new GameStepDto();
-            dto.setStepId(step.getId());
-            dto.setQuestions(questionDtos);
-            dto.setDiscussionPoints(discussionDtos);
-            dto.setTeacherTexts(teacherTextDtos);
-            dto.setMediaElements(mediaDtos);
-
-            gameStepDtos.add(dto);
-        }
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -242,8 +219,8 @@ public class GameService {
         if (gameRequest.getName() == null || gameRequest.getName().isEmpty()) {
             throw new RuntimeException("Game name is empty");
         }
-        if (gameRequest.getCategoryId() <= 0 || gameRequest.getCategoryId() >= 4) {
-            throw new RuntimeException("Category id is out of range");
+        if (gameRequest.getCategoryId() == null || gameRequest.getCategoryId() <= 0 || gameRequest.getCategoryId() >= 4) {
+            throw new RuntimeException("Category id is out of range or missing");
         }
         if (gameRequest.getSteps() == null || gameRequest.getSteps().isEmpty()) {
             throw new RuntimeException("Game steps are empty");
@@ -255,18 +232,18 @@ public class GameService {
             }
             String contentType = mediaFile.getContentType();
 
-            switch (gameRequest.getCategoryId()) {
+            switch (gameRequest.getCategoryId().intValue()) { // intValue to get around Long -> int conversion
                 case 1: // Check for audio
                     if (contentType != null && !contentType.startsWith("audio/")) {
                         throw new RuntimeException("CategoryId 1 requires audio");
                     }
                     break;
-                case 2:
+                case 2: // Check for video
                     if (contentType != null && !contentType.startsWith("video/")) {
                         throw new RuntimeException("CategoryId 2 requires video");
                     }
                     break;
-                case 3:
+                case 3: // Check for image
                     if (contentType != null && !contentType.startsWith("image/")) {
                         throw new RuntimeException("CategoryId 3 requires image");
                     }
