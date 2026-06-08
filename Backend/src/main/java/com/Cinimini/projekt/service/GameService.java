@@ -183,6 +183,7 @@ public class GameService {
         Game savedGame = gameRepository.save(game);
 
 //        // testing rollback
+//        System.out.println("Before exception");
 //        if (true) {
 //            throw new RuntimeException("Transaction test");
 //        }
