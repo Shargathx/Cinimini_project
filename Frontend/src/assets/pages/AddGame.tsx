@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { Category } from '../models/Category'
 import type { CreateGameStep } from '../models/CreateGameStep'
+import type { Media } from '../models/Media';
 import './AddGame.css';
 
 function AddGame() {
@@ -15,6 +16,8 @@ function AddGame() {
   //Discussion points
   const [newPoint, setNewpoint] = useState("")
   const [discussionPointsCounter, setDiscussionPointsCounter] = useState(0)
+  //Media
+  const [media, setMedia] = useState<Media[]>([])
 
   const [steps, setSteps] = useState<CreateGameStep[]>([
     {
@@ -79,6 +82,8 @@ function AddGame() {
         );
       });
     });
+    console.log(formData)
+
 
     fetch(import.meta.env.VITE_BACK_URL + "/games/add-game", {
       method: "POST",
@@ -99,6 +104,7 @@ function AddGame() {
           }
         ]);
       }).catch(err => console.error(err));
+
   }
 
   function addDiscussionpoint(newPoint: string) {
@@ -135,10 +141,16 @@ function AddGame() {
     <div>
 
       <h2 id='uploadImageTitle'>Lae üles pilt:</h2>
-      <input id='uploadImageBtn' type="file"
-        onChange={(e) =>
+      <input multiple id='uploadImageBtn' type="file"
+        onChange={(e) => {
+          const files = Array.from(e.target.files || []);
+
+          setMedia((prev) => [...prev, ...files] || [prev]);
+          console.log(media)
           setSteps(prev =>
-            prev.map((step, index) => index === 0 ? { ...step, image: e.target.files?.[0] ?? null } : step))}
+            prev.map((step, index) => index === 0 ? { ...step, image: media } : step))
+          console.log(steps)
+        }}
       />
 
       <h2 id='addQuestionTitle'>Lisa küsimus</h2>
