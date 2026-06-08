@@ -15,12 +15,16 @@ function AddGame() {
   //Discussion points
   const [newPoint, setNewpoint] = useState("")
   const [discussionPointsCounter, setDiscussionPointsCounter] = useState(0)
+  //Teacher text
+  const [teacherText, setTeacherText] = useState("")
+  const [teacherCounter, setTeacherCounter] = useState(0)
 
   const [steps, setSteps] = useState<CreateGameStep[]>([
     {
       image: null,
       questions: [],
-      discussionPoints: []
+      discussionPoints: [],
+      teacherTexts: []
     }
   ])
   //Form data
@@ -40,6 +44,23 @@ function AddGame() {
     setSteps(prev =>
       prev.map((step, index) =>
         index === 0 ? { ...step, questions: [...step.questions, { id: newId, questionText: newQuestion }] } : step));
+  }
+
+  function addTeacherText(newText: string) {
+    const newId = questionCounter + 1;
+
+    setTeacherCounter(newId);
+
+    setSteps(prev =>
+      prev.map((step, index) =>
+        index === 0 ? { ...step, teacherTexts: [...step.teacherTexts, { id: newId, teachertext: newText }] } : step));
+  }
+
+
+  function deleteTeacherText(id: number) {
+    setSteps(prev =>
+      prev.map((step, index) =>
+        index === 0 ? { ...step, teacherTexts: step.teacherTexts.filter(q => q.id !== id) } : step));
   }
 
   function deleteQuestion(id: number) {
@@ -78,6 +99,10 @@ function AddGame() {
           `steps[${stepIndex}].discussionPoints[${discussionIndex}]`, discussion.discussionText
         );
       });
+      step.teacherTexts.forEach((text, textIndex) => {
+        formData.append(
+          `steps[${stepIndex}].teacherTexts[${textIndex}]`, text.teachertext);
+      });
     });
 
     fetch(import.meta.env.VITE_BACK_URL + "/games/add-game", {
@@ -95,7 +120,8 @@ function AddGame() {
           {
             image: null,
             questions: [],
-            discussionPoints: []
+            discussionPoints: [],
+            teacherTexts: []
           }
         ]);
       }).catch(err => console.error(err));
@@ -158,6 +184,16 @@ function AddGame() {
       {
         steps[0].discussionPoints.map((discussionPoint) =>
           (<div key={discussionPoint.id}>{discussionPoint.discussionText} <button id='deleteDiscussionBtn' onClick={() => { deletePoint(discussionPoint.id) }}>Kustuta</button></div>)
+        )
+      }
+
+      <h2 id='addTeacherTextTitle'>Lisa tekst õpetajale: </h2>
+      <input value={teacherText} onChange={(e) => { setTeacherText(e.target.value) }} id='addTeachText' name='addTeachText' type='text'></input><br />
+      <button id='addTeachTextbtn' type='button' onClick={() => { addTeacherText(teacherText); }}>Lisa õpetaja tekst: </button>
+      <div id='questionsList'>Tekst: </div>
+      {
+        steps[0].teacherTexts.map((text) =>
+          (<div key={text.id}>{text.teachertext} <button id='deleteTeacherText' onClick={() => { deleteTeacherText(text.id) }}>Kustuta</button></div>)
         )
       }
       <hr></hr>

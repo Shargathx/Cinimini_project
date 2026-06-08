@@ -1,8 +1,10 @@
 import type { Discussion } from "./Discussion";
 import type { Question } from "./Question";
+import type { TeacherText } from "./TeacherText";
 
 export interface CreateGameStep {
     image: File | null;
     questions: Question[];
     discussionPoints: Discussion[];
+    teacherTexts: TeacherText[]
 }
