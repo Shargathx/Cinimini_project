@@ -24,6 +24,7 @@ public class GameService {
     private final QuestionRepository questionRepository;
     private final GameRepository gameRepository;
     private final CategoryRepository categoryRepository;
+    private final TeacherTextRepository teacherTextRepository;
 
     public List<Game> getAllActiveGames() {
         return gameRepository.findAllByActiveTrue();
@@ -74,6 +75,14 @@ public class GameService {
                 discussionDtos.add(discussionPointDto);
             }
 
+            List<TeacherTextDto> teacherTextDtos = new ArrayList<>();
+            for (TeacherText teacherText : gameStep.getTeacherText()) {
+                TeacherTextDto teacherTextDto = new TeacherTextDto();
+                teacherTextDto.setId(teacherText.getId());
+                teacherTextDto.setTeacherText(teacherText.getTeacherText());
+                teacherTextDtos.add(teacherTextDto);
+            }
+
             List<MediaDto> mediaDtos = new ArrayList<>();
             for (MediaElement media : gameStep.getMediaElements()) {
                 MediaDto mediaDto = new MediaDto();
@@ -85,6 +94,7 @@ public class GameService {
             }
             gameStepDto.setQuestions(questionDtos);
             gameStepDto.setDiscussionPoints(discussionDtos);
+            gameStepDto.setTeacherTexts(teacherTextDtos);
             gameStepDto.setMediaElements(mediaDtos);
 
             stepDtos.add(gameStepDto);
@@ -99,15 +109,18 @@ public class GameService {
         if (allSteps.isEmpty()) {
             throw new RuntimeException("No steps found for game: " + gameId);
         }
+
         List<GameStepDto> gameStepDtos = new ArrayList<>();
 
         List<Question> questions = questionRepository.findByGameStep_Game_Id(gameId);
 
         List<DiscussionPoint> discussions = discussionPointRepository.findByGameStep_Game_Id(gameId);
 
-        List<MediaElement> media = mediaRepository.findAll();
+        List<MediaElement> media = mediaRepository.findByGameStep_Game_Id(gameId);
 
-        createAndMapDtos(allSteps, gameStepDtos, questions, discussions, media);
+        List<TeacherText> teacherTexts = teacherTextRepository.findByGameStep_Game_Id(gameId);
+
+        createAndMapDtos(allSteps, gameStepDtos, questions, discussions, teacherTexts, media);
 
         GameDto gameDto = new GameDto();
         gameDto.setGameId(game.getId());
@@ -122,11 +135,12 @@ public class GameService {
                                   List<GameStepDto> gameStepDtos,
                                   List<Question> questions,
                                   List<DiscussionPoint> discussions,
-                                  List<MediaElement> media) {
+                                  List<TeacherText> teacherTexts, List<MediaElement> media) {
         for (GameStep step : allSteps) {
 
             List<QuestionDto> questionDtos = new ArrayList<>();
             List<DiscussionDto> discussionDtos = new ArrayList<>();
+            List<TeacherTextDto> teacherTextDtos = new ArrayList<>();
             List<MediaDto> mediaDtos = new ArrayList<>();
 
             for (Question question : questions) {
@@ -147,6 +161,15 @@ public class GameService {
                 }
             }
 
+            for (TeacherText teacherText : teacherTexts) {
+                if (teacherText.getGameStep().getId().equals(step.getId())) {
+                    TeacherTextDto teacherTextDto = new TeacherTextDto();
+                    teacherTextDto.setId(teacherText.getId());
+                    teacherTextDto.setTeacherText(teacherText.getTeacherText());
+                    teacherTextDtos.add(teacherTextDto);
+                }
+            }
+
             for (MediaElement mediaElement : media) {
                 if (mediaElement.getGameStep().getId().equals(step.getId())) {
                     MediaDto dto = new MediaDto();
@@ -162,6 +185,7 @@ public class GameService {
             dto.setStepId(step.getId());
             dto.setQuestions(questionDtos);
             dto.setDiscussionPoints(discussionDtos);
+            dto.setTeacherTexts(teacherTextDtos);
             dto.setMediaElements(mediaDtos);
 
             gameStepDtos.add(dto);
@@ -201,14 +225,17 @@ public class GameService {
             handleAndSaveMediaFiles(stepRequest, savedStep);
 
             // HANDLE QUESTIONS
-            int questionOrder = 1;
-            handleAndSaveQuestions(stepRequest, questionOrder, savedStep);
+            handleAndSaveQuestions(stepRequest, savedStep);
+
+            // HANDLE TEACHER TEXTS
+            handleAndSaveTeacherTexts(stepRequest, savedStep);
 
             // HANDLE DISCUSSIONS
-            int discussionPointOrder = 1;
-            handleAndSaveDiscussionText(stepRequest, discussionPointOrder, savedStep);
+            handleAndSaveDiscussionText(stepRequest, savedStep);
         }
     }
+
+
 
 
     private static void validateGameData(CreateGameRequest gameRequest) {
@@ -264,7 +291,8 @@ public class GameService {
         mediaRepository.save(media);
     }
 
-    private void handleAndSaveQuestions(GameStepRequest stepRequest, int questionOrder, GameStep savedStep) {
+    private void handleAndSaveQuestions(GameStepRequest stepRequest, GameStep savedStep) {
+        int questionOrder = 1;
         for (String question : stepRequest.getQuestions()) {
             Question questionEntity = new Question();
             questionEntity.setQuestionText(question);
@@ -275,7 +303,20 @@ public class GameService {
         }
     }
 
-    private void handleAndSaveDiscussionText(GameStepRequest stepRequest, int discussionPointOrder, GameStep savedStep) {
+    private void handleAndSaveTeacherTexts(GameStepRequest stepRequest, GameStep savedStep) {
+        int teacherOrder = 1;
+        for (String teacherText : stepRequest.getTeacherTexts()) {
+            TeacherText teacherEntity = new TeacherText();
+            teacherEntity.setTeacherText(teacherText);
+            teacherEntity.setIsActive(true);
+            teacherEntity.setTextOrder(teacherOrder++);
+            teacherEntity.setGameStep(savedStep);
+            teacherTextRepository.save(teacherEntity);
+        }
+    }
+
+    private void handleAndSaveDiscussionText(GameStepRequest stepRequest, GameStep savedStep) {
+        int discussionPointOrder = 1;
         for (String discussionPoint : stepRequest.getDiscussionPoints()) {
             DiscussionPoint discussionText = new DiscussionPoint();
             discussionText.setDiscussionText(discussionPoint);
