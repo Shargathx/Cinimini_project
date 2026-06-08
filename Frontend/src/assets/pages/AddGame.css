@@ -1,0 +1,107 @@
+* {
+    box-sizing: border-box;
+}
+
+#addGameTitle {
+    font-size: 40px;
+    text-align: center;
+    margin: 10px 0px;
+}
+
+#gameNameLabel, #gameCatLabel {
+    font-size: 20px;
+    margin-left: 20px;
+}
+
+#gameName, #gameCat {
+    margin-left: 20px;
+    margin-bottom: 20px;
+    padding: 5px;
+    font-size: 16px;
+}
+
+#uploadImageTitle, #addQuestionTitle, #addDiscussionTitle {
+    font-size: 24px;
+    margin-left: 20px;
+}
+
+input[type="file"] {
+    font-size: 16px;
+    font-family: 'Segoe UI';
+    font-weight: 400;
+}
+
+input[type="file"]::file-selector-button {
+    
+    margin: 10px 20px;
+    padding: 5px 10px;
+    border: 3px solid #47f19f;
+    border-radius: 30px;
+    font-family: 'Segoe UI';
+    font-size: 16px;
+    font-weight: 400;
+
+    background: #76f8c6;
+    color: black;
+
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+    transform: scale(1.05);
+}
+
+input[type="file"]::file-selector-button:active {
+    transform: scale(1.05);
+}
+
+#addQuestion, #addDiscussion {
+    margin-left: 20px;
+    margin-bottom: 10px;
+    padding: 5px;
+    font-size: 16px;
+}
+
+#addQuestionBtn, #addDiscussionBtn {
+    margin-left: 20px;
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: #acffd5ba;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#questionsList, #discussionPointsList {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+#deleteQuestionBtn, #deleteDiscussionBtn {
+    margin-left: 10px;
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: #c4c4c4af;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#saveGameBtn {
+    display: block;
+    margin: 0 auto 20px auto;
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#saveGameBtn:hover {
+    background-color: #45a049;
+}
+

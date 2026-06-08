@@ -1,5 +1,5 @@
 import './Footer.css';
-import logo from "../assets/vite.svg";
+import logo from "../assets/TLULogo.png";
 
 // meie nimed
 // TLÜ logo?
@@ -10,18 +10,19 @@ import logo from "../assets/vite.svg";
 // Kõik kuidagi centered ka viisakalt
 
 function Footer() {
-    const names = ["Martin Saareväli", "Anette Aruorg", "Roland Piperal", "Õnne-Elisabeth Maripu", "Carolina Treu"]
+    const names = ["Martin Saareväli", "Anette Aruorg", "Roland Piperal", "Carolina Treu", "Õnne-Elisabeth Maripu"]
     return (
         <footer className="footer">
             <div className="footer-left">
                 {names.map((name, index) => (
-                    <div key={index}>{name}</div>
+                    <div key={index} className="footer-name">
+                        {name}
+                    </div>
                 ))}
             </div>
 
             <div className="footer-right">
-                {/* korralik logo hiljem siia */}
-                <img src={logo} alt="Logo" style={{ height: "40px" }} />
+                <img src={logo} alt="Logo" />
             </div>
         </footer>
 

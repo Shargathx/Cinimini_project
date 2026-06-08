@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { Category } from '../models/Category'
 import type { CreateGameStep } from '../models/CreateGameStep'
+import './AddGame.css';
 
 function AddGame() {
   const [categories, setCategories] = useState<Category[]>([])
@@ -117,50 +118,50 @@ function AddGame() {
   }
 
   return (<>
-    <h1>Loo mäng</h1>
-    <label>Mängu nimi: </label>
+    <h1 id='addGameTitle'>Loo mäng</h1>
+    <label id='gameNameLabel'>Mängu nimi: </label>
     <input id='gameName' onChange={(e) => { setName(e.target.value) }}></input><br></br>
-    <label>kategooria: </label>
+    <label id='gameCatLabel'>kategooria: </label>
     <select onChange={(e) => { setCategory(Number(e.target.value)) }} id='gameCat' name='gameCat' >
       {categories.map((category) => (
         <option key={category.id} value={category.id}>{category.name}</option>
       ))}
     </select><br />
 
-    <label>Kirjeldus: </label><br />
-    <textarea onChange={(e) => { setDescription(e.target.value) }}></textarea>
+    <label id='gameDescriptionLabel'>Kirjeldus: </label><br />
+    <textarea id='gameDescriptionBox' onChange={(e) => { setDescription(e.target.value) }}></textarea>
     <hr></hr>
 
     <div>
 
-      <h2>Lae üles pilt:</h2>
-      <input type="file"
+      <h2 id='uploadImageTitle'>Lae üles pilt:</h2>
+      <input id='uploadImageBtn' type="file"
         onChange={(e) =>
           setSteps(prev =>
             prev.map((step, index) => index === 0 ? { ...step, image: e.target.files?.[0] ?? null } : step))}
       />
 
-      <h2>Lisa küsimus</h2>
+      <h2 id='addQuestionTitle'>Lisa küsimus</h2>
       <input value={newQuestion} onChange={(e) => { setNewQuestion(e.target.value) }} id='addQuestion' name='addQuestion' type='text'></input><br />
-      <button type='button' onClick={() => { addQuestion(newQuestion) }}>Lisa Küsimus</button>
-      <div>Küsimused: </div>
+      <button id='addQuestionBtn' type='button' onClick={() => { addQuestion(newQuestion) }}>Lisa Küsimus</button>
+      <div id='questionsList'>Küsimused: </div>
       {
         steps[0].questions.map((question) =>
-          (<div key={question.id}>{question.questionText} <button onClick={() => { deleteQuestion(question.id) }}>Kustuta</button></div>)
+          (<div key={question.id}>{question.questionText} <button id='deleteQuestionBtn' onClick={() => { deleteQuestion(question.id) }}>Kustuta</button></div>)
         )
       }
 
-      <h2>Lisa Arutelu</h2>
+      <h2 id='addDiscussionTitle'>Lisa Arutelu</h2>
       <input value={newPoint} onChange={(e) => { setNewpoint(e.target.value) }} id='addDiscussion' name='addQuestion' type='text'></input><br />
-      <button type='button' onClick={() => { addDiscussionpoint(newPoint) }}>Lisa Arutelupunkt</button>
-      <div>Arutelu punktid: </div>
+      <button id='addDiscussionBtn' type='button' onClick={() => { addDiscussionpoint(newPoint) }}>Lisa Arutelupunkt</button>
+      <div id='discussionPointsList'>Arutelu punktid: </div>
       {
         steps[0].discussionPoints.map((discussionPoint) =>
-          (<div key={discussionPoint.id}>{discussionPoint.discussionText} <button onClick={() => { deletePoint(discussionPoint.id) }}>Kustuta</button></div>)
+          (<div key={discussionPoint.id}>{discussionPoint.discussionText} <button id='deleteDiscussionBtn' onClick={() => { deletePoint(discussionPoint.id) }}>Kustuta</button></div>)
         )
       }
       <hr></hr>
-      <button onClick={() => { handleSubmit() }} type='submit'>SALVESTA</button>
+      <button id='saveGameBtn' onClick={() => { handleSubmit() }} type='submit'>SALVESTA</button>
 
     </div>
   </>

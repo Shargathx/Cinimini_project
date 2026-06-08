@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import './Game.css';
 import type { Game } from '../models/Game'
 import type { Question } from '../models/Question'
 import type { Discussion } from '../models/Discussion'
