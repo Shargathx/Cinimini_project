@@ -37,18 +37,23 @@ function Game() {
     }, [id])
 
     function returnCorrectData() {
-        console.log(fileFormat)
-        
-        
-   
-        
-        (fileFormat) {
+        console.log(fileFormat);
+        switch (fileFormat) {
             case "image/png":
                 return (
                     media && (
                         <img
                             src={`data:image/png;base64,${media}`}
                             alt="Game"
+                            style={{
+                                filter: `
+                        saturate(${saturation}%)
+                        contrast(${contrast}%)
+                        brightness(${exposure}%)
+                    `,
+                                transform: `scale(${zoom / 100})`,
+                                transformOrigin: "center"
+                            }}
                         />
                     )
                 );
@@ -113,63 +118,34 @@ function Game() {
             setPoints(data.gameSteps[0].discussionPoints)
         }
     }
-    /*
-        function createImg() {
-            let isMounted = false // commented out for now (not used anywhere?)
-            if (data && !toggle) {
-                setToggle(true)
-                if (data.gameSteps[0].mediaElements[0] === undefined) {
-                    alert("No media data")
-                }
-                else {
-                    let imgData = data.gameSteps[0].mediaElements[0].fileData
-                    setImg(imgData)
-                }
-            }
-        }
-            */
-
 
     return (<>
 
         {returnCorrectData()}
-        {/* {createImg()} */}
 
-        {img && (
-            <img
-                src={`data:image/png;base64,${img}`}
-                alt="Game"
-                style={{
-                    filter: `
-                saturate(${saturation}%)
-                contrast(${contrast}%)
-                brightness(${exposure}%)
-            `,
-                    transform: `scale(${zoom / 100})`,
-                    transformOrigin: "center"
-                }}
-            />
+        {fileFormat.startsWith("image/") && (
+            <>
+                <ImageSaturation
+                    value={saturation}
+                    onChange={setSaturation}
+                />
+
+                <ImageContrast
+                    value={contrast}
+                    onChange={setContrast}
+                />
+
+                <ImageExposure
+                    value={exposure}
+                    onChange={setExposure}
+                />
+
+                <ImageZoom
+                    value={zoom}
+                    onChange={setZoom}
+                />
+            </>
         )}
-
-        <ImageSaturation
-            value={saturation}
-            onChange={setSaturation}
-        />
-
-        <ImageContrast
-            value={contrast}
-            onChange={setContrast}
-        />
-
-        <ImageExposure
-            value={exposure}
-            onChange={setExposure}
-        />
-
-        <ImageZoom
-            value={zoom}
-            onChange={setZoom}
-        />
 
         <h1>Mängu nimi: {data?.name}</h1>
         <h3>Kirjeldus: {data?.description}</h3>
