@@ -56,13 +56,12 @@ public class GameController {
         gameService.addNewGame(gameRequest);
         return ResponseEntity.ok("Game added successfully");
     }
-    /*
-    // TODO: delete service
-    @DeleteMapping("/games/delete-game/{gameId}")
-    public ResponseEntity<String> deleteGame(@PathVariable Long gameId) {
 
+    @DeleteMapping("/games/{gameId}")
+    public ResponseEntity<String> deleteGame(@PathVariable Long gameId) {
+        gameService.softDeleteGame(gameId);
+        return ResponseEntity.ok("Game deleted successfully");
     }
-    */
 
 
 }

@@ -5,9 +5,11 @@ import com.Cinimini.projekt.dto.*;
 import com.Cinimini.projekt.entity.*;
 import com.Cinimini.projekt.repository.*;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -213,6 +215,12 @@ public class GameService {
     }
 
 
+    public void softDeleteGame(Long gameId) {
+        Game game = gameRepository.findById(gameId).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Game not found with id: " + gameId));
+        game.setActive(false);
+        gameRepository.save(game);
+    }
 
 
     private static void validateGameData(CreateGameRequest gameRequest) {
