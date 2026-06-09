@@ -17,7 +17,8 @@ function Game() {
     const [points, setPoints] = useState<Discussion[]>([])
     // const [img, setImg] = useState<string>("")
     // const [toggle, setToggle] = useState(false)
-    const img = data?.gameSteps[0]?.mediaElements?.[0]?.fileData ?? ""
+    const media = data?.gameSteps[0]?.mediaElements?.[0]?.fileData ?? ""
+    const fileFormat = data?.gameSteps[0]?.mediaElements?.[0]?.mediaType ?? ""
 
     useEffect(() => {
         fetch(import.meta.env.VITE_BACK_URL + `/category/games/${id}/steps`)
@@ -26,6 +27,68 @@ function Game() {
             .catch(err => console.error(err));
     }, [id])
 
+    function returnCorrectData() {
+        console.log(fileFormat)
+        switch (fileFormat) {
+            case "image/png":
+                return (
+                    media && (
+                        <img
+                            src={`data:image/png;base64,${media}`}
+                            alt="Game"
+                        />
+                    )
+                );
+            case "audio/mpeg":
+                return (
+                    media && (
+                        <audio controls autoPlay>
+                            <source src={`data:audio/mpeg;base64,${media}`} type="audio/mpeg"
+                            />
+                        </audio>
+
+                    )
+                )
+
+        }
+    }
+
+    async function reverseAudio(media) {
+        const response = await media
+        const arrayBuffer = await response.arrayBuffer();
+
+        const audioContext = new AudioContext();
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+        // Reverse each channel
+        for (let channel = 0; channel < audioBuffer.numberOfChannels; channel++) {
+            const channelData = audioBuffer.getChannelData(channel);
+            channelData.reverse();
+        }
+
+        return audioBuffer;
+    }
+
+    function ReversePlayer({ media }) {
+        const handlePlay = async () => {
+            const response = media
+            const arrayBuffer = await response.arrayBuffer();
+
+            const ctx = new AudioContext();
+            const buffer = await ctx.decodeAudioData(arrayBuffer);
+
+            for (let i = 0; i < buffer.numberOfChannels; i++) {
+                buffer.getChannelData(i).reverse();
+            }
+
+            const source = ctx.createBufferSource();
+            source.buffer = buffer;
+            source.connect(ctx.destination);
+            source.start();
+        };
+
+        return <button onClick={handlePlay}>Play Reversed</button>;
+    }
     function getQuestions() {
         if (data) {
             setQuestions(data.gameSteps[0].questions)
@@ -55,13 +118,8 @@ function Game() {
 
 
     return (<>
-        {/* {createImg()} */}
-        {img && (
-            <img
-                src={`data:image/png;base64,${img}`}
-                alt="Game"
-            />
-        )}
+
+        {returnCorrectData()}
         <h1>Mängu nimi: {data?.name}</h1>
         <h3>Kirjeldus: {data?.description}</h3>
         <button onClick={() => { getQuestions() }}>Questions</button>

@@ -25,7 +25,10 @@ function AddGame() {
       image: null,
       questions: [],
       discussionPoints: [],
-      teacherTexts: []
+      teacherTexts: [],
+      questionInput:"",
+      discussionInput:"",
+      teacherTextInput:""
     }
   ])
 
@@ -293,7 +296,10 @@ function AddGame() {
           image: null,
           questions: [],
           discussionPoints: [],
-          teacherTexts: []
+          teacherTexts: [],
+          questionInput:"",
+          discussionInput:"",
+          teacherTextInput:""
         }
       ]);
 
