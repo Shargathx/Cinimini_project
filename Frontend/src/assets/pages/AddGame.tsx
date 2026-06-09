@@ -377,7 +377,7 @@ function AddGame() {
 
     {steps.map((step, stepIndex) => (
       <div key={stepIndex}>
-        <h2>Samm {stepIndex + 1}</h2>
+        <h2 id='stepTitle'>Samm {stepIndex + 1}</h2>
 
         <input
           type="file"
