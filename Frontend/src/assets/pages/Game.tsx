@@ -24,6 +24,7 @@ function Game() {
     const [data, setData] = useState<Game | null>(null)
     const [questions, setQuestions] = useState<Question[]>([])
     const [points, setPoints] = useState<Discussion[]>([])
+    const [reverb, setReverb] = useState<Number>(0)
     // const [img, setImg] = useState<string>("")
     // const [toggle, setToggle] = useState(false)
     const media = data?.gameSteps[0]?.mediaElements?.[0]?.fileData ?? ""
@@ -40,6 +41,7 @@ function Game() {
         console.log(fileFormat);
         switch (fileFormat) {
             case "image/png":
+
                 return (
                     media && (
                         <img
@@ -58,12 +60,94 @@ function Game() {
                     )
                 );
             case "audio/mpeg":
+                async function playReversed(url) {
+                    const audioContext = new AudioContext();
+
+                    const response = await fetch(url);
+                    const arrayBuffer = await response.arrayBuffer();
+
+                    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+                    // Reverse each channel
+                    for (let channel = 0; channel < audioBuffer.numberOfChannels; channel++) {
+                        audioBuffer.getChannelData(channel).reverse();
+                    }
+
+                    const source = audioContext.createBufferSource();
+                    source.buffer = audioBuffer;
+                    source.connect(audioContext.destination);
+
+                    source.start();
+                }
+                async function playWithReverb(url) {
+                    const audioContext = new AudioContext();
+
+                    const response = await fetch(url);
+                    const arrayBuffer = await response.arrayBuffer();
+
+                    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+                    // Source
+                    const source = audioContext.createBufferSource();
+                    source.buffer = audioBuffer;
+
+                    // Reverb
+                    const convolver = audioContext.createConvolver();
+                    convolver.buffer = createImpulseResponse(audioContext, 3, 4);
+
+                    // Dry/Wet mix
+                    const dryGain = audioContext.createGain();
+                    const wetGain = audioContext.createGain();
+
+                    dryGain.gain.value = 0.7; // original audio
+                    wetGain.gain.value = reverb; // reverb amount
+
+                    // Connections
+                    source.connect(dryGain);
+                    source.connect(convolver);
+
+                    convolver.connect(wetGain);
+
+                    dryGain.connect(audioContext.destination);
+                    wetGain.connect(audioContext.destination);
+
+                    source.start();
+
+                    function createImpulseResponse(context, duration = 3, decay = 4) {
+                        const length = context.sampleRate * duration;
+                        const impulse = context.createBuffer(
+                            2,
+                            length,
+                            context.sampleRate
+                        );
+
+                        for (let channel = 0; channel < 2; channel++) {
+                            const data = impulse.getChannelData(channel);
+
+                            for (let i = 0; i < length; i++) {
+                                data[i] =
+                                    (Math.random() * 2 - 1) *
+                                    Math.pow(1 - i / length, decay);
+                            }
+                        }
+
+                        return impulse;
+                    }
+
+
+
+                }
+
                 return (
-                    media && (
-                        <audio controls autoPlay>
+                    media && (<>
+                        <audio controls>
                             <source src={`data:audio/mpeg;base64,${media}`} type="audio/mpeg"
                             />
                         </audio>
+                        <button onClick={() => { playReversed(`data:audio/mpeg;base64,${media}`) }}>Reversed</button>
+                        <button onClick={() => { playWithReverb(`data:audio/mpeg;base64,${media}`) }}>Reverb</button>
+                        {changeReverb(1)}
+                    </>
 
                     )
                 )
@@ -71,42 +155,36 @@ function Game() {
         }
     }
 
-    async function reverseAudio(media) {
-        const response = await media
-        const arrayBuffer = await response.arrayBuffer();
+    type Props = {
+        value: number;
+        onChange: (value: number) => void;
+    };
 
-        const audioContext = new AudioContext();
-        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    function changeReverb({ value }: Props) {
+        return (
+            <div>
+                <label
+                    style={{
+                        display: "inline-block",
+                        width: "160px",
+                        fontVariantNumeric: "tabular-nums"
+                    }}
+                >
+                    Reverb amount: {reverb}%
+                </label>
 
-        // Reverse each channel
-        for (let channel = 0; channel < audioBuffer.numberOfChannels; channel++) {
-            const channelData = audioBuffer.getChannelData(channel);
-            channelData.reverse();
-        }
-
-        return audioBuffer;
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={reverb}
+                    onChange={(e) => setReverb(Number(e.target.value))}
+                />
+            </div>
+        );
     }
 
-    function ReversePlayer({ media }) {
-        const handlePlay = async () => {
-            const response = media
-            const arrayBuffer = await response.arrayBuffer();
 
-            const ctx = new AudioContext();
-            const buffer = await ctx.decodeAudioData(arrayBuffer);
-
-            for (let i = 0; i < buffer.numberOfChannels; i++) {
-                buffer.getChannelData(i).reverse();
-            }
-
-            const source = ctx.createBufferSource();
-            source.buffer = buffer;
-            source.connect(ctx.destination);
-            source.start();
-        };
-
-        return <button onClick={handlePlay}>Play Reversed</button>;
-    }
     function getQuestions() {
         if (data) {
             setQuestions(data.gameSteps[0].questions)
