@@ -4,11 +4,20 @@ import './Game.css';
 import type { Game } from '../models/Game'
 import type { Question } from '../models/Question'
 import type { Discussion } from '../models/Discussion'
+import ImageSaturation from '../../components/ImageSaturation';
+import ImageContrast from '../../components/ImageContrast';
+import ImageExposure from '../../components/ImageExposure';
+import ImageZoom from '../../components/ImageZoom';
 
 
 function Game() {
 
     //Praegu veel "barebones"
+
+    const [saturation, setSaturation] = useState(100);
+    const [contrast, setContrast] = useState(100);
+    const [exposure, setExposure] = useState(100);
+    const [zoom, setZoom] = useState(100);
 
     const { id } = useParams()
     const { catid } = useParams() // TODO: on vaja?
@@ -29,7 +38,11 @@ function Game() {
 
     function returnCorrectData() {
         console.log(fileFormat)
-        switch (fileFormat) {
+        
+        
+   
+        
+        (fileFormat) {
             case "image/png":
                 return (
                     media && (
@@ -120,6 +133,44 @@ function Game() {
     return (<>
 
         {returnCorrectData()}
+        {/* {createImg()} */}
+
+        {img && (
+            <img
+                src={`data:image/png;base64,${img}`}
+                alt="Game"
+                style={{
+                    filter: `
+                saturate(${saturation}%)
+                contrast(${contrast}%)
+                brightness(${exposure}%)
+            `,
+                    transform: `scale(${zoom / 100})`,
+                    transformOrigin: "center"
+                }}
+            />
+        )}
+
+        <ImageSaturation
+            value={saturation}
+            onChange={setSaturation}
+        />
+
+        <ImageContrast
+            value={contrast}
+            onChange={setContrast}
+        />
+
+        <ImageExposure
+            value={exposure}
+            onChange={setExposure}
+        />
+
+        <ImageZoom
+            value={zoom}
+            onChange={setZoom}
+        />
+
         <h1>Mängu nimi: {data?.name}</h1>
         <h3>Kirjeldus: {data?.description}</h3>
         <button onClick={() => { getQuestions() }}>Questions</button>
