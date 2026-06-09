@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { Category } from '../models/Category'
 import type { CreateGameStep } from '../models/CreateGameStep'
+import type { Media } from '../models/Media';
 import './AddGame.css';
 
 function AddGame() {
@@ -17,16 +18,44 @@ function AddGame() {
   const [discussionPointsCounter, setDiscussionPointsCounter] = useState(0)
   //Teacher text
   const [teacherText, setTeacherText] = useState("")
-  const [teacherCounter, setTeacherCounter] = useState(0)
+  const [teacherTextCounter, setTeacherTextCounter] = useState(0);
 
   const [steps, setSteps] = useState<CreateGameStep[]>([
     {
       image: null,
       questions: [],
       discussionPoints: [],
-      teacherTexts: []
+      teacherTexts: [],
+      questionInput:"",
+      discussionInput:"",
+      teacherTextInput:""
     }
   ])
+
+  type TeacherText = {
+    id: number;
+    teacherText: string;
+  };
+
+  type GameStepForm = {
+    image: File | null;
+
+    questions: {
+      id: number;
+      questionText: string;
+    }[];
+
+    discussionPoints: {
+      id: number;
+      discussionText: string;
+    }[];
+
+    teacherTexts: TeacherText[];
+
+    questionInput: string;
+    discussionInput: string;
+    teacherTextInput: string;
+  };
   //Form data
 
   useEffect(() => {
@@ -36,24 +65,138 @@ function AddGame() {
       .catch(err => console.error(err));
   }, []);
 
-  function addQuestion(newQuestion: string) {
-    const newId = questionCounter + 1;
+  function createEmptyStep(): GameStepForm {
+    return {
+      image: null,
 
+      questions: [],
+      discussionPoints: [],
+      teacherTexts: [],
+
+      questionInput: "",
+      discussionInput: "",
+      teacherTextInput: ""
+    };
+  }
+
+  function addStep() {
+    setSteps(prev => [...prev, createEmptyStep()]);
+  }
+
+  function updateQuestionInput(
+    stepIndex: number,
+    value: string
+  ) {
+    setSteps(prev =>
+      prev.map((step, index) =>
+        index === stepIndex
+          ? { ...step, questionInput: value }
+          : step
+      )
+    );
+  }
+
+  function updateDiscussionInput(
+    stepIndex: number,
+    value: string
+  ) {
+    setSteps(prev =>
+      prev.map((step, index) =>
+        index === stepIndex
+          ? { ...step, discussionInput: value }
+          : step
+      )
+    );
+  }
+
+  function addQuestion(stepIndex: number) {
+    const questionText =
+      steps[stepIndex].questionInput.trim();
+
+    if (!questionText) return;
+
+    const newId = questionCounter + 1;
     setQuestionCounter(newId);
 
     setSteps(prev =>
       prev.map((step, index) =>
-        index === 0 ? { ...step, questions: [...step.questions, { id: newId, questionText: newQuestion }] } : step));
+        index === stepIndex
+          ? {
+            ...step,
+            questionInput: "",
+            questions: [
+              ...step.questions,
+              {
+                id: newId,
+                questionText
+              }
+            ]
+          }
+          : step
+      )
+    );
+  }
+  function updateTeacherTextInput(
+    stepIndex: number,
+    value: string
+  ) {
+    setSteps(prev =>
+      prev.map((step, index) =>
+        index === stepIndex
+          ? {
+            ...step,
+            teacherTextInput: value
+          }
+          : step
+      )
+    );
   }
 
-  function addTeacherText(newText: string) {
-    const newId = questionCounter + 1;
+  function addTeacherText(stepIndex: number) {
+    const text =
+      steps[stepIndex].teacherTextInput.trim();
 
-    setTeacherCounter(newId);
+    if (!text) return;
+
+    const newId = teacherTextCounter + 1;
+    setTeacherTextCounter(newId);
 
     setSteps(prev =>
       prev.map((step, index) =>
-        index === 0 ? { ...step, teacherTexts: [...step.teacherTexts, { id: newId, teachertext: newText }] } : step));
+        index === stepIndex
+          ? {
+            ...step,
+            teacherTextInput: "",
+
+            teacherTexts: [
+              ...step.teacherTexts,
+              {
+                id: newId,
+                teacherText: text
+              }
+            ]
+          }
+          : step
+      )
+    );
+  }
+
+  function deleteTeacherText(
+    stepIndex: number,
+    teacherTextId: number
+  ) {
+    setSteps(prev =>
+      prev.map((step, index) =>
+        index === stepIndex
+          ? {
+            ...step,
+            teacherTexts: step.teacherTexts.filter(
+              t => t.id !== teacherTextId
+            )
+          }
+          : step
+      )
+    );
   }
 
 
@@ -63,87 +206,158 @@ function AddGame() {
         index === 0 ? { ...step, teacherTexts: step.teacherTexts.filter(q => q.id !== id) } : step));
   }
 
-  function deleteQuestion(id: number) {
+  function deleteQuestion(
+    stepIndex: number,
+    questionId: number
+  ) {
     setSteps(prev =>
       prev.map((step, index) =>
-        index === 0 ? { ...step, questions: step.questions.filter(q => q.id !== id) } : step));
+        index === stepIndex
+          ? {
+            ...step,
+            questions: step.questions.filter(
+              q => q.id !== questionId
+            )
+          }
+          : step
+      )
+    );
   }
 
-  const handleSubmit = () => {
-
-    const missingImage = steps.some(step => !step.image);
-
-    if (missingImage) {
-      alert("Kõigil sammudel peab olema meediafail!");
-      return;
-    }
-
+  const handleSubmit = async () => {
     const formData = new FormData();
+
     formData.append("name", name);
     formData.append("description", description);
     formData.append("categoryId", String(category));
 
     steps.forEach((step, stepIndex) => {
+
+      // image
       if (step.image) {
         formData.append(
-          `steps[${stepIndex}].image`, step.image);
+          `steps[${stepIndex}].image`,
+          step.image
+        );
       }
 
+      // questions
       step.questions.forEach((question, questionIndex) => {
         formData.append(
-          `steps[${stepIndex}].questions[${questionIndex}]`, question.questionText);
-      });
-
-      step.discussionPoints.forEach((discussion, discussionIndex) => {
-        formData.append(
-          `steps[${stepIndex}].discussionPoints[${discussionIndex}]`, discussion.discussionText
+          `steps[${stepIndex}].questions[${questionIndex}]`,
+          question.questionText
         );
       });
-      step.teacherTexts.forEach((text, textIndex) => {
-        formData.append(
-          `steps[${stepIndex}].teacherTexts[${textIndex}]`, text.teachertext);
-      });
+
+      step.teacherTexts.forEach(
+        (teacherText, teacherTextIndex) => {
+          formData.append(
+            `steps[${stepIndex}].teacherTexts[${teacherTextIndex}]`,
+            teacherText.teacherText
+          );
+        }
+      );
+
+      // discussion points
+      step.discussionPoints.forEach(
+        (discussion, discussionIndex) => {
+          formData.append(
+            `steps[${stepIndex}].discussionPoints[${discussionIndex}]`,
+            discussion.discussionText
+          );
+        }
+      );
     });
 
-    fetch(import.meta.env.VITE_BACK_URL + "/games/add-game", {
-      method: "POST",
-      body: formData
-    })
-      .then(res => {
-        if (!res.ok) {
-          throw new Error("Failed to save game");
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ', ' + pair[1]);
+    }
+
+    try {
+      const response = await fetch(
+        import.meta.env.VITE_BACK_URL + "/games/add-game",
+        {
+          method: "POST",
+          body: formData
         }
-        alert("Game saved!");
-        setName("");
-        setDescription("");
-        setSteps([
-          {
-            image: null,
-            questions: [],
-            discussionPoints: [],
-            teacherTexts: []
-          }
-        ]);
-      }).catch(err => console.error(err));
-  }
+      );
 
-  function addDiscussionpoint(newPoint: string) {
+      if (!response.ok) {
+        throw new Error("Failed to save game");
+      }
+
+      alert("Game saved!");
+
+      setName("");
+      setDescription("");
+
+      setSteps([
+        {
+          image: null,
+          questions: [],
+          discussionPoints: [],
+          teacherTexts: [],
+          questionInput:"",
+          discussionInput:"",
+          teacherTextInput:""
+        }
+      ]);
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  function addDiscussionPoint(
+    stepIndex: number
+  ) {
+    const discussionText =
+      steps[stepIndex].discussionInput.trim();
+
+    if (!discussionText) return;
+
     const newId = discussionPointsCounter + 1;
-
     setDiscussionPointsCounter(newId);
 
     setSteps(prev =>
       prev.map((step, index) =>
-        index === 0 ? { ...step, discussionPoints: [...step.discussionPoints, { id: newId, discussionText: newPoint }] } : step));
-    setNewpoint("");
+        index === stepIndex
+          ? {
+            ...step,
+            discussionInput: "",
+            discussionPoints: [
+              ...step.discussionPoints,
+              {
+                id: newId,
+                discussionText
+              }
+            ]
+          }
+          : step
+      )
+    );
   }
 
-  function deletePoint(id: number) {
+  function deletePoint(
+    stepIndex: number,
+    pointId: number
+  ) {
     setSteps(prev =>
-      prev.map((step, index) => index === 0 ? { ...step, discussionPoints: step.discussionPoints.filter(p => p.id !== id) } : step));
+      prev.map((step, index) =>
+        index === stepIndex
+          ? {
+            ...step,
+            discussionPoints: step.discussionPoints.filter(
+              p => p.id !== pointId
+            )
+          }
+          : step
+      )
+    );
   }
 
   return (<>
+
     <h1 id='addGameTitle'>Loo mäng</h1>
     <label id='gameNameLabel'>Mängu nimi: </label>
     <input id='gameName' onChange={(e) => { setName(e.target.value) }}></input><br></br>
@@ -157,49 +371,162 @@ function AddGame() {
     <label id='gameDescriptionLabel'>Kirjeldus: </label><br />
     <textarea id='gameDescriptionBox' onChange={(e) => { setDescription(e.target.value) }}></textarea>
     <hr></hr>
+    <button type="button" onClick={addStep}>
+      Lisa uus samm
+    </button>
 
-    <div>
+    {steps.map((step, stepIndex) => (
+      <div key={stepIndex}>
+        <h2>Samm {stepIndex + 1}</h2>
 
-      <h2 id='uploadImageTitle'>Lae üles pilt:</h2>
-      <input id='uploadImageBtn' type="file"
-        onChange={(e) =>
-          setSteps(prev =>
-            prev.map((step, index) => index === 0 ? { ...step, image: e.target.files?.[0] ?? null } : step))}
-      />
+        <input
+          type="file"
+          onChange={(e) =>
+            setSteps(prev =>
+              prev.map((s, index) =>
+                index === stepIndex
+                  ? {
+                    ...s,
+                    image: e.target.files?.[0] ?? null
+                  }
+                  : s
+              )
+            )
+          }
+        />
 
-      <h2 id='addQuestionTitle'>Lisa küsimus</h2>
-      <input value={newQuestion} onChange={(e) => { setNewQuestion(e.target.value) }} id='addQuestion' name='addQuestion' type='text'></input><br />
-      <button id='addQuestionBtn' type='button' onClick={() => { addQuestion(newQuestion) }}>Lisa Küsimus</button>
-      <div id='questionsList'>Küsimused: </div>
-      {
-        steps[0].questions.map((question) =>
-          (<div key={question.id}>{question.questionText} <button id='deleteQuestionBtn' onClick={() => { deleteQuestion(question.id) }}>Kustuta</button></div>)
-        )
+        <h3>Lisa küsimus</h3>
+
+        <input
+          value={step.questionInput}
+          onChange={(e) =>
+            updateQuestionInput(
+              stepIndex,
+              e.target.value
+            )
+          }
+        />
+
+        <button
+          type="button"
+          onClick={() => addQuestion(stepIndex)}
+        >
+          Lisa küsimus
+        </button>
+
+        {step.questions.map(question => (
+          <div key={question.id}>
+            {question.questionText}
+
+            <button
+              type="button"
+              onClick={() =>
+                deleteQuestion(
+                  stepIndex,
+                  question.id
+                )
+              }
+            >
+              Kustuta
+            </button>
+          </div>
+        ))}
+
+        <h3>Lisa arutelupunkt</h3>
+
+        <input
+          value={step.discussionInput}
+          onChange={(e) =>
+            updateDiscussionInput(
+              stepIndex,
+              e.target.value
+            )
+          }
+        />
+
+        <button
+          type="button"
+          onClick={() =>
+            addDiscussionPoint(stepIndex)
+          }
+        >
+          Lisa arutelupunkt
+        </button>
+
+        {step.discussionPoints.map(point => (
+          <div key={point.id}>
+            {point.discussionText}
+
+            <button
+              type="button"
+              onClick={() =>
+                deletePoint(
+                  stepIndex,
+                  point.id
+                )
+              }
+            >
+              Kustuta
+            </button>
+          </div>
+
+        ))}
+
+        <h3>Õpetaja tekst</h3>
+
+        <input
+          type="text"
+          value={step.teacherTextInput}
+          onChange={(e) =>
+            updateTeacherTextInput(
+              stepIndex,
+              e.target.value
+            )
+          }
+        />
+
+        <button
+          type="button"
+          onClick={() => addTeacherText(stepIndex)}
+        >
+          Lisa õpetaja tekst
+        </button>
+
+        <div>Õpetaja tekstid:</div>
+
+        {step.teacherTexts.map(text => (
+          <div key={text.id}>
+            {text.teacherText}
+
+            <button
+              type="button"
+              onClick={() =>
+                deleteTeacherText(
+                  stepIndex,
+                  text.id
+                )
+              }
+            >
+              Kustuta
+            </button>
+          </div>
+        ))}
+
+        <hr />
+      </div>
+    ))}
+
+    <button
+      type="button"
+      onClick={() =>
+        handleSubmit()
       }
+    >
+      SALVESTA
+    </button>
 
-      <h2 id='addDiscussionTitle'>Lisa Arutelu</h2>
-      <input value={newPoint} onChange={(e) => { setNewpoint(e.target.value) }} id='addDiscussion' name='addQuestion' type='text'></input><br />
-      <button id='addDiscussionBtn' type='button' onClick={() => { addDiscussionpoint(newPoint) }}>Lisa Arutelupunkt</button>
-      <div id='discussionPointsList'>Arutelu punktid: </div>
-      {
-        steps[0].discussionPoints.map((discussionPoint) =>
-          (<div key={discussionPoint.id}>{discussionPoint.discussionText} <button id='deleteDiscussionBtn' onClick={() => { deletePoint(discussionPoint.id) }}>Kustuta</button></div>)
-        )
-      }
 
-      <h2 id='addTeacherTextTitle'>Lisa tekst õpetajale: </h2>
-      <input value={teacherText} onChange={(e) => { setTeacherText(e.target.value) }} id='addTeachText' name='addTeachText' type='text'></input><br />
-      <button id='addTeachTextbtn' type='button' onClick={() => { addTeacherText(teacherText); }}>Lisa õpetaja tekst: </button>
-      <div id='questionsList'>Tekst: </div>
-      {
-        steps[0].teacherTexts.map((text) =>
-          (<div key={text.id}>{text.teachertext} <button id='deleteTeacherText' onClick={() => { deleteTeacherText(text.id) }}>Kustuta</button></div>)
-        )
-      }
-      <hr></hr>
-      <button id='saveGameBtn' onClick={() => { handleSubmit() }} type='submit'>SALVESTA</button>
 
-    </div>
   </>
   )
 }

@@ -6,5 +6,8 @@ export interface CreateGameStep {
     image: File | null;
     questions: Question[];
     discussionPoints: Discussion[];
-    teacherTexts: TeacherText[]
+    teacherTexts: TeacherText[];
+    questionInput: string,
+    discussionInput: string,
+    teacherTextInput:string
 }
