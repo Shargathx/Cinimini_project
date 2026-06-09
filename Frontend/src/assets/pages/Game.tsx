@@ -4,6 +4,7 @@ import './Game.css';
 import type { Game } from '../models/Game'
 import type { Question } from '../models/Question'
 import type { Discussion } from '../models/Discussion'
+import ImageGreyscale from '../../components/ImageGreyscale';
 
 
 function Game() {
@@ -56,12 +57,20 @@ function Game() {
 
     return (<>
         {/* {createImg()} */}
+
         {img && (
+            <ImageGreyscale imageData={img} />
+        )}
+
+
+        {/* {img && (
             <img
                 src={`data:image/png;base64,${img}`}
                 alt="Game"
             />
-        )}
+        )} */}
+
+
         <h1>Mängu nimi: {data?.name}</h1>
         <h3>Kirjeldus: {data?.description}</h3>
         <button onClick={() => { getQuestions() }}>Questions</button>
