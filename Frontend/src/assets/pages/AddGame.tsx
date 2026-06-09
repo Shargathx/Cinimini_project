@@ -496,7 +496,7 @@ function AddGame() {
 
         {step.teacherTexts.map(text => (
           <div key={text.id}>
-            {text.teacherText}
+            {text.teachertext}
 
             <button
               type="button"
