@@ -395,7 +395,7 @@ function AddGame() {
           }
         />
 
-        <h3>Lisa küsimus</h3>
+        <h3 id='addQuestionTitle'>Lisa küsimus</h3>
 
         <input
           value={step.questionInput}
@@ -404,11 +404,12 @@ function AddGame() {
               stepIndex,
               e.target.value
             )
-          }
+          }id='addQuestion'
         />
 
         <button
           type="button"
+          id='addQuestionBtn'
           onClick={() => addQuestion(stepIndex)}
         >
           Lisa küsimus
@@ -432,7 +433,7 @@ function AddGame() {
           </div>
         ))}
 
-        <h3>Lisa arutelupunkt</h3>
+        <h3 id='addDiscussionTitle'>Lisa arutelupunkt</h3>
 
         <input
           value={step.discussionInput}
@@ -441,10 +442,10 @@ function AddGame() {
               stepIndex,
               e.target.value
             )
-          }
+          } id='addDiscussion'
         />
 
-        <button
+        <button id='addDiscussionBtn'
           type="button"
           onClick={() =>
             addDiscussionPoint(stepIndex)
@@ -472,7 +473,7 @@ function AddGame() {
 
         ))}
 
-        <h3>Õpetaja tekst</h3>
+        <h3 id='addTeacherTextTitle'>Õpetaja tekst</h3>
 
         <input
           type="text"
@@ -482,10 +483,10 @@ function AddGame() {
               stepIndex,
               e.target.value
             )
-          }
+          } id='addTeachText'
         />
 
-        <button
+        <button id='addTeachTextBtn'
           type="button"
           onClick={() => addTeacherText(stepIndex)}
         >
@@ -516,7 +517,7 @@ function AddGame() {
       </div>
     ))}
 
-    <button
+    <button id='saveGameBtn'
       type="button"
       onClick={() =>
         handleSubmit()
