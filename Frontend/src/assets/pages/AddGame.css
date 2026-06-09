@@ -8,9 +8,17 @@
     margin: 10px 0px;
 }
 
-#gameNameLabel, #gameCatLabel {
+#gameNameLabel, #gameCatLabel{
     font-size: 20px;
     margin-left: 20px;
+    
+}
+
+#gameDescriptionLabel{
+    font-size: 20px;
+    margin-left: 20px;
+
+    
 }
 
 #gameName, #gameCat {
@@ -18,10 +26,23 @@
     margin-bottom: 20px;
     padding: 5px;
     font-size: 16px;
+    background-color: aqua;
+    border: 3px solid #91F2BE;
+    border-radius: 5px;
 }
 
-#uploadImageTitle, #addQuestionTitle, #addDiscussionTitle {
-    font-size: 24px;
+ #gameDescriptionBox {
+    margin-left: 31px;
+    margin-bottom: 0px;
+    padding: 5px;
+    font-size: 16px;
+    background-color: aqua;
+    border: 3px solid #91F2BE;
+    border-radius: 5px;
+}
+
+#uploadImageTitle, #addQuestionTitle, #addDiscussionTitle, #addTeacherTextTitle {
+    font-size: 18px;
     margin-left: 20px;
 }
 
@@ -41,7 +62,7 @@ input[type="file"]::file-selector-button {
     font-size: 16px;
     font-weight: 400;
 
-    background: #76f8c6;
+    background: #91F2BE;
     color: black;
 
     cursor: pointer;
@@ -55,25 +76,40 @@ input[type="file"]::file-selector-button:active {
     transform: scale(1.05);
 }
 
-#addQuestion, #addDiscussion {
+#addQuestion, #addDiscussion, #addTeachText {
     margin-left: 20px;
     margin-bottom: 10px;
     padding: 5px;
     font-size: 16px;
+    background-color: red;
+    border: 3px solid #91F2BE;
+    border-radius: 5px;
 }
 
-#addQuestionBtn, #addDiscussionBtn {
+#addQuestionBtn, #addDiscussionBtn, #addTeachTextBtn{
     margin-left: 20px;
     padding: 5px 10px;
     font-size: 14px;
-    background-color: #acffd5ba;
+    background-color: #9ff9c9;
     color: black;
-    border: none;
-    border-radius: 5px;
+    border: 3px solid #47f19f;
+    border-radius: 30px;
     cursor: pointer;
 }
 
-#questionsList, #discussionPointsList {
+#addQuestionBtn:hover, #addDiscussionBtn:hover, #addTeachTextBtn:hover{
+    margin-left: 20px;
+    padding: 5px 10px;
+    font-size: 14px;
+    transform: scale(1.05);
+    background-color: #9ff9c9;
+    color: white;
+    border: 3px solid #47f19f;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+#questionsList, #discussionPointsList, #teacherTextList {
     margin-left: 20px;
     margin-bottom: 20px;
 }

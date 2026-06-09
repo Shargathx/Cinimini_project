@@ -47,7 +47,7 @@ function AddGame() {
   }
 
   function addTeacherText(newText: string) {
-    const newId = questionCounter + 1;
+    const newId = teacherCounter + 1;
 
     setTeacherCounter(newId);
 
@@ -154,7 +154,7 @@ function AddGame() {
       ))}
     </select><br />
 
-    <label id='gameDescriptionLabel'>Kirjeldus: </label><br />
+    <label id='gameDescriptionLabel'>Kirjeldus: </label>
     <textarea id='gameDescriptionBox' onChange={(e) => { setDescription(e.target.value) }}></textarea>
     <hr></hr>
 
@@ -189,8 +189,8 @@ function AddGame() {
 
       <h2 id='addTeacherTextTitle'>Lisa tekst õpetajale: </h2>
       <input value={teacherText} onChange={(e) => { setTeacherText(e.target.value) }} id='addTeachText' name='addTeachText' type='text'></input><br />
-      <button id='addTeachTextbtn' type='button' onClick={() => { addTeacherText(teacherText); }}>Lisa õpetaja tekst: </button>
-      <div id='questionsList'>Tekst: </div>
+      <button id='addTeachTextBtn' type='button' onClick={() => { addTeacherText(teacherText); }}>Lisa õpetaja tekst: </button>
+      <div id='teacherTextList'>Tekst: </div>
       {
         steps[0].teacherTexts.map((text) =>
           (<div key={text.id}>{text.teachertext} <button id='deleteTeacherText' onClick={() => { deleteTeacherText(text.id) }}>Kustuta</button></div>)
