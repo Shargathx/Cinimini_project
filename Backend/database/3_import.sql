@@ -45,6 +45,18 @@ INSERT INTO public.discussion_point (id, game_step_id, discussion_text, is_activ
 VALUES (default, 1, 'Teine küsimus.', false, 2);
 
 
+INSERT INTO public.teacher_info(id, game_step_id, teacher_text, is_active, text_order)
+VALUES (default, 1, 'Julgusta lapsi kirjeldama, mida nad pildil märkavad.', true, 1);
+INSERT INTO public.teacher_info(id, game_step_id, teacher_text, is_active, text_order)
+VALUES (default, 1, 'Suuna arutelu emotsioonidele, mida pilt tekitab.', true, 2);
+INSERT INTO public.teacher_info(id, game_step_id, teacher_text, is_active, text_order)
+VALUES (default, 1, 'Mitteaktiivne õpetaja märkus testimiseks.', false, 3);
+INSERT INTO public.teacher_info(id, game_step_id, teacher_text, is_active, text_order)
+VALUES (default, 2, 'Palu lastel tähele panna video olulisi detaile.', true, 1);
+INSERT INTO public.teacher_info(id, game_step_id, teacher_text, is_active, text_order)
+VALUES (default, 3, 'Kuulake heli lõpuni enne küsimuste arutamist.', true, 1);
+
+
 INSERT INTO public.media (id, game_step_id, media_type, file_name)
 VALUES (default, 1, 'image', 'Raul.png');
 

@@ -8,4 +8,5 @@ spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 spring.servlet.multipart.max-file-size=10MB
 spring.servlet.multipart.max-request-size=10MB
 spring.jpa.show-sql=true
+logging.level.org.springframework.transaction=DEBUG
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect

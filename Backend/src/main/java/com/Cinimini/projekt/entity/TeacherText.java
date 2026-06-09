@@ -8,20 +8,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "discussion_point")
+@Table(name = "teacher_info")
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiscussionPoint {
+public class TeacherText {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String discussionText;
+    private String teacherText;
     private Boolean isActive;
 
-    @Column(name ="discussion_order", nullable = false)
-    private Integer discussionOrder;
+    @Column(name ="text_order", nullable = false)
+    private Integer textOrder;
 
     @JsonIgnore
     @ManyToOne

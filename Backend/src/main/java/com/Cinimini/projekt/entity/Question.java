@@ -20,6 +20,8 @@ public class Question {
     private String questionText;
     @Column(name = "is_active")
     private Boolean isActive;
+
+    @Column(name ="question_order", nullable = false)
     private Integer questionOrder;
 
     @JsonIgnore
