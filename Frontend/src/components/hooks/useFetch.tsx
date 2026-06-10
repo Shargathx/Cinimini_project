@@ -5,7 +5,6 @@ export function useFetch<T>(url: string, dependencies: unknown[] = []) {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<unknown | null>(null);
 
-    // Turn the dependencies array into a stable string primitive that the linter can track
     const depsString = JSON.stringify(dependencies);
 
     useEffect(() => {
@@ -37,7 +36,6 @@ export function useFetch<T>(url: string, dependencies: unknown[] = []) {
             setError(null);
         };
 
-        // The linter is completely fine with primitives like strings and variables!
     }, [url, depsString]);
 
     return { data, loading, error };
