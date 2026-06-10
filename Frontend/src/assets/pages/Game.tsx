@@ -30,7 +30,6 @@ function Game() {
     // const [img, setImg] = useState<string>("")
     // const [toggle, setToggle] = useState(false)
     const [teacherTexts, setTeacherText] = useState<TeacherText[]>([])
-    const [reverb, setReverb] = useState<number>(0)
     const media = data?.gameSteps[0]?.mediaElements?.[0]?.fileData ?? ""
     const fileFormat = data?.gameSteps[0]?.mediaElements?.[0]?.mediaType ?? ""
 
@@ -186,7 +185,7 @@ function Game() {
                         </video><br></br>
                         <button onClick={() => { playReverse() }}>Reverse</button>
                         <button onClick={() => { playFast() }}>Fast</button>
-                        {changeSpeed(video, playFast)}
+                        {changeSpeed(playFast)}
                     </>
                     )
                 );
@@ -194,10 +193,6 @@ function Game() {
         }
     }
 
-    type Props = {
-        value: number;
-        onChange: (value: number) => void;
-    };
 
     function changeReverb() {
         return (
@@ -223,7 +218,7 @@ function Game() {
         );
     }
 
-    function changeSpeed(video: HTMLVideoElement, func) {
+    function changeSpeed(func:Function) {
         return (
             <div>
                 <label
