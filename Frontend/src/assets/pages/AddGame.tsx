@@ -380,6 +380,7 @@ function AddGame() {
       <div key={stepIndex}>
         <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
 
+
         <input
           type="file"
           onChange={(e) =>
