@@ -153,8 +153,10 @@ function AddGame() {
   }
 
   function addTeacherText(stepIndex: number) {
+    
     const text =
       steps[stepIndex].teacherTextInput.trim();
+    console.log(text)
 
     if (!text) return;
 
@@ -167,7 +169,6 @@ function AddGame() {
           ? {
             ...step,
             teacherTextInput: "",
-
             teacherTexts: [
               ...step.teacherTexts,
               {
@@ -199,12 +200,6 @@ function AddGame() {
     );
   }
 
-
-  function deleteTeacherText(id: number) {
-    setSteps(prev =>
-      prev.map((step, index) =>
-        index === 0 ? { ...step, teacherTexts: step.teacherTexts.filter(q => q.id !== id) } : step));
-  }
 
   function deleteQuestion(
     stepIndex: number,
@@ -272,6 +267,8 @@ function AddGame() {
     for (var pair of formData.entries()) {
       console.log(pair[0] + ', ' + pair[1]);
     }
+
+    console.log(formData.entries())
 
     try {
       const response = await fetch(
@@ -496,9 +493,9 @@ function AddGame() {
         <div>Õpetaja tekstid:</div>
 
         {step.teacherTexts.map(text => (
-          <div key={text.id}>
-            {text.teachertext}
 
+          <div key={text.id}>
+            {text.teacherText}
             <button
               type="button"
               onClick={() =>
