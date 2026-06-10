@@ -82,6 +82,12 @@ function AddGame() {
     setSteps(prev => [...prev, createEmptyStep()]);
   }
 
+  function deleteStep(stepIndex: number) {
+    setSteps(prev =>
+      prev.filter((_, index) => index !== stepIndex)
+    );
+  }
+
   function updateQuestionInput(
     stepIndex: number,
     value: string
@@ -347,34 +353,34 @@ function AddGame() {
   }
 
   return (<>
-  <div id="generalContainer">
-    <h1 id="addGameTitle">Loo mäng</h1>
-    
-    <label id="gameNameLabel">Mängu nimi: </label>
-    <input id="gameName" value={name} onChange={(e) => { setName(e.target.value) }}></input><br></br>
-    <label id="gameCatLabel">Kategooria: </label>
-    <select
-      value={category}
-      onChange={(e) => setCategory(e.target.value)}
-      id="gameCat"
-      name="gameCat"
-    >
-      <option value="" disabled>
-        Vali kategooria
-      </option>
+    <div id="generalContainer">
+      <h1 id="addGameTitle">Loo mäng</h1>
 
-      {categories.map((category) => (
-        <option key={category.id} value={category.id}>
-          {category.name}
+      <label id="gameNameLabel">Mängu nimi: </label>
+      <input id="gameName" value={name} onChange={(e) => { setName(e.target.value) }}></input><br></br>
+      <label id="gameCatLabel">Kategooria: </label>
+      <select
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        id="gameCat"
+        name="gameCat"
+      >
+        <option value="" disabled>
+          Vali kategooria
         </option>
-      ))}
-    </select>
-    
-    <br />
 
-    <label id="gameDescriptionLabel">Kirjeldus: </label>
-    <textarea id="gameDescriptionBox" onChange={(e) => { setDescription(e.target.value) }}></textarea>
-  </div>ˇ
+        {categories.map((category) => (
+          <option key={category.id} value={category.id}>
+            {category.name}
+          </option>
+        ))}
+      </select>
+
+      <br />
+
+      <label id="gameDescriptionLabel">Kirjeldus: </label>
+      <textarea id="gameDescriptionBox" onChange={(e) => { setDescription(e.target.value) }}></textarea>
+    </div>ˇ
     <hr></hr>
     <button type="button" id="stepBtn" onClick={addStep}>
       Lisa uus samm
@@ -383,6 +389,13 @@ function AddGame() {
       {steps.map((step, stepIndex) => (
         <div key={stepIndex} id="singleStep">
           <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
+
+          <button
+            type="button"
+            onClick={() => deleteStep(stepIndex)}
+          >
+            Kustuta samm
+          </button>
 
           <input
             type="file"
@@ -521,7 +534,7 @@ function AddGame() {
                 Kustuta
               </button>
             </div>
-          ))}  
+          ))}
         </div>
       ))}
     </div>

@@ -9,6 +9,7 @@ import ImageSaturation from '../../components/ImageSaturation';
 import ImageContrast from '../../components/ImageContrast';
 import ImageExposure from '../../components/ImageExposure';
 import ImageZoom from '../../components/ImageZoom';
+import fullscreenIcon from '../icons/fullscreen_icon.svg'
 
 
 function Game() {
@@ -39,7 +40,20 @@ function Game() {
             .then(res => res.json())
             .then(json => { setData(json) })
             .catch(err => console.error(err));
-    }, [id])
+    }, [id]);
+
+    useEffect(() => {
+        if (!fullscreen) return;
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                setFullscreen(false);
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [fullscreen]);
 
     function returnCorrectData() {
         console.log(fileFormat);
@@ -48,26 +62,34 @@ function Game() {
 
                 return (
                     media && (
-                        <>
+                        <div className="image-wrapper">
                             <img
                                 className="image-container"
                                 src={`data:image/png;base64,${media}`}
                                 alt="Game"
                                 style={{
                                     filter: `
-                            saturate(${saturation}%)
-                            contrast(${contrast}%)
-                            brightness(${exposure}%)
-                        `,
+                        saturate(${saturation}%)
+                        contrast(${contrast}%)
+                        brightness(${exposure}%)
+                    `,
                                     transform: `scale(${zoom / 100})`,
                                     transformOrigin: "center"
                                 }}
                             />
 
-                            <button onClick={() => setFullscreen(true)}>
-                                Fullscreen
+                            <button
+                                className="fullscreen-btn"
+                                onClick={() => setFullscreen(true)}
+                            >
+                                <img
+                                    src={fullscreenIcon}
+                                    alt="Fullscreen"
+                                    width="32"
+                                    height="32"
+                                />
                             </button>
-                        </>
+                        </div>
                     )
                 );
             case "audio/mpeg":
@@ -146,9 +168,6 @@ function Game() {
                             return impulse;
                         }
 
-
-
-
                     }
                     return (
                         media && (<>
@@ -201,9 +220,7 @@ function Game() {
                         )
                     );
                 }
-
         }
-
     }
 
     function changeReverb() {
@@ -268,7 +285,6 @@ function Game() {
         }
     }
 
-
     function getTeacherText() {
         console.log(data?.gameSteps?.[0]);
         if (data) {
@@ -278,7 +294,6 @@ function Game() {
 
     return (
         <div className="game-grid-container">
-
             <div className="game-content">
                 {returnCorrectData()}
             </div>
@@ -334,6 +349,16 @@ function Game() {
                     <div key={teacherText.id}>{teacherText.teacherText}</div>
                 ))}
             </div>
+
+            <button className="fullscreen-btn" onClick={() => setFullscreen(true)}>
+                <img
+                    src={fullscreenIcon}
+                    alt="Fullscreen button"
+                    width="32"
+                    height="32"
+                />
+            </button>
+
             {fullscreen && fileFormat.startsWith("image/") && (
                 <div
                     className="fullscreen-overlay"
