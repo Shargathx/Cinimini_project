@@ -5,16 +5,8 @@ type Props = {
 
 function ImageExposure({ value, onChange }: Props) {
     return (
-        <div>
-            <label
-                style={{
-                    display: "inline-block",
-                    width: "160px",
-                    fontVariantNumeric: "tabular-nums"
-                }}
-            >
-                Exposure: {value}%
-            </label>
+        <div className="slider-control">
+            <label>Exposure: {value}%</label>
 
             <input
                 type="range"

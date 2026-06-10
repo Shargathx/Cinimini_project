@@ -5,16 +5,8 @@ type Props = {
 
 function ImageContrast({ value, onChange }: Props) {
     return (
-        <div>
-            <label
-                style={{
-                    display: "inline-block",
-                    width: "160px",
-                    fontVariantNumeric: "tabular-nums"
-                }}
-            >
-                Contrast: {value}%
-            </label>
+        <div className="slider-control">
+            <label>Contrast: {value}%</label>
 
             <input
                 type="range"
