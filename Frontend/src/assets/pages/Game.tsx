@@ -136,8 +136,8 @@ function Game() {
 
 
 
-                }
 
+                }
                 return (
                     media && (<>
                         <audio controls>
@@ -151,6 +151,47 @@ function Game() {
 
                     )
                 )
+            case "video/mp4":
+                const video = document.getElementById("video");
+                let reverseInterval;
+                let noramlIterval
+
+                function playNormal() {
+                    video.pause()
+                    video.play()
+                }
+
+                function playReverse() {
+                    clearInterval(reverseInterval);
+                    video.pause()
+                    console.log(video.duration)
+                    reverseInterval = setInterval(() => {
+                        if (video?.currentTime <= 0) {
+                            video.pause()
+                            clearInterval(reverseInterval);
+                            return;
+                        }
+
+                        video.currentTime -= 0.04; // ~25fps
+                    }, 40);
+                }
+
+                function playFast() {
+                    video.defaultPlaybackRate = 0.5;
+                    video.play()
+                }
+
+                return (
+                    media && (<>
+                        <video id='video' width="320" height="240">
+                            <source src={`data:video/mp4;base64,${media}`} type="video/mp4"></source>
+                        </video><br></br>
+                        <button onClick={() => { playReverse() }}>Reverse</button>
+                        <button onClick={() => { playNormal() }}>Play</button>
+                        <button onClick={() => { playFast() }}>Fast</button>
+                    </>
+                    )
+                );
 
         }
     }
