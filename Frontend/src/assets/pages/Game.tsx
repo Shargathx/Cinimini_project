@@ -268,56 +268,64 @@ function Game() {
         }
     }
 
-    return (<>
+    return (
+        <div className="game-grid-container">
 
-        {returnCorrectData()}
+            <div className="game-content">
+                {returnCorrectData()}
+            </div>
 
-        {fileFormat.startsWith("image/") && (
-            <>
-                <ImageSaturation
-                    value={saturation}
-                    onChange={setSaturation}
-                />
+            <div className="game-function">
+                {fileFormat.startsWith("image/") && (
+                    <>
+                        <ImageSaturation
+                            value={saturation}
+                            onChange={setSaturation}
+                        />
 
-                <ImageContrast
-                    value={contrast}
-                    onChange={setContrast}
-                />
+                        <ImageContrast
+                            value={contrast}
+                            onChange={setContrast}
+                        />
 
-                <ImageExposure
-                    value={exposure}
-                    onChange={setExposure}
-                />
+                        <ImageExposure
+                            value={exposure}
+                            onChange={setExposure}
+                        />
 
-                <ImageZoom
-                    value={zoom}
-                    onChange={setZoom}
-                />
-            </>
-        )}
+                        <ImageZoom
+                            value={zoom}
+                            onChange={setZoom}
+                        />
+                    </>
 
+                )}
+            </div>
 
-        <h1>Mängu nimi: {data?.name}</h1>
-        <h3>Kirjeldus: {data?.description}</h3>
+            <div className="name-and-description">
+                <h3 className="game-description">Kirjeldus: {data?.description}</h3>
+                <h1 className="game-name">Mängu nimi: {data?.name}</h1>
+            </div>
+            <div className="game-info-buttons">
+                <button onClick={() => { getQuestions() }}>Questions</button>
+                <div>Küsimused: </div>
+                {questions.map((question) => (
+                    <div key={question.id}>{question.questionText}</div>
+                ))}
 
-        <button onClick={() => { getQuestions() }}>Questions</button>
-        <div>Küsimused: </div>
-        {questions.map((question) => (
-            <div key={question.id}>{question.questionText}</div>
-        ))}
+                <button onClick={() => { getPoints() }}>Discussion points</button>
+                <div>Arutelu punktid: </div>
+                {points.map((point) => (
+                    <div key={point.id}>{point.discussionText}</div>
+                ))}
 
-        <button onClick={() => { getPoints() }}>Discussion points</button>
-        <div>Arutelu punktid: </div>
-        {points.map((point) => (
-            <div key={point.id}>{point.discussionText}</div>
-        ))}
-
-        <button onClick={() => { getTeacherText() }}>Õpetaja info</button>
-        <div>Ideed, mõtted, eesmärgid: </div>
-        {teacherTexts.map((teacherText) => (
-            <div key={teacherText.id}>{teacherText.teacherText}</div>
-        ))}
-    </>
+                <button onClick={() => { getTeacherText() }}>Info õpetajale</button>
+                <div>Ideed, mõtted: </div>
+                {teacherTexts.map((teacherText) => (
+                    <div key={teacherText.id}>{teacherText.teacherText}</div>
+                ))}
+            </div>
+        </div>
     )
 }
 
