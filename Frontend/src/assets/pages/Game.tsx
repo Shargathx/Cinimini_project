@@ -4,6 +4,7 @@ import './Game.css';
 import type { Game } from '../models/Game'
 import type { Question } from '../models/Question'
 import type { Discussion } from '../models/Discussion'
+import type { TeacherText } from '../models/TeacherText';
 import ImageSaturation from '../../components/ImageSaturation';
 import ImageContrast from '../../components/ImageContrast';
 import ImageExposure from '../../components/ImageExposure';
@@ -20,7 +21,7 @@ function Game() {
     const [zoom, setZoom] = useState(100);
 
     const { id } = useParams()
-    const { catid } = useParams() // TODO: on vaja?
+    // const { catid } = useParams() // TODO: on vaja?
     const [data, setData] = useState<Game | null>(null)
     const [questions, setQuestions] = useState<Question[]>([])
     const [points, setPoints] = useState<Discussion[]>([])
@@ -28,6 +29,8 @@ function Game() {
     const [speed, setSpeed] = useState<number>(1)
     // const [img, setImg] = useState<string>("")
     // const [toggle, setToggle] = useState(false)
+    const [teacherTexts, setTeacherText] = useState<TeacherText[]>([])
+    const [reverb, setReverb] = useState<number>(0)
     const media = data?.gameSteps[0]?.mediaElements?.[0]?.fileData ?? ""
     const fileFormat = data?.gameSteps[0]?.mediaElements?.[0]?.mediaType ?? ""
 
@@ -258,6 +261,13 @@ function Game() {
         }
     }
 
+    function getTeacherText() {
+        console.log(data?.gameSteps?.[0]);
+        if (data) {
+            setTeacherText(data.gameSteps[0].teacherTexts)
+        }
+    }
+
     return (<>
 
         {returnCorrectData()}
@@ -286,8 +296,10 @@ function Game() {
             </>
         )}
 
+
         <h1>Mängu nimi: {data?.name}</h1>
         <h3>Kirjeldus: {data?.description}</h3>
+
         <button onClick={() => { getQuestions() }}>Questions</button>
         <div>Küsimused: </div>
         {questions.map((question) => (
@@ -298,6 +310,12 @@ function Game() {
         <div>Arutelu punktid: </div>
         {points.map((point) => (
             <div key={point.id}>{point.discussionText}</div>
+        ))}
+
+        <button onClick={() => { getTeacherText() }}>Õpetaja info</button>
+        <div>Ideed, mõtted, eesmärgid: </div>
+        {teacherTexts.map((teacherText) => (
+            <div key={teacherText.id}>{teacherText.teacherText}</div>
         ))}
     </>
     )

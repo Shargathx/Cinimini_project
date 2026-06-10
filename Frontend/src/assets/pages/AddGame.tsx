@@ -1,23 +1,22 @@
-import { useEffect, useState } from 'react'
-import type { Category } from '../models/Category'
-import type { CreateGameStep } from '../models/CreateGameStep'
-import type { Media } from '../models/Media';
-import './AddGame.css';
+import { useEffect, useState } from "react"
+import type { Category } from "../models/Category"
+import type { CreateGameStep } from "../models/CreateGameStep"
+import "./AddGame.css";
 
 function AddGame() {
   const [categories, setCategories] = useState<Category[]>([])
   //Game file, name and category
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
-  const [category, setCategory] = useState<number>(1);
+  const [category, setCategory] = useState("");
   //Game questions
-  const [newQuestion, setNewQuestion] = useState("")
+  // const [newQuestion, setNewQuestion] = useState("")
   const [questionCounter, setQuestionCounter] = useState(0)
   //Discussion points
-  const [newPoint, setNewpoint] = useState("")
+  // const [newPoint, setNewpoint] = useState("")
   const [discussionPointsCounter, setDiscussionPointsCounter] = useState(0)
   //Teacher text
-  const [teacherText, setTeacherText] = useState("")
+  // const [teacherText, setTeacherText] = useState("")
   const [teacherTextCounter, setTeacherTextCounter] = useState(0);
 
   const [steps, setSteps] = useState<CreateGameStep[]>([
@@ -26,9 +25,9 @@ function AddGame() {
       questions: [],
       discussionPoints: [],
       teacherTexts: [],
-      questionInput:"",
-      discussionInput:"",
-      teacherTextInput:""
+      questionInput: "",
+      discussionInput: "",
+      teacherTextInput: ""
     }
   ])
 
@@ -187,23 +186,14 @@ function AddGame() {
   ) {
     setSteps(prev =>
       prev.map((step, index) =>
-        index === stepIndex
-          ? {
-            ...step,
-            teacherTexts: step.teacherTexts.filter(
-              t => t.id !== teacherTextId
-            )
-          }
+        index === stepIndex ? {
+          ...step, teacherTexts: step.teacherTexts.filter(
+            t => t.id !== teacherTextId
+          )
+        }
           : step
       )
     );
-  }
-
-
-  function deleteTeacherText(id: number) {
-    setSteps(prev =>
-      prev.map((step, index) =>
-        index === 0 ? { ...step, teacherTexts: step.teacherTexts.filter(q => q.id !== id) } : step));
   }
 
   function deleteQuestion(
@@ -229,7 +219,7 @@ function AddGame() {
 
     formData.append("name", name);
     formData.append("description", description);
-    formData.append("categoryId", String(category));
+    formData.append("categoryId", (category));
 
     steps.forEach((step, stepIndex) => {
 
@@ -269,8 +259,8 @@ function AddGame() {
       );
     });
 
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
+    for (const pair of formData.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
     }
 
     try {
@@ -297,9 +287,9 @@ function AddGame() {
           questions: [],
           discussionPoints: [],
           teacherTexts: [],
-          questionInput:"",
-          discussionInput:"",
-          teacherTextInput:""
+          questionInput: "",
+          discussionInput: "",
+          teacherTextInput: ""
         }
       ]);
 
@@ -358,18 +348,29 @@ function AddGame() {
 
   return (<>
 
-    <h1 id='addGameTitle'>Loo mäng</h1>
-    <label id='gameNameLabel'>Mängu nimi: </label>
-    <input id='gameName' onChange={(e) => { setName(e.target.value) }}></input><br></br>
-    <label id='gameCatLabel'>kategooria: </label>
-    <select onChange={(e) => { setCategory(Number(e.target.value)) }} id='gameCat' name='gameCat' >
+    <h1 id="addGameTitle">Loo mäng</h1>
+    <label id="gameNameLabel">Mängu nimi: </label>
+    <input id="gameName" value={name} onChange={(e) => { setName(e.target.value) }}></input><br></br>
+    <label id="gameCatLabel">Kategooria: </label>
+    <select
+      value={category}
+      onChange={(e) => setCategory(e.target.value)}
+      id="gameCat"
+      name="gameCat"
+    >
+      <option value="" disabled>
+        Vali kategooria
+      </option>
+
       {categories.map((category) => (
-        <option key={category.id} value={category.id}>{category.name}</option>
+        <option key={category.id} value={category.id}>
+          {category.name}
+        </option>
       ))}
     </select><br />
 
-    <label id='gameDescriptionLabel'>Kirjeldus: </label><br />
-    <textarea id='gameDescriptionBox' onChange={(e) => { setDescription(e.target.value) }}></textarea>
+    <label id="gameDescriptionLabel">Kirjeldus: </label><br />
+    <textarea id="gameDescriptionBox" onChange={(e) => { setDescription(e.target.value) }}></textarea>
     <hr></hr>
     <button type="button" onClick={addStep}>
       Lisa uus samm
@@ -377,7 +378,8 @@ function AddGame() {
 
     {steps.map((step, stepIndex) => (
       <div key={stepIndex}>
-        <h2 id='stepTitle'>Samm {stepIndex + 1}</h2>
+        <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
+
 
         <input
           type="file"
@@ -395,7 +397,7 @@ function AddGame() {
           }
         />
 
-        <h3 id='addQuestionTitle'>Lisa küsimus</h3>
+        <h3 id="addQuestionTitle">Lisa küsimus</h3>
 
         <input
           value={step.questionInput}
@@ -404,17 +406,18 @@ function AddGame() {
               stepIndex,
               e.target.value
             )
-          }id='addQuestion'
+          } id="addQuestion"
         />
 
         <button
           type="button"
-          id='addQuestionBtn'
+          id="addQuestionBtn"
           onClick={() => addQuestion(stepIndex)}
         >
           Lisa küsimus
         </button>
 
+        <div>Küsimused:</div>
         {step.questions.map(question => (
           <div key={question.id}>
             {question.questionText}
@@ -433,7 +436,7 @@ function AddGame() {
           </div>
         ))}
 
-        <h3 id='addDiscussionTitle'>Lisa arutelupunkt</h3>
+        <h3 id="addDiscussionTitle">Lisa arutelupunkt</h3>
 
         <input
           value={step.discussionInput}
@@ -442,10 +445,10 @@ function AddGame() {
               stepIndex,
               e.target.value
             )
-          } id='addDiscussion'
+          } id="addDiscussion"
         />
 
-        <button id='addDiscussionBtn'
+        <button id="addDiscussionBtn"
           type="button"
           onClick={() =>
             addDiscussionPoint(stepIndex)
@@ -454,6 +457,7 @@ function AddGame() {
           Lisa arutelupunkt
         </button>
 
+        <div>Arutelu punktid:</div>
         {step.discussionPoints.map(point => (
           <div key={point.id}>
             {point.discussionText}
@@ -473,7 +477,7 @@ function AddGame() {
 
         ))}
 
-        <h3 id='addTeacherTextTitle'>Õpetaja tekst</h3>
+        <h3 id="addTeacherTextTitle">Õpetaja tekst</h3>
 
         <input
           type="text"
@@ -483,10 +487,10 @@ function AddGame() {
               stepIndex,
               e.target.value
             )
-          } id='addTeachText'
+          } id="addTeachText"
         />
 
-        <button id='addTeachTextBtn'
+        <button id="addTeachTextBtn"
           type="button"
           onClick={() => addTeacherText(stepIndex)}
         >
@@ -497,7 +501,7 @@ function AddGame() {
 
         {step.teacherTexts.map(text => (
           <div key={text.id}>
-            {text.teachertext}
+            {text.teacherText}
 
             <button
               type="button"
@@ -517,7 +521,7 @@ function AddGame() {
       </div>
     ))}
 
-    <button id='saveGameBtn'
+    <button id="saveGameBtn"
       type="button"
       onClick={() =>
         handleSubmit()
