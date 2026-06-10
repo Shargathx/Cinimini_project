@@ -1,6 +1,6 @@
 .game-start-container {
     display: flex;
-    padding: 20px;
+    padding: 5vw;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -9,14 +9,14 @@
 }
 
 .game-logo {
-    width: 700px;
+    width: 40vw;
     height: auto;
 }
 
 #gameStart{
     background: none;
     border: none;
-    padding: 20px;
+    padding: 4vw;
     cursor: pointer;
 
 }
@@ -26,8 +26,8 @@
 
 #gameStart img {
     display: block; 
-    width: 160px;
+    width: 10vw;
     height: auto;
-    margin-top: -25px;
-    margin-bottom: 20px;
+    margin-top: -3vw;
+    margin-bottom: 0.5vw;
 }
