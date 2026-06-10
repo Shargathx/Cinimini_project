@@ -48,6 +48,7 @@ function Game() {
                 return (
                     media && (
                         <img
+                            className="image-container"
                             src={`data:image/png;base64,${media}`}
                             alt="Game"
                             style={{
