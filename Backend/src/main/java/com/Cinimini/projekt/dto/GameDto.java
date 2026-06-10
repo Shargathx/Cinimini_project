@@ -13,7 +13,7 @@ import java.util.List;
 public class GameDto {
     private Long gameId;
     private String name;
-    private int categoryId;
+    private Long categoryId;
     private String description;
     private List<GameStepDto> gameSteps;
 }

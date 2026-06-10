@@ -86,6 +86,33 @@ ALTER TABLE discussion_point
                 INITIALLY IMMEDIATE
 ;
 
+-- Table: teacher_info
+CREATE TABLE teacher_info
+(
+    id           bigserial NOT NULL,
+    game_step_id bigint    NOT NULL,
+    teacher_text text      NOT NULL,
+    is_active    boolean   NOT NULL,
+    text_order   int       NOT NULL,
+
+    CONSTRAINT teacher_info_uq
+        UNIQUE (game_step_id, text_order)
+            NOT DEFERRABLE INITIALLY IMMEDIATE,
+
+    CONSTRAINT teacher_info_pk
+        PRIMARY KEY (id)
+);
+
+-- Reference: teacher_info_game_step (table: teacher_info)
+ALTER TABLE teacher_info
+    ADD CONSTRAINT teacher_info_game_step
+        FOREIGN KEY (game_step_id)
+            REFERENCES game_step (id)
+            ON DELETE CASCADE
+            NOT DEFERRABLE
+                INITIALLY IMMEDIATE
+;
+
 -- Reference: game_category (table: game)
 ALTER TABLE game
     ADD CONSTRAINT game_category

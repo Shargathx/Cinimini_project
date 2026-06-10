@@ -2,6 +2,8 @@ import { useParams } from "react-router-dom";
 import type { Game } from "../models/Game";
 import { useEffect, useState } from 'react'
 import { Link } from "react-router-dom";
+import defaultGameIcon from '../icons/defaultGameIcon.svg';
+import './CategoryGame.css';
 
 function CategoryGame() {
     const { catid } = useParams();
@@ -15,13 +17,25 @@ function CategoryGame() {
     }, [catid])
 
 
-    return <div>
+    return <div className="games-container">
         {categoryGame.map(game =>
-            <div key={game.id}>
-                <Link to={`/categories/${catid}/${game.id}`}>
-                    id: {game.id}<br/> Name: {game.name}<br/> Description: {game.description}<hr/>
+                <Link 
+                    key={game.id}
+                    to={`/categories/${catid}/${game.id}`}
+                    className={
+                        "game-card " +
+                        (catid === "1" ? " heli" : "") +
+                        (catid === "2" ? " video" : "") +
+                        (catid === "3" ? " pilt" : "")
+                    }
+                >
+                    <img src={defaultGameIcon} alt="DefaultIcon" className="game-icon" />
+
+                    <div className="game-name">
+                        {game.name}
+                    </div>
                 </Link>
-            </div>)}
+            )}
     </div>;
 }
 

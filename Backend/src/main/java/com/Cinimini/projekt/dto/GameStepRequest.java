@@ -14,6 +14,7 @@ public class GameStepRequest {
     private MultipartFile image;
     private List<String> questions;
     private List<String> discussionPoints;
+    private List<String> teacherTexts;
 
     /*
     // COMMENT THESE IN FOR POSTMAN TESTING (COMMENT OUT THE ABOVE ONE)

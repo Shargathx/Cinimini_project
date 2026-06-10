@@ -13,5 +13,6 @@ public class GameStepDto {
     private Long stepId;
     private List<DiscussionDto> discussionPoints;
     private List<QuestionDto> questions;
+    private List<TeacherTextDto> teacherTexts;
     private List<MediaDto> mediaElements;
 }
