@@ -184,7 +184,7 @@ function Game() {
                             <source src={`data:video/mp4;base64,${media}`} type="video/mp4"></source>
                         </video><br></br>
                         <button onClick={() => { playReverse() }}>Reverse</button>
-                        <button onClick={() => { playFast() }}>Fast</button>
+                        {/*<button onClick={() => { playFast() }}>Fast</button>*/}
                         {changeSpeed(playFast)}
                     </>
                     )
