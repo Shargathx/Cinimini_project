@@ -16,9 +16,7 @@
 
 #gameDescriptionLabel{
     font-size: 20px;
-    margin-left: 20px;
-
-    
+    margin-left: 20px;  
 }
 
 #gameName, #gameCat {
@@ -26,19 +24,19 @@
     margin-bottom: 20px;
     padding: 5px;
     font-size: 16px;
-    background-color: aqua;
-    border: 3px solid #91F2BE;
+    border: 3px solid rgb(145, 242, 190, 1);
     border-radius: 5px;
+    background-color: #FFF8F8E5
 }
 
  #gameDescriptionBox {
-    margin-left: 31px;
+    margin-left: 20px;
     margin-bottom: 0px;
     padding: 5px;
     font-size: 16px;
-    background-color: aqua;
-    border: 3px solid #91F2BE;
+    border: 3px solid  rgb(145, 242, 190, 1);
     border-radius: 5px;
+    background-color: #FFF8F8E5;
 }
 
 #uploadImageTitle, #addQuestionTitle, #addDiscussionTitle, #addTeacherTextTitle {
@@ -56,13 +54,13 @@ input[type="file"]::file-selector-button {
     
     margin: 10px 20px;
     padding: 5px 10px;
-    border: 3px solid #47f19f;
+    border: 3px solid rgb(145, 242, 190, 1);
     border-radius: 30px;
     font-family: 'Segoe UI';
     font-size: 16px;
     font-weight: 400;
 
-    background: #91F2BE;
+    background: #c2f2d7;
     color: black;
 
     cursor: pointer;
@@ -70,6 +68,7 @@ input[type="file"]::file-selector-button {
 
 input[type="file"]::file-selector-button:hover {
     transform: scale(1.05);
+    background-color: rgb(145, 242, 190, 1);
 }
 
 input[type="file"]::file-selector-button:active {
@@ -81,18 +80,39 @@ input[type="file"]::file-selector-button:active {
     margin-bottom: 10px;
     padding: 5px;
     font-size: 16px;
-    background-color: red;
-    border: 3px solid #91F2BE;
+    border: 3px solid rgb(145, 242, 190, 1);
     border-radius: 5px;
+    background-color: #FFF8F8E5;
+    
+}
+
+button{
+    margin-left: 20px;
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: #c2f2d7;
+    color: black;
+    border: 3px solid rgb(145, 242, 190, 1);
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+button:hover{
+    margin-left: 20px;
+    padding: 5px 10px;
+    transform: scale(1.05);
+    background-color: rgb(200, 220, 209);
+    border: 3px solid rgb(145, 242, 190, 1);
+    border-radius: 30px;
+    cursor: pointer;
 }
 
 #addQuestionBtn, #addDiscussionBtn, #addTeachTextBtn{
     margin-left: 20px;
     padding: 5px 10px;
-    font-size: 14px;
-    background-color: #9ff9c9;
+    background-color: #c2f2d7;
     color: black;
-    border: 3px solid #47f19f;
+    border: 3px solid rgb(145, 242, 190, 1);
     border-radius: 30px;
     cursor: pointer;
 }
@@ -100,11 +120,9 @@ input[type="file"]::file-selector-button:active {
 #addQuestionBtn:hover, #addDiscussionBtn:hover, #addTeachTextBtn:hover{
     margin-left: 20px;
     padding: 5px 10px;
-    font-size: 14px;
     transform: scale(1.05);
-    background-color: #9ff9c9;
-    color: white;
-    border: 3px solid #47f19f;
+    background-color: rgb(145, 242, 190, 1);;
+    border: 3px solid rgb(145, 242, 190, 1);
     border-radius: 30px;
     cursor: pointer;
 }
@@ -130,14 +148,13 @@ input[type="file"]::file-selector-button:active {
     margin: 0 auto 20px auto;
     padding: 10px 20px;
     font-size: 18px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: rgb(128, 240, 180);
+    
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
 #saveGameBtn:hover {
-    background-color: #45a049;
+    background-color: rgb(107, 215, 158);
 }
-
