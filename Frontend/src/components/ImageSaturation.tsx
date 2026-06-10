@@ -5,16 +5,8 @@ type Props = {
 
 function ImageSaturation({ value, onChange }: Props) {
     return (
-        <div>
-            <label
-                style={{
-                    display: "inline-block",
-                    width: "160px",
-                    fontVariantNumeric: "tabular-nums"
-                }}
-            >
-                Saturation: {value}%
-            </label>
+        <div className="slider-control">
+            <label>Saturation: {value}%</label>
 
             <input
                 type="range"

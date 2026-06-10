@@ -19,6 +19,7 @@ function Game() {
     const [contrast, setContrast] = useState(100);
     const [exposure, setExposure] = useState(100);
     const [zoom, setZoom] = useState(100);
+    const [fullscreen, setFullscreen] = useState(false);
 
     const { id } = useParams()
     // const { catid } = useParams() // TODO: on vaja?
@@ -47,20 +48,26 @@ function Game() {
 
                 return (
                     media && (
-                        <img
-                            className="image-container"
-                            src={`data:image/png;base64,${media}`}
-                            alt="Game"
-                            style={{
-                                filter: `
-                        saturate(${saturation}%)
-                        contrast(${contrast}%)
-                        brightness(${exposure}%)
-                    `,
-                                transform: `scale(${zoom / 100})`,
-                                transformOrigin: "center"
-                            }}
-                        />
+                        <>
+                            <img
+                                className="image-container"
+                                src={`data:image/png;base64,${media}`}
+                                alt="Game"
+                                style={{
+                                    filter: `
+                            saturate(${saturation}%)
+                            contrast(${contrast}%)
+                            brightness(${exposure}%)
+                        `,
+                                    transform: `scale(${zoom / 100})`,
+                                    transformOrigin: "center"
+                                }}
+                            />
+
+                            <button onClick={() => setFullscreen(true)}>
+                                Fullscreen
+                            </button>
+                        </>
                     )
                 );
             case "audio/mpeg":
@@ -196,8 +203,8 @@ function Game() {
                 }
 
         }
-    }
 
+    }
 
     function changeReverb() {
         return (
@@ -261,6 +268,7 @@ function Game() {
         }
     }
 
+
     function getTeacherText() {
         console.log(data?.gameSteps?.[0]);
         if (data) {
@@ -306,6 +314,7 @@ function Game() {
                 <h3 className="game-description">Kirjeldus: {data?.description}</h3>
                 <h1 className="game-name">Mängu nimi: {data?.name}</h1>
             </div>
+
             <div className="game-info-buttons">
                 <button onClick={() => { getQuestions() }}>Questions</button>
                 <div>Küsimused: </div>
@@ -325,6 +334,41 @@ function Game() {
                     <div key={teacherText.id}>{teacherText.teacherText}</div>
                 ))}
             </div>
+            {fullscreen && fileFormat.startsWith("image/") && (
+                <div
+                    className="fullscreen-overlay"
+                    onClick={() => setFullscreen(false)}
+                >
+                    <div
+                        className="fullscreen-content"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <img
+                            src={`data:image/png;base64,${media}`}
+                            className="fullscreen-image"
+                            style={{
+                                filter: `
+            saturate(${saturation}%)
+            contrast(${contrast}%)
+            brightness(${exposure}%)
+          `,
+                                transform: `scale(${zoom / 100})`,
+                            }}
+                        />
+
+                        <button className="close-btn" onClick={() => setFullscreen(false)}>
+                            ✕
+                        </button>
+
+                        <div className="fullscreen-controls">
+                            <ImageSaturation value={saturation} onChange={setSaturation} />
+                            <ImageContrast value={contrast} onChange={setContrast} />
+                            <ImageExposure value={exposure} onChange={setExposure} />
+                            <ImageZoom value={zoom} onChange={setZoom} />
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
