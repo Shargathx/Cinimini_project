@@ -27,7 +27,7 @@
     padding: 5px;
     font-size: 16px;
     background-color: aqua;
-    border: 3px solid #91F2BE;
+    border: 3px solid #91f2be;
     border-radius: 5px;
 }
 
@@ -37,7 +37,7 @@
     padding: 5px;
     font-size: 16px;
     background-color: aqua;
-    border: 3px solid #91F2BE;
+    border: 3px solid #91f2be;
     border-radius: 5px;
 }
 
@@ -62,7 +62,7 @@ input[type="file"]::file-selector-button {
     font-size: 16px;
     font-weight: 400;
 
-    background: #91F2BE;
+    background: #9ff9c9;
     color: black;
 
     cursor: pointer;
@@ -70,6 +70,7 @@ input[type="file"]::file-selector-button {
 
 input[type="file"]::file-selector-button:hover {
     transform: scale(1.05);
+    background-color: #47f19f;
 }
 
 input[type="file"]::file-selector-button:active {
@@ -92,7 +93,7 @@ input[type="file"]::file-selector-button:active {
     font-size: 14px;
     background-color: #9ff9c9;
     color: black;
-    border: 3px solid #47f19f;
+    border: 3px solid #91f2be;
     border-radius: 30px;
     cursor: pointer;
 }
@@ -102,7 +103,7 @@ input[type="file"]::file-selector-button:active {
     padding: 5px 10px;
     font-size: 14px;
     transform: scale(1.05);
-    background-color: #9ff9c9;
+    background-color: #47f19f;
     color: white;
     border: 3px solid #47f19f;
     border-radius: 30px;
