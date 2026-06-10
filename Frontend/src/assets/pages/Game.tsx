@@ -183,7 +183,7 @@ function Game() {
                         </video><br></br>
                         <button onClick={() => { playReverse() }}>Reverse</button>
                         <button onClick={() => { playFast() }}>Fast</button>
-                        {changeSpeed()}
+                        {changeSpeed(video, playFast)}
                     </>
                     )
                 );
@@ -220,7 +220,7 @@ function Game() {
         );
     }
 
-    function changeSpeed() {
+    function changeSpeed(video: HTMLVideoElement, func) {
         return (
             <div>
                 <label
@@ -239,7 +239,7 @@ function Game() {
                     max="2"
                     step=".1"
                     value={speed}
-                    onChange={(e) => setSpeed(Number(e.target.value))}
+                    onChange={(e)=>{setSpeed(Number(e.target.value));func()}}
                 />
             </div>
         );
