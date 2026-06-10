@@ -26,7 +26,9 @@ function Game() {
     const [questions, setQuestions] = useState<Question[]>([])
     const [points, setPoints] = useState<Discussion[]>([])
     const [reverb, setReverb] = useState<number>(0)
+    const [reverbsource, setReverbsource] = useState()
     const [speed, setSpeed] = useState<number>(1)
+    const [isPlaying, setIsPlayinhg] = useState<boolean>()
     // const [img, setImg] = useState<string>("")
     // const [toggle, setToggle] = useState(false)
     const [teacherTexts, setTeacherText] = useState<TeacherText[]>([])
@@ -64,6 +66,9 @@ function Game() {
                     )
                 );
             case "audio/mpeg":
+                const audio = document.getElementById("audio")
+
+
                 {
                     async function playReversed(url: string) {
                         const audioContext = new AudioContext();
@@ -81,6 +86,8 @@ function Game() {
                         const source = audioContext.createBufferSource();
                         source.buffer = audioBuffer;
                         source.connect(audioContext.destination);
+                        console.log(reverbsource)
+                        audio!.pause()
 
                         source.start();
                     }
@@ -115,8 +122,11 @@ function Game() {
 
                         dryGain.connect(audioContext.destination);
                         wetGain.connect(audioContext.destination);
+                        setReverbsource(source)
 
+                        audio!.pause()
                         source.start();
+
 
                         function createImpulseResponse(context: AudioContext, duration = 3, decay = 4) {
                             const length = context.sampleRate * duration;
@@ -145,12 +155,12 @@ function Game() {
                     }
                     return (
                         media && (<>
-                            <audio controls>
+                            <audio id='audio' controls>
                                 <source src={`data:audio/mpeg;base64,${media}`} type="audio/mpeg"
                                 />
-                            </audio>
-                            <button onClick={() => { playReversed(`data:audio/mpeg;base64,${media}`) }}>Reversed</button>
-                            <button onClick={() => { playWithReverb(`data:audio/mpeg;base64,${media}`) }}>Reverb</button>
+                            </audio><br></br>
+                            <button onClick={() => { playReversed(`data:audio/mpeg;base64,${media}`) }}>Play Reversed</button><br /><br />
+                            <button onClick={() => { playWithReverb(`data:audio/mpeg;base64,${media}`) }}>Play wiht Reverb</button>
                             {changeReverb()}
                         </>
 
@@ -209,13 +219,14 @@ function Game() {
                         fontVariantNumeric: "tabular-nums"
                     }}
                 >
-                    Reverb amount: {reverb}%
+                    Reverb amount: {reverb}
                 </label>
 
                 <input
                     type="range"
                     min="0"
-                    max="100"
+                    max="2"
+                    step=".1"
                     value={reverb}
                     onChange={(e) => setReverb(Number(e.target.value))}
                 />
