@@ -63,132 +63,136 @@ function Game() {
                     )
                 );
             case "audio/mpeg":
-                { async function playReversed(url: string) {
-                    const audioContext = new AudioContext();
+                {
+                    async function playReversed(url: string) {
+                        const audioContext = new AudioContext();
 
-                    const response = await fetch(url);
-                    const arrayBuffer = await response.arrayBuffer();
+                        const response = await fetch(url);
+                        const arrayBuffer = await response.arrayBuffer();
 
-                    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+                        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
 
-                    // Reverse each channel
-                    for (let channel = 0; channel < audioBuffer.numberOfChannels; channel++) {
-                        audioBuffer.getChannelData(channel).reverse();
+                        // Reverse each channel
+                        for (let channel = 0; channel < audioBuffer.numberOfChannels; channel++) {
+                            audioBuffer.getChannelData(channel).reverse();
+                        }
+
+                        const source = audioContext.createBufferSource();
+                        source.buffer = audioBuffer;
+                        source.connect(audioContext.destination);
+
+                        source.start();
                     }
+                    async function playWithReverb(url: string) {
+                        const audioContext = new AudioContext();
 
-                    const source = audioContext.createBufferSource();
-                    source.buffer = audioBuffer;
-                    source.connect(audioContext.destination);
+                        const response = await fetch(url);
+                        const arrayBuffer = await response.arrayBuffer();
 
-                    source.start();
-                }
-                async function playWithReverb(url: string) {
-                    const audioContext = new AudioContext();
+                        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
 
-                    const response = await fetch(url);
-                    const arrayBuffer = await response.arrayBuffer();
+                        // Source
+                        const source = audioContext.createBufferSource();
+                        source.buffer = audioBuffer;
 
-                    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+                        // Reverb
+                        const convolver = audioContext.createConvolver();
+                        convolver.buffer = createImpulseResponse(audioContext, 3, 4);
 
-                    // Source
-                    const source = audioContext.createBufferSource();
-                    source.buffer = audioBuffer;
+                        // Dry/Wet mix
+                        const dryGain = audioContext.createGain();
+                        const wetGain = audioContext.createGain();
 
-                    // Reverb
-                    const convolver = audioContext.createConvolver();
-                    convolver.buffer = createImpulseResponse(audioContext, 3, 4);
+                        dryGain.gain.value = 0.7; // original audio
+                        wetGain.gain.value = reverb; // reverb amount
 
-                    // Dry/Wet mix
-                    const dryGain = audioContext.createGain();
-                    const wetGain = audioContext.createGain();
+                        // Connections
+                        source.connect(dryGain);
+                        source.connect(convolver);
 
-                    dryGain.gain.value = 0.7; // original audio
-                    wetGain.gain.value = reverb; // reverb amount
+                        convolver.connect(wetGain);
 
-                    // Connections
-                    source.connect(dryGain);
-                    source.connect(convolver);
+                        dryGain.connect(audioContext.destination);
+                        wetGain.connect(audioContext.destination);
 
-                    convolver.connect(wetGain);
+                        source.start();
 
-                    dryGain.connect(audioContext.destination);
-                    wetGain.connect(audioContext.destination);
+                        function createImpulseResponse(context: AudioContext, duration = 3, decay = 4) {
+                            const length = context.sampleRate * duration;
+                            const impulse = context.createBuffer(
+                                2,
+                                length,
+                                context.sampleRate
+                            );
 
-                    source.start();
+                            for (let channel = 0; channel < 2; channel++) {
+                                const data = impulse.getChannelData(channel);
 
-                    function createImpulseResponse(context: AudioContext, duration = 3, decay = 4) {
-                        const length = context.sampleRate * duration;
-                        const impulse = context.createBuffer(
-                            2,
-                            length,
-                            context.sampleRate
-                        );
-
-                        for (let channel = 0; channel < 2; channel++) {
-                            const data = impulse.getChannelData(channel);
-
-                            for (let i = 0; i < length; i++) {
-                                data[i] =
-                                    (Math.random() * 2 - 1) *
-                                    Math.pow(1 - i / length, decay);
+                                for (let i = 0; i < length; i++) {
+                                    data[i] =
+                                        (Math.random() * 2 - 1) *
+                                        Math.pow(1 - i / length, decay);
+                                }
                             }
+
+                            return impulse;
                         }
 
-                        return impulse;
+
+
+
+                    }
+                    return (
+                        media && (<>
+                            <audio controls>
+                                <source src={`data:audio/mpeg;base64,${media}`} type="audio/mpeg"
+                                />
+                            </audio>
+                            <button onClick={() => { playReversed(`data:audio/mpeg;base64,${media}`) }}>Reversed</button>
+                            <button onClick={() => { playWithReverb(`data:audio/mpeg;base64,${media}`) }}>Reverb</button>
+                            {changeReverb()}
+                        </>
+
+                        )
+                    )
+                }
+            case "video/mp4":
+                {
+                    const video = document.getElementById("video") as HTMLVideoElement;
+                    let reverseInterval: number;
+
+                    function playReverse() {
+                        clearInterval(reverseInterval);
+                        video!.pause()
+                        reverseInterval = setInterval(() => {
+                            if (video?.currentTime <= 0) {
+                                video.pause();
+                                clearInterval(reverseInterval);
+                                return;
+                            }
+
+                            video!.currentTime -= 0.04 * speed; // ~25fps
+                        }, 40);
                     }
 
+                    function playFast() {
+                        video!.defaultPlaybackRate = speed;
+                        video!.load()
+                        video!.play()
+                    }
 
-
-
+                    return (
+                        media && (<>
+                            <video id='video' width="320" height="240" controls>
+                                <source src={`data:video/mp4;base64,${media}`} type="video/mp4"></source>
+                            </video><br></br>
+                            <button onClick={() => { playReverse() }}>Reverse</button>
+                            <button onClick={() => { playFast() }}>Fast</button>
+                            {changeSpeed(playFast)}
+                        </>
+                        )
+                    );
                 }
-                return (
-                    media && (<>
-                        <audio controls>
-                            <source src={`data:audio/mpeg;base64,${media}`} type="audio/mpeg"
-                            />
-                        </audio>
-                        <button onClick={() => { playReversed(`data:audio/mpeg;base64,${media}`) }}>Reversed</button>
-                        <button onClick={() => { playWithReverb(`data:audio/mpeg;base64,${media}`) }}>Reverb</button>
-                        {changeReverb()}
-                    </>
-
-                    )
-                ) }
-            case "video/mp4":
-                { const video: HTMLVideoElement = document.getElementById("video");
-                let reverseInterval: number;
-
-                function playReverse() {
-                    clearInterval(reverseInterval);
-                    video!.pause()
-                    reverseInterval = setInterval(() => {
-                        if (video?.currentTime <= 0) {
-                            video?.pause()
-                            clearInterval(reverseInterval);
-                            return;
-                        }
-
-                        video!.currentTime -= 0.04 * speed; // ~25fps
-                    }, 40);
-                }
-
-                function playFast() {
-                    video!.defaultPlaybackRate = speed;
-                    video!.load()
-                    video!.play()
-                }
-
-                return (
-                    media && (<>
-                        <video id='video' width="320" height="240" controls>
-                            <source src={`data:video/mp4;base64,${media}`} type="video/mp4"></source>
-                        </video><br></br>
-                        <button onClick={() => { playReverse() }}>Reverse</button>
-                        <button onClick={() => { playFast() }}>Fast</button>
-                        {changeSpeed(playFast)}
-                    </>
-                    )
-                ); }
 
         }
     }
@@ -237,7 +241,7 @@ function Game() {
                     max="2"
                     step=".1"
                     value={speed}
-                    onChange={(e)=>{setSpeed(Number(e.target.value));func()}}
+                    onChange={(e) => { setSpeed(Number(e.target.value)); func() }}
                 />
             </div>
         );
