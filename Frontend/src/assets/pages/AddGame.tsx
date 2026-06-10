@@ -347,8 +347,9 @@ function AddGame() {
   }
 
   return (<>
-
+  <div id="generalContainer">
     <h1 id="addGameTitle">Loo mäng</h1>
+    
     <label id="gameNameLabel">Mängu nimi: </label>
     <input id="gameName" value={name} onChange={(e) => { setName(e.target.value) }}></input><br></br>
     <label id="gameCatLabel">Kategooria: </label>
@@ -367,159 +368,164 @@ function AddGame() {
           {category.name}
         </option>
       ))}
-    </select><br />
+    </select>
+    
+    <br />
 
-    <label id="gameDescriptionLabel">Kirjeldus: </label><br />
+    <label id="gameDescriptionLabel">Kirjeldus: </label>
     <textarea id="gameDescriptionBox" onChange={(e) => { setDescription(e.target.value) }}></textarea>
+  </div>ˇ
     <hr></hr>
-    <button type="button" onClick={addStep}>
+    <button type="button" id="stepBtn" onClick={addStep}>
       Lisa uus samm
     </button>
+    <div id="step-container">
+      {steps.map((step, stepIndex) => (
+        <div key={stepIndex} id="singleStep">
+          <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
 
-    {steps.map((step, stepIndex) => (
-      <div key={stepIndex}>
-        <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
-
-        <input
-          type="file"
-          onChange={(e) =>
-            setSteps(prev =>
-              prev.map((s, index) =>
-                index === stepIndex
-                  ? {
-                    ...s,
-                    image: e.target.files?.[0] ?? null
-                  }
-                  : s
+          <input
+            type="file"
+            onChange={(e) =>
+              setSteps(prev =>
+                prev.map((s, index) =>
+                  index === stepIndex
+                    ? {
+                      ...s,
+                      image: e.target.files?.[0] ?? null
+                    }
+                    : s
+                )
               )
-            )
-          }
-        />
+            }
+          />
 
-        <h3 id="addQuestionTitle">Lisa küsimus</h3>
+          <h3 id="addQuestionTitle">Lisa küsimus</h3>
 
-        <input
-          value={step.questionInput}
-          onChange={(e) =>
-            updateQuestionInput(
-              stepIndex,
-              e.target.value
-            )
-          } id="addQuestion"
-        />
+          <input
+            value={step.questionInput}
+            onChange={(e) =>
+              updateQuestionInput(
+                stepIndex,
+                e.target.value
+              )
+            } id="addQuestion"
+          />
 
-        <button
-          type="button"
-          id="addQuestionBtn"
-          onClick={() => addQuestion(stepIndex)}
-        >
-          Lisa küsimus
-        </button>
+          <button
+            type="button"
+            id="addQuestionBtn"
+            onClick={() => addQuestion(stepIndex)}
+          >
+            Lisa küsimus
+          </button>
 
-        <div>Küsimused:</div>
-        {step.questions.map(question => (
-          <div key={question.id}>
-            {question.questionText}
+          <div>Küsimused:</div>
+          {step.questions.map(question => (
+            <div key={question.id}>
+              {question.questionText}
 
-            <button
-              type="button"
-              onClick={() =>
-                deleteQuestion(
-                  stepIndex,
-                  question.id
-                )
-              }
-            >
-              Kustuta
-            </button>
-          </div>
-        ))}
+              <button
+                type="button"
+                id="eraseBtn"
+                onClick={() =>
+                  deleteQuestion(
+                    stepIndex,
+                    question.id
+                  )
+                }
+              >
+                Kustuta
+              </button>
+            </div>
+          ))}
 
-        <h3 id="addDiscussionTitle">Lisa arutelupunkt</h3>
+          <h3 id="addDiscussionTitle">Lisa arutelupunkt</h3>
 
-        <input
-          value={step.discussionInput}
-          onChange={(e) =>
-            updateDiscussionInput(
-              stepIndex,
-              e.target.value
-            )
-          } id="addDiscussion"
-        />
+          <input
+            value={step.discussionInput}
+            onChange={(e) =>
+              updateDiscussionInput(
+                stepIndex,
+                e.target.value
+              )
+            } id="addDiscussion"
+          />
 
-        <button id="addDiscussionBtn"
-          type="button"
-          onClick={() =>
-            addDiscussionPoint(stepIndex)
-          }
-        >
-          Lisa arutelupunkt
-        </button>
+          <button id="addDiscussionBtn"
+            type="button"
+            onClick={() =>
+              addDiscussionPoint(stepIndex)
+            }
+          >
+            Lisa arutelupunkt
+          </button>
 
-        <div>Arutelu punktid:</div>
-        {step.discussionPoints.map(point => (
-          <div key={point.id}>
-            {point.discussionText}
+          <div>Arutelu punktid:</div>
+          {step.discussionPoints.map(point => (
+            <div key={point.id}>
+              {point.discussionText}
 
-            <button
-              type="button"
-              onClick={() =>
-                deletePoint(
-                  stepIndex,
-                  point.id
-                )
-              }
-            >
-              Kustuta
-            </button>
-          </div>
+              <button
+                type="button"
+                id="eraseBtn"
+                onClick={() =>
+                  deletePoint(
+                    stepIndex,
+                    point.id
+                  )
+                }
+              >
+                Kustuta
+              </button>
+            </div>
 
-        ))}
+          ))}
 
-        <h3 id="addTeacherTextTitle">Õpetaja tekst</h3>
+          <h3 id="addTeacherTextTitle">Õpetaja tekst</h3>
 
-        <input
-          type="text"
-          value={step.teacherTextInput}
-          onChange={(e) =>
-            updateTeacherTextInput(
-              stepIndex,
-              e.target.value
-            )
-          } id="addTeachText"
-        />
+          <input
+            type="text"
+            value={step.teacherTextInput}
+            onChange={(e) =>
+              updateTeacherTextInput(
+                stepIndex,
+                e.target.value
+              )
+            } id="addTeachText"
+          />
 
-        <button id="addTeachTextBtn"
-          type="button"
-          onClick={() => addTeacherText(stepIndex)}
-        >
-          Lisa õpetaja tekst
-        </button>
+          <button id="addTeachTextBtn"
+            type="button"
+            onClick={() => addTeacherText(stepIndex)}
+          >
+            Lisa õpetaja tekst
+          </button>
 
-        <div>Õpetaja tekstid:</div>
+          <div>Õpetaja tekstid:</div>
 
-        {step.teacherTexts.map(text => (
-          <div key={text.id}>
-            {text.teacherText}
+          {step.teacherTexts.map(text => (
+            <div key={text.id}>
+              {text.teacherText}
 
-            <button
-              type="button"
-              onClick={() =>
-                deleteTeacherText(
-                  stepIndex,
-                  text.id
-                )
-              }
-            >
-              Kustuta
-            </button>
-          </div>
-        ))}
-
-        <hr />
-      </div>
-    ))}
-
+              <button
+                type="button"
+                id="eraseBtn"
+                onClick={() =>
+                  deleteTeacherText(
+                    stepIndex,
+                    text.id
+                  )
+                }
+              >
+                Kustuta
+              </button>
+            </div>
+          ))}  
+        </div>
+      ))}
+    </div>
+    <hr />
     <button id="saveGameBtn"
       type="button"
       onClick={() =>
