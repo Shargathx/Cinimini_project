@@ -24,7 +24,8 @@ function Game() {
     const [data, setData] = useState<Game | null>(null)
     const [questions, setQuestions] = useState<Question[]>([])
     const [points, setPoints] = useState<Discussion[]>([])
-    const [reverb, setReverb] = useState<Number>(0)
+    const [reverb, setReverb] = useState<number>(0)
+    const [speed, setSpeed] = useState<number>(1)
     // const [img, setImg] = useState<string>("")
     // const [toggle, setToggle] = useState(false)
     const media = data?.gameSteps[0]?.mediaElements?.[0]?.fileData ?? ""
@@ -60,7 +61,7 @@ function Game() {
                     )
                 );
             case "audio/mpeg":
-                async function playReversed(url) {
+                async function playReversed(url: string) {
                     const audioContext = new AudioContext();
 
                     const response = await fetch(url);
@@ -79,7 +80,7 @@ function Game() {
 
                     source.start();
                 }
-                async function playWithReverb(url) {
+                async function playWithReverb(url: string) {
                     const audioContext = new AudioContext();
 
                     const response = await fetch(url);
@@ -113,7 +114,7 @@ function Game() {
 
                     source.start();
 
-                    function createImpulseResponse(context, duration = 3, decay = 4) {
+                    function createImpulseResponse(context: AudioContext, duration = 3, decay = 4) {
                         const length = context.sampleRate * duration;
                         const impulse = context.createBuffer(
                             2,
@@ -146,49 +147,43 @@ function Game() {
                         </audio>
                         <button onClick={() => { playReversed(`data:audio/mpeg;base64,${media}`) }}>Reversed</button>
                         <button onClick={() => { playWithReverb(`data:audio/mpeg;base64,${media}`) }}>Reverb</button>
-                        {changeReverb(1)}
+                        {changeReverb()}
                     </>
 
                     )
                 )
             case "video/mp4":
-                const video = document.getElementById("video");
-                let reverseInterval;
-                let noramlIterval
-
-                function playNormal() {
-                    video.pause()
-                    video.play()
-                }
+                const video: HTMLVideoElement = document.getElementById("video");
+                let reverseInterval: number;
 
                 function playReverse() {
                     clearInterval(reverseInterval);
-                    video.pause()
-                    console.log(video.duration)
+                    video!.pause()
                     reverseInterval = setInterval(() => {
                         if (video?.currentTime <= 0) {
-                            video.pause()
+                            video?.pause()
                             clearInterval(reverseInterval);
                             return;
                         }
 
-                        video.currentTime -= 0.04; // ~25fps
+                        video!.currentTime -= 0.04 * speed; // ~25fps
                     }, 40);
                 }
 
                 function playFast() {
-                    video.defaultPlaybackRate = 0.5;
-                    video.play()
+                    video!.defaultPlaybackRate = speed;
+                    video!.load()
+                    video!.play()
                 }
 
                 return (
                     media && (<>
-                        <video id='video' width="320" height="240">
+                        <video id='video' width="320" height="240" controls>
                             <source src={`data:video/mp4;base64,${media}`} type="video/mp4"></source>
                         </video><br></br>
                         <button onClick={() => { playReverse() }}>Reverse</button>
-                        <button onClick={() => { playNormal() }}>Play</button>
                         <button onClick={() => { playFast() }}>Fast</button>
+                        {changeSpeed()}
                     </>
                     )
                 );
@@ -201,7 +196,7 @@ function Game() {
         onChange: (value: number) => void;
     };
 
-    function changeReverb({ value }: Props) {
+    function changeReverb() {
         return (
             <div>
                 <label
@@ -220,6 +215,31 @@ function Game() {
                     max="100"
                     value={reverb}
                     onChange={(e) => setReverb(Number(e.target.value))}
+                />
+            </div>
+        );
+    }
+
+    function changeSpeed() {
+        return (
+            <div>
+                <label
+                    style={{
+                        display: "inline-block",
+                        width: "160px",
+                        fontVariantNumeric: "tabular-nums"
+                    }}
+                >
+                    Speed amount: {speed}<br></br><br></br>
+                </label>
+
+                <input
+                    type="range"
+                    min="1"
+                    max="2"
+                    step=".1"
+                    value={speed}
+                    onChange={(e) => setSpeed(Number(e.target.value))}
                 />
             </div>
         );
