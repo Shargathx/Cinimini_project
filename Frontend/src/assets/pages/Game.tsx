@@ -63,7 +63,7 @@ function Game() {
                     )
                 );
             case "audio/mpeg":
-                async function playReversed(url: string) {
+                { async function playReversed(url: string) {
                     const audioContext = new AudioContext();
 
                     const response = await fetch(url);
@@ -153,9 +153,9 @@ function Game() {
                     </>
 
                     )
-                )
+                ) }
             case "video/mp4":
-                const video: HTMLVideoElement = document.getElementById("video");
+                { const video: HTMLVideoElement = document.getElementById("video");
                 let reverseInterval: number;
 
                 function playReverse() {
@@ -188,7 +188,7 @@ function Game() {
                         {changeSpeed(playFast)}
                     </>
                     )
-                );
+                ); }
 
         }
     }
@@ -218,7 +218,7 @@ function Game() {
         );
     }
 
-    function changeSpeed(func:Function) {
+    function changeSpeed(func: () => void) {
         return (
             <div>
                 <label
