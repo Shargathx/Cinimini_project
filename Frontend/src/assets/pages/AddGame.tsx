@@ -25,10 +25,6 @@ function AddGame() {
 
   const game = data;
 
-  useEffect(() => {
-    console.log("Fetched data:", data);
-  }, [data]);
-
   const [steps, setSteps] = useState<CreateGameStep[]>([
     {
       image: null,
@@ -79,7 +75,9 @@ function AddGame() {
   }, [])
 
   useEffect(() => {
-    fillEditableDate()
+    if (mode == "edit") {
+      fillEditableDate()
+    }
   }, [game])
 
 
@@ -93,7 +91,7 @@ function AddGame() {
 
     setSteps(
       game.gameSteps.map(step => ({
-        image: null, // existing image already on server
+        image: step.mediaElements[0], // existing image already on server
 
         questions: step.questions.map(q => ({
           id: q.id,
