@@ -75,12 +75,46 @@ function AddGame() {
   }, []);
 
   useEffect(() => {
-    setMode(localStorage.getItem("mode"))
+    setMode(localStorage.getItem("mode"));
   }, [])
+
+  useEffect(() => {
+    fillEditableDate()
+  }, [game])
+
 
 
   function fillEditableDate() {
-    setCategory
+    if (!game) return;
+
+    setName(game.name);
+    setDescription(game.description);
+    setCategory(String(localStorage.getItem("catid")));
+
+    setSteps(
+      game.gameSteps.map(step => ({
+        image: null, // existing image already on server
+
+        questions: step.questions.map(q => ({
+          id: q.id,
+          questionText: q.questionText
+        })),
+
+        discussionPoints: step.discussionPoints.map(dp => ({
+          id: dp.id,
+          discussionText: dp.discussionText
+        })),
+
+        teacherTexts: step.teacherTexts.map(tt => ({
+          id: tt.id,
+          teacherText: tt.teacherText
+        })),
+
+        questionInput: "",
+        discussionInput: "",
+        teacherTextInput: ""
+      }))
+    );
   }
 
   function createEmptyStep(): GameStepForm {
@@ -325,14 +359,15 @@ function AddGame() {
     }
     if (mode == "edit") {
       try {
+        const gameId = localStorage.getItem("id");
+
         const response = await fetch(
-          import.meta.env.VITE_BACK_URL + "/games/edit-game/:id",
+          `${import.meta.env.VITE_BACK_URL}/games/edit-game/${gameId}`,
           {
             method: "PUT",
             body: formData
           }
         );
-
         if (!response.ok) {
           throw new Error("Failed to save game");
         }
@@ -437,7 +472,11 @@ function AddGame() {
       <br />
 
       <label id="gameDescriptionLabel">Kirjeldus: </label>
-      <textarea id="gameDescriptionBox" onChange={(e) => { setDescription(e.target.value) }}></textarea>
+      <textarea
+        id="gameDescriptionBox"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
     </div>ˇ
     <hr></hr>
     <button type="button" id="stepBtn" onClick={addStep}>
