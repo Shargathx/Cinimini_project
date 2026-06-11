@@ -46,6 +46,9 @@ function CategoryGame() {
                     </Link>
 
                     <button onClick={() => { deleteGame(Number(game.id)) }}>Delete game</button>
+                    <Link to={`/update-game/${game.id}`}><button onClick={()=>{ localStorage.setItem("mode", "edit");
+                                                                                localStorage.setItem("id", game.id),
+                                                                                localStorage.setItem("catid", catid)}}>Edit</button></Link>
                 </>
 
             ))}

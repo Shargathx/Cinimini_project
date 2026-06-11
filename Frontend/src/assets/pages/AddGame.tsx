@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import type { Category } from "../models/Category"
 import type { CreateGameStep } from "../models/CreateGameStep"
 import "./AddGame.css";
+import type { Game } from "../models/Game";
+import { useFetch } from '../../components/hooks/useFetch';
 
 function AddGame() {
   const [categories, setCategories] = useState<Category[]>([])
@@ -9,6 +11,8 @@ function AddGame() {
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [category, setCategory] = useState("");
+  const [mode, setMode] = useState<String>("")
+  const { data, loading } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/games/${localStorage.getItem("catid")}/${localStorage.getItem("id")}`, []);
   //Game questions
   // const [newQuestion, setNewQuestion] = useState("")
   const [questionCounter, setQuestionCounter] = useState(0)
@@ -18,6 +22,8 @@ function AddGame() {
   //Teacher text
   // const [teacherText, setTeacherText] = useState("")
   const [teacherTextCounter, setTeacherTextCounter] = useState(0);
+
+  const game = data;
 
   const [steps, setSteps] = useState<CreateGameStep[]>([
     {
@@ -63,6 +69,51 @@ function AddGame() {
       .then(json => setCategories(json))
       .catch(err => console.error(err));
   }, []);
+
+  useEffect(() => {
+    setMode(localStorage.getItem("mode"));
+  }, [])
+
+  useEffect(() => {
+    if (mode == "edit") {
+      fillEditableDate()
+    }
+  }, [game])
+
+
+
+  function fillEditableDate() {
+    if (!game) return;
+
+    setName(game.name);
+    setDescription(game.description);
+    setCategory(String(localStorage.getItem("catid")));
+
+    setSteps(
+      game.gameSteps.map(step => ({
+        image: step.mediaElements[0], // existing image already on server
+
+        questions: step.questions.map(q => ({
+          id: q.id,
+          questionText: q.questionText
+        })),
+
+        discussionPoints: step.discussionPoints.map(dp => ({
+          id: dp.id,
+          discussionText: dp.discussionText
+        })),
+
+        teacherTexts: step.teacherTexts.map(tt => ({
+          id: tt.id,
+          teacherText: tt.teacherText
+        })),
+
+        questionInput: "",
+        discussionInput: "",
+        teacherTextInput: ""
+      }))
+    );
+  }
 
   function createEmptyStep(): GameStepForm {
     return {
@@ -269,39 +320,78 @@ function AddGame() {
       console.log(pair[0] + ", " + pair[1]);
     }
 
-    try {
-      const response = await fetch(
-        import.meta.env.VITE_BACK_URL + "/games/add-game",
-        {
-          method: "POST",
-          body: formData
-        }
-      );
+    if (mode == "add") {
+      try {
+        const response = await fetch(
+          import.meta.env.VITE_BACK_URL + "/games/add-game",
+          {
+            method: "POST",
+            body: formData
+          }
+        );
 
-      if (!response.ok) {
-        throw new Error("Failed to save game");
+        if (!response.ok) {
+          throw new Error("Failed to save game");
+        }
+
+        alert("Game saved!");
+
+        setName("");
+        setDescription("");
+
+        setSteps([
+          {
+            image: null,
+            questions: [],
+            discussionPoints: [],
+            teacherTexts: [],
+            questionInput: "",
+            discussionInput: "",
+            teacherTextInput: ""
+          }
+        ]);
+
+      } catch (err) {
+        console.error(err);
       }
-
-      alert("Game saved!");
-
-      setName("");
-      setDescription("");
-
-      setSteps([
-        {
-          image: null,
-          questions: [],
-          discussionPoints: [],
-          teacherTexts: [],
-          questionInput: "",
-          discussionInput: "",
-          teacherTextInput: ""
-        }
-      ]);
-
-    } catch (err) {
-      console.error(err);
     }
+    if (mode == "edit") {
+      try {
+        const gameId = localStorage.getItem("id");
+
+        const response = await fetch(
+          `${import.meta.env.VITE_BACK_URL}/games/edit-game/${gameId}`,
+          {
+            method: "PUT",
+            body: formData
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Failed to save game");
+        }
+
+        alert("Game saved!");
+
+        setName("");
+        setDescription("");
+
+        setSteps([
+          {
+            image: null,
+            questions: [],
+            discussionPoints: [],
+            teacherTexts: [],
+            questionInput: "",
+            discussionInput: "",
+            teacherTextInput: ""
+          }
+        ]);
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
   };
 
   function addDiscussionPoint(
@@ -355,7 +445,8 @@ function AddGame() {
   return (<>
     <div id="generalContainer">
       <h1 id="addGameTitle">Loo mäng</h1>
-
+      <h2>Mode: {mode}</h2>
+      <button onClick={() => { console.log(game) }}>Get editable</button>
       <label id="gameNameLabel">Mängu nimi: </label>
       <input id="gameName" value={name} onChange={(e) => { setName(e.target.value) }}></input><br></br>
       <label id="gameCatLabel">Kategooria: </label>
@@ -379,7 +470,11 @@ function AddGame() {
       <br />
 
       <label id="gameDescriptionLabel">Kirjeldus: </label>
-      <textarea id="gameDescriptionBox" onChange={(e) => { setDescription(e.target.value) }}></textarea>
+      <textarea
+        id="gameDescriptionBox"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
     </div>ˇ
     <hr></hr>
     <button type="button" id="stepBtn" onClick={addStep}>
