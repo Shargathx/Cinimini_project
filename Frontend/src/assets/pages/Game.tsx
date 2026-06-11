@@ -32,13 +32,14 @@ function Game() {
     // const [img, setImg] = useState<string>("")
     // const [toggle, setToggle] = useState(false)
     const [teacherTexts, setTeacherText] = useState<TeacherText[]>([])
+    const [mediaCount, setMediaCount] = useState<number | null>(0)
     const media = data?.gameSteps[0]?.mediaElements?.[0]?.fileData ?? ""
     const fileFormat = data?.gameSteps[0]?.mediaElements?.[0]?.mediaType ?? ""
 
     useEffect(() => {
         fetch(import.meta.env.VITE_BACK_URL + `/category/games/${id}/steps`)
             .then(res => res.json())
-            .then(json => { setData(json) })
+            .then(json => { setData(json); })
             .catch(err => console.error(err));
     }, [id]);
 
@@ -55,11 +56,14 @@ function Game() {
         };
     }, [fullscreen]);
 
+    useEffect(()=>{
+        getMediaCount()
+    }, [data])
+
     function returnCorrectData() {
-        console.log(fileFormat);
         switch (fileFormat) {
             case "image/png":
-
+                console.log(mediaCount)
                 return (
                     media && (
                         <div className="image-wrapper">
@@ -214,7 +218,6 @@ function Game() {
                                 <source src={`data:video/mp4;base64,${media}`} type="video/mp4"></source>
                             </video><br></br>
                             <button onClick={() => { playReverse() }}>Reverse</button>
-                            <button onClick={() => { playFast() }}>Fast</button>
                             {changeSpeed(playFast)}
                         </>
                         )
@@ -272,6 +275,12 @@ function Game() {
         );
     }
 
+    function getMediaCount() {
+        if (data) {
+            setMediaCount(data?.gameSteps[0]?.mediaElements?.length)
+        }
+
+    }
 
     function getQuestions() {
         if (data) {
@@ -286,7 +295,6 @@ function Game() {
     }
 
     function getTeacherText() {
-        console.log(data?.gameSteps?.[0]);
         if (data) {
             setTeacherText(data.gameSteps[0].teacherTexts)
         }
@@ -294,6 +302,7 @@ function Game() {
 
     return (
         <div className="game-grid-container">
+            <div>1/{mediaCount}</div>
             <div className="game-content">
                 {returnCorrectData()}
             </div>
