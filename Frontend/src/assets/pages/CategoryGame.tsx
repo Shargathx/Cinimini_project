@@ -16,11 +16,17 @@ function CategoryGame() {
         );
     }
 
-    const gamesList = categoryGames ?? [];
+    function deleteGame(gameId: number) {
+        fetch(import.meta.env.VITE_BACK_URL + `/games/${gameId}`, {
+            method: "DELETE"
+        }).then(res => res.json())
+            .then(json => setCategoryGame(json))
+    }
 
-    return (
-        <div className="games-container">
-            {gamesList.map(game => (
+
+    return <div className="games-container">
+        {categoryGame.map(game =>
+            <>
                 <Link
                     key={game.id}
                     to={`/categories/${catid}/${game.id}`}
@@ -37,9 +43,10 @@ function CategoryGame() {
                         {game.name}
                     </div>
                 </Link>
-            ))}
-        </div>
-    );
+                <button onClick={() => { deleteGame(Number(game.id)) }}>Delete game</button>
+            </>
+        )}
+    </div>;
 }
 
 export default CategoryGame;
