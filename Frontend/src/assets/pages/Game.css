@@ -1,9 +1,7 @@
 .game-grid-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 10vh 1fr 10vh;
-    column-gap: 10px;
-    margin: 10px;
+    grid-template-rows: clamp(90px, 10vh, 150px) minmax(0, 1fr) clamp(60px, 10vh, 120px);
 
 }
 
@@ -13,10 +11,18 @@
     height: 100%;
     width: 100%;
     overflow: hidden;
+    margin: clamp(1rem, 1vw, 4rem);
 
 }
 
-.game-info-buttons {
+.game-function{
+    grid-column: 2 / 3;
+	grid-row: 2 / 3;
+    margin: clamp(1rem, 1vw, 4rem);
+    margin-left: clamp(3rem, 6vw, 8rem);
+}
+
+.game-info-buttons{
     grid-column: 1 / 2;
     grid-row: 3 / 4;
 
@@ -31,17 +37,104 @@
 
     display: flex !important;
     flex-direction: column !important;
-    /*justify-content: center;*/
+    justify-content: center;
 }
 
 .game-name {
-    order: 1 !important;
+    font-size: clamp(1.5rem, 1.8vw, 3.5rem); 
+    font-weight: bold;
+    line-height: 1.2;
+    margin: 0;
 }
 
 .game-description {
-    order: 2 !important;
+    font-size: clamp(0.875rem, 1.2vw, 1.5rem); 
+    line-height: 1.5;
+    margin: 0;
+    margin-top: 0.5rem;
 }
 
+.image-container {
+    width: clamp(300px, 80%, 1000px);
+    max-height: clamp(45vh, 48vh, 75vh);
+    aspect-ratio: 16 / 10;
+    z-index: 1;
+    overflow: hidden;
+    border: clamp(8px, 0.5vw, 16px) solid rgba(197, 170, 241, 0.6);
+    border-radius: 20px;
+}
+
+@media (min-width: 1800px) {
+    .image-container {
+        width: 95%;
+        max-height: 80vh;
+    }
+}
+
+/* // idk if needed
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit:cover;
+}
+*/
+
+.image-function{
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.5rem;
+}
+
+.image-slider-text{
+    font-size: clamp(1rem, 1vw, 1.5rem);
+    margin-bottom: 0.5vh;
+    width: 100%;
+    white-space: nowrap;
+}
+
+@media (min-width: 1800px) {
+    .image-slider-text {
+        margin-bottom: 1.5vh;
+    }
+}
+
+.text-and-slider{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.image-slider{
+    height: clamp(24px, 2vh, 60px);
+    appearance: none;
+    background: transparent;
+    width: clamp(200px, 40%, 700px);
+    margin-bottom: 1.5vh;
+}
+
+@media (min-width: 1800px) {
+    .image-slider {
+        margin-bottom: 2.5vh;
+    }
+}
+
+.image-slider::-webkit-slider-runnable-track {
+    height: clamp(32px, 2vw, 60px);
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 30px;
+    border: clamp(2px, 0.25vw, 4px) solid rgba(197, 170, 241, 0.6);
+}
+
+.image-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: clamp(22px, 1.4vw, 62px);
+    height: clamp(22px, 1.4vw, 62px);
+    border-radius: 50%;
+    background: rgba(197, 170, 241, 0.8);
+    margin-top: 0; 
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 .fullscreen-overlay {
     position: fixed;
     inset: 0;

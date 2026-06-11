@@ -61,13 +61,23 @@ function Game() {
             case "image/png":
             case "image/jpeg":
                 return (
-                    <ImageGame
-                        media={media}
-                        saturation={saturation} setSaturation={setSaturation}
-                        contrast={contrast} setContrast={setContrast}
-                        exposure={exposure} setExposure={setExposure}
-                        zoom={zoom} setZoom={setZoom}
-                    />
+                    media && (
+                        <div className="image-container">
+                            <img 
+                                src={`data:image/png;base64,${media}`}
+                                alt="Game"
+                                style={{
+                                    filter: `
+                            saturate(${saturation}%)
+                            contrast(${contrast}%)
+                            brightness(${exposure}%)
+                        `,
+                                    transform: `scale(${zoom / 100})`,
+                                    transformOrigin: "center"
+                                }}
+                            />
+                        </div>
+                    )
                 );
             case "audio/mpeg":
             case "audio/mp3":
@@ -96,18 +106,34 @@ function Game() {
             </div>
             <div className="game-function">
                 {fileFormat.startsWith("image/") && (
-                    <>
-                        <ImageSaturation value={saturation} onChange={setSaturation} />
-                        <ImageContrast value={contrast} onChange={setContrast} />
-                        <ImageExposure value={exposure} onChange={setExposure} />
-                        <ImageZoom value={zoom} onChange={setZoom} />
-                    </>
+                    <div className="image-function">
+                        <ImageSaturation
+                            value={saturation}
+                            onChange={setSaturation}
+                        />
+
+                        <ImageContrast
+                            value={contrast}
+                            onChange={setContrast}
+                        />
+
+                        <ImageExposure
+                            value={exposure}
+                            onChange={setExposure}
+                        />
+
+                        <ImageZoom
+                            value={zoom}
+                            onChange={setZoom}
+                        />
+                    </div>
+
                 )}
             </div>
 
             <div className="name-and-description">
-                <h3 className="game-description">Kirjeldus: {data?.description}</h3>
                 <h1 className="game-name">Mängu nimi: {data?.name}</h1>
+                <h3 className="game-description">Kirjeldus: {data?.description}</h3>
             </div>
 
             <div className="game-info-buttons">
