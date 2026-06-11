@@ -58,9 +58,10 @@ public class GameController {
     }
 
     @DeleteMapping("/games/{gameId}")
-    public ResponseEntity<String> deleteGame(@PathVariable Long gameId) {
+    public List<Game> deleteGame(@PathVariable Long gameId) {
         gameService.softDeleteGame(gameId);
-        return ResponseEntity.ok("Game deleted successfully");
+       // return ResponseEntity.ok("Game deleted successfully");
+        return gameService.getAllActiveGames();
     }
 
 
