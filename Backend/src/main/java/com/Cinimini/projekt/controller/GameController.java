@@ -57,7 +57,7 @@ public class GameController {
         return ResponseEntity.ok("Game added successfully");
     }
 
-    @PutMapping(value = "/games/edit-game/{gameId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/games/edit-game/{gameId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> editGame(
             @PathVariable Long gameId,
             @ModelAttribute CreateGameRequest gameRequest) throws IOException {

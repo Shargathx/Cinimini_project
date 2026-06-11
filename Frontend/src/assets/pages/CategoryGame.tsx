@@ -16,7 +16,7 @@ function CategoryGame() {
         );
     }
 
-    let gamesList = categoryGames ?? [];
+    const gamesList = categoryGames ?? [];
 
     function deleteGame(gameId: number) {
         fetch(import.meta.env.VITE_BACK_URL + `/games/${gameId}`, {
