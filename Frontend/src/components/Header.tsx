@@ -45,7 +45,7 @@ function Header() {
                 )}
 
                 {showAddGame && (
-                    <a href="/add-game" className="home-page-link">
+                    <a onClick={()=>{localStorage.setItem("mode", "add")}} href="/add-game" className="home-page-link">
                         LISA MÄNG
                     </a>
                 )}

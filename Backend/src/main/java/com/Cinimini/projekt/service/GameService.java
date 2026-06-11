@@ -42,7 +42,7 @@ public class GameService {
         Game game = gameRepository.findById(gameId)
                 .orElseThrow(() -> new RuntimeException("Game not found"));
 
-        if (game.getCategoryId().equals(categoryId)) {
+        if (!game.getCategoryId().equals(categoryId)) {
             throw new RuntimeException("Game does not belong to category");
         }
 
