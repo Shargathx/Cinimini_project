@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Game.css';
 import { useFetch } from '../../components/hooks/useFetch';
 import type { Game } from '../models/Game';
@@ -21,6 +21,7 @@ function Game() {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [points, setPoints] = useState<Discussion[]>([]);
     const [teacherTexts, setTeacherText] = useState<TeacherText[]>([]);
+    const [mediaCount, setMediaCount] = useState<number | null>(0)
 
     const [saturation, setSaturation] = useState(100);
     const [contrast, setContrast] = useState(100);
@@ -30,6 +31,16 @@ function Game() {
     const step = data?.gameSteps?.[0];
     const media = step?.mediaElements?.[0]?.fileData ?? "";
     const fileFormat = step?.mediaElements?.[0]?.mediaType ?? "";
+
+    function getMediaCount() {
+        if (data) {
+            setMediaCount(data.gameSteps[0].mediaElements.length)
+        }
+    }
+
+    useEffect(() => {
+        getMediaCount()
+    }, [data])
 
     function getQuestions() {
         if (step) setQuestions(step.questions);
@@ -78,10 +89,11 @@ function Game() {
 
     return (
         <div className="game-grid-container">
+
+            <div>1/{mediaCount}</div>
             <div className="game-content">
                 {renderMediaComponent()}
             </div>
-
             <div className="game-function">
                 {fileFormat.startsWith("image/") && (
                     <>

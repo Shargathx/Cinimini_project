@@ -16,27 +16,38 @@ function CategoryGame() {
         );
     }
 
-    const gamesList = categoryGames ?? [];
+    let gamesList = categoryGames ?? [];
+
+    function deleteGame(gameId: number) {
+        fetch(import.meta.env.VITE_BACK_URL + `/games/${gameId}`, {
+            method: "DELETE"
+        }).then(()=>{window.location.reload()})
+    }
 
     return (
         <div className="games-container">
             {gamesList.map(game => (
-                <Link
-                    key={game.id}
-                    to={`/categories/${catid}/${game.id}`}
-                    className={
-                        "game-card" +
-                        (catid === "1" ? " heli" : "") +
-                        (catid === "2" ? " video" : "") +
-                        (catid === "3" ? " pilt" : "")
-                    }
-                >
-                    <img src={defaultGameIcon} alt="DefaultIcon" className="game-icon" />
+                <>
+                    <Link
+                        key={game.id}
+                        to={`/categories/${catid}/${game.id}`}
+                        className={
+                            "game-card" +
+                            (catid === "1" ? " heli" : "") +
+                            (catid === "2" ? " video" : "") +
+                            (catid === "3" ? " pilt" : "")
+                        }
+                    >
+                        <img src={defaultGameIcon} alt="DefaultIcon" className="game-icon" />
 
-                    <div className="game-name">
-                        {game.name}
-                    </div>
-                </Link>
+                        <div className="game-name">
+                            {game.name}
+                        </div>
+                    </Link>
+
+                    <button onClick={() => { deleteGame(Number(game.id)) }}>Delete game</button>
+                </>
+
             ))}
         </div>
     );
