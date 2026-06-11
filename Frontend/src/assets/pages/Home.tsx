@@ -3,9 +3,6 @@ import gameStartIcon from '../icons/startGame.svg';
 import './Home.css';
 import gameLogo from '../logos/logo.svg';
 
-<div>
-</div>
-
 function Home() {
     const navigate = useNavigate();
 

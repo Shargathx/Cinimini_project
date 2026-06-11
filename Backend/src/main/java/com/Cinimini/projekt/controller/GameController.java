@@ -57,6 +57,14 @@ public class GameController {
         return ResponseEntity.ok("Game added successfully");
     }
 
+    @PutMapping(value = "/games/edit-game/{gameId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> editGame(
+            @PathVariable Long gameId,
+            @ModelAttribute CreateGameRequest gameRequest) throws IOException {
+        gameService.editGameData(gameId, gameRequest);
+        return ResponseEntity.ok("Game updated successfully");
+    }
+
     @DeleteMapping("/games/{gameId}")
     public List<Game> deleteGame(@PathVariable Long gameId) {
         gameService.softDeleteGame(gameId);

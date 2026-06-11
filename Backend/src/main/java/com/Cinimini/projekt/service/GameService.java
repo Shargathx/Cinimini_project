@@ -176,7 +176,7 @@ public class GameService {
         System.out.println(MediaElement.class.getName());
         System.out.println(MediaElement.class.getClassLoader());
 
-        validateGameData(gameRequest);
+        validateAddGameData(gameRequest);
 
         Game game = new Game();
         game.setName(gameRequest.getName());
@@ -214,6 +214,14 @@ public class GameService {
         }
     }
 
+    public void editGameData(Long gameId, CreateGameRequest gameRequest) throws IOException {
+        Game existingGame = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
+        validateAddGameData(gameRequest);
+        validateEditGameData(gameRequest, existingGame);
+    }
+
+
+
 
     public void softDeleteGame(Long gameId) {
         Game game = gameRepository.findById(gameId).orElseThrow(() -> new ResponseStatusException(
@@ -222,8 +230,21 @@ public class GameService {
         gameRepository.save(game);
     }
 
+    private static void validateEditGameData(CreateGameRequest gameRequest, Game existingGame) {
+        if (!existingGame.getName().equals(gameRequest.getName())) {
+            existingGame.setName(gameRequest.getName());
+        }
+        if (!existingGame.getCategoryId().equals(gameRequest.getCategoryId())) {
+            existingGame.setCategoryId(gameRequest.getCategoryId());
+        }
+        if (!existingGame.getDescription().equals(gameRequest.getDescription())) {
+            existingGame.setDescription(gameRequest.getDescription());
+        }
+        validateAddGameStepsData(gameRequest);
+    }
 
-    private static void validateGameData(CreateGameRequest gameRequest) {
+
+    private static void validateAddGameData(CreateGameRequest gameRequest) {
         if (gameRequest.getName() == null || gameRequest.getName().isEmpty()) {
             throw new RuntimeException("Game name is empty");
         }
@@ -233,6 +254,10 @@ public class GameService {
         if (gameRequest.getSteps() == null || gameRequest.getSteps().isEmpty()) {
             throw new RuntimeException("Game steps are empty");
         }
+        validateAddGameStepsData(gameRequest);
+    }
+
+    private static void validateAddGameStepsData(CreateGameRequest gameRequest) {
         for (GameStepRequest stepRequest : gameRequest.getSteps()) {
             MultipartFile mediaFile = stepRequest.getImage();
             if (mediaFile == null || mediaFile.isEmpty()) {

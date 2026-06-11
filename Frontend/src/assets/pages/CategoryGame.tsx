@@ -1,20 +1,20 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { useFetch } from "../../components/hooks/useFetch"; // Double check this path matches your folder structure!
 import type { Game } from "../models/Game";
-import { useEffect, useState } from 'react'
-import { Link } from "react-router-dom";
 import defaultGameIcon from '../icons/defaultGameIcon.svg';
 import './CategoryGame.css';
 
 function CategoryGame() {
-    const { catid } = useParams();
-    const [categoryGame, setCategoryGame] = useState<Game[]>([])
+    const { catid } = useParams<{ catid: string }>();
+    const { data: categoryGames, loading } = useFetch<Game[]>(`${import.meta.env.VITE_BACK_URL}/category/games/${catid}`, [catid]);
 
-    useEffect(() => {
-        fetch(import.meta.env.VITE_BACK_URL + `/category/games/${catid}`)
-            .then(res => res.json())
-            .then(json => setCategoryGame(json))
-            .catch(err => console.error(err));
-    }, [catid])
+    if (loading) {
+        return (
+            <div className="game-loading-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+                <p>Laeb mänge...</p>
+            </div>
+        );
+    }
 
     function deleteGame(gameId: number) {
         fetch(import.meta.env.VITE_BACK_URL + `/games/${gameId}`, {
@@ -31,7 +31,7 @@ function CategoryGame() {
                     key={game.id}
                     to={`/categories/${catid}/${game.id}`}
                     className={
-                        "game-card " +
+                        "game-card" +
                         (catid === "1" ? " heli" : "") +
                         (catid === "2" ? " video" : "") +
                         (catid === "3" ? " pilt" : "")
@@ -49,4 +49,4 @@ function CategoryGame() {
     </div>;
 }
 
-export default CategoryGame
+export default CategoryGame;
