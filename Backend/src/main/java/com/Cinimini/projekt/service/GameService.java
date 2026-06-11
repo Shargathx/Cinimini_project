@@ -318,5 +318,14 @@ public class GameService {
         gameRepository.save(game);
     }
 
+    public void deleteGameFully(Long gameId) {
+        Game game = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
+        List<GameStep> steps = gameStepRepository.findByGameId(gameId);
+        for (GameStep gameStep : steps) {
+            gameStepRepository.delete(gameStep);
+        }
+        gameRepository.delete(game);
+    }
+
 
 }

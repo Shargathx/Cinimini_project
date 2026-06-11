@@ -91,5 +91,11 @@ public class GameController {
         return ResponseEntity.ok("Game deleted successfully");
     }
 
+    @DeleteMapping("/games/delete-permanently/{gameId}")
+    public ResponseEntity<Void> deleteGamePermanently(@PathVariable Long gameId) {
+        gameService.deleteGameFully(gameId);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }
