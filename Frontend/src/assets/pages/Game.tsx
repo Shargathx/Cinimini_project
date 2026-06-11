@@ -27,26 +27,13 @@ function Game() {
     const [exposure, setExposure] = useState(100);
     const [zoom, setZoom] = useState(100);
 
-    const { id } = useParams()
-    // const { catid } = useParams() // TODO: on vaja?
-    const [data, setData] = useState<Game | null>(null)
-    const [questions, setQuestions] = useState<Question[]>([])
-    const [points, setPoints] = useState<Discussion[]>([])
-    const [reverb, setReverb] = useState<number>(0)
-    const [speed, setSpeed] = useState<number>(1)
-    // const [img, setImg] = useState<string>("")
-    // const [toggle, setToggle] = useState(false)
-    const [teacherTexts, setTeacherText] = useState<TeacherText[]>([])
-    const [mediaCount, setMediaCount] = useState<number | null>(0)
-    const media = data?.gameSteps[0]?.mediaElements?.[0]?.fileData ?? ""
-    const fileFormat = data?.gameSteps[0]?.mediaElements?.[0]?.mediaType ?? ""
+    const step = data?.gameSteps?.[0];
+    const media = step?.mediaElements?.[0]?.fileData ?? "";
+    const fileFormat = step?.mediaElements?.[0]?.mediaType ?? "";
 
-    useEffect(() => {
-        fetch(import.meta.env.VITE_BACK_URL + `/category/games/${id}/steps`)
-            .then(res => res.json())
-            .then(json => { setData(json); })
-            .catch(err => console.error(err));
-    }, [id]);
+    function getQuestions() {
+        if (step) setQuestions(step.questions);
+    }
 
     function getPoints() {
         if (step) setPoints(step.discussionPoints);
@@ -59,14 +46,9 @@ function Game() {
     function renderMediaComponent() {
         if (!media) return null;
 
-    useEffect(()=>{
-        getMediaCount()
-    }, [data])
-
-    function returnCorrectData() {
         switch (fileFormat) {
             case "image/png":
-                console.log(mediaCount)
+            case "image/jpeg":
                 return (
                     <ImageGame
                         media={media}
@@ -94,34 +76,8 @@ function Game() {
         );
     }
 
-    function getMediaCount() {
-        if (data) {
-            setMediaCount(data?.gameSteps[0]?.mediaElements?.length)
-        }
-
-    }
-
-    function getQuestions() {
-        if (data) {
-            setQuestions(data.gameSteps[0].questions)
-        }
-    }
-
-    function getPoints() {
-        if (data) {
-            setPoints(data.gameSteps[0].discussionPoints)
-        }
-    }
-
-    function getTeacherText() {
-        if (data) {
-            setTeacherText(data.gameSteps[0].teacherTexts)
-        }
-    }
-
     return (
         <div className="game-grid-container">
-            <div>1/{mediaCount}</div>
             <div className="game-content">
                 {renderMediaComponent()}
             </div>

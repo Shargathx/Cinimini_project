@@ -11,9 +11,6 @@ export default defineConfig({
       host: 'g4hbc24m-3000.euw.devtunnels.ms',
       protocol: 'wss', // Secure websockets are mandatory over dev tunnels
       clientPort: 443
-    },
-    watch: {
-      usePolling: true
     }
   }
 })
