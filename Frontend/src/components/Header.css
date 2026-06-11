@@ -24,7 +24,7 @@
     color: var(--text-h);
     font-family: 'Sono', sans-serif;
     font-weight: bold;
-    font-size: 1.2vw;
+    font-size: 20px;
     text-align: center;
     border-radius: 6vw;
     border: 0.2vw solid rgb(145, 242, 190, 1);
@@ -105,13 +105,19 @@
 }
 
 .popup-text-container ul {
-    padding-left: 0.6vw;
+    list-style-type: disc;
+    list-style-position: outside;
+    padding-left: clamp(30px, 2.5vw, 50px);
 }
 
 .popup-text-container li {
-    font-size: 0.8vw;
-    padding-left: 0.6vw;
+    font-size: clamp(16px, 0.8vw, 22px);
     margin-bottom: 0.2vw;
+}
+
+.popup-text-container li::marker {
+    font-family: Arial, sans-serif;
+    font-size: 1.4em;
 }
 
 .popup-close-button {
