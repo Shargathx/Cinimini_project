@@ -1,5 +1,6 @@
 package com.Cinimini.projekt.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,22 +24,24 @@ public class GameStep {
     private Integer stepOrder;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "game_id")
     private Game game;
 
-    @OneToMany(mappedBy = "gameStep")
+    @OneToMany(mappedBy = "gameStep", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("discussionOrder ASC")
+
     private List<DiscussionPoint> discussionPoints;
 
-    @OneToMany(mappedBy = "gameStep")
+    @OneToMany(mappedBy = "gameStep", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id ASC")
     private List<MediaElement> mediaElements;
 
-    @OneToMany(mappedBy = "gameStep")
+    @OneToMany(mappedBy = "gameStep", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("questionOrder ASC")
     private List<Question> questions;
 
-    @OneToMany(mappedBy = "gameStep")
+    @OneToMany(mappedBy = "gameStep", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("textOrder ASC")
     private List<TeacherText> teacherText;
 }

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "game")
 @Setter
@@ -21,4 +23,7 @@ public class Game {
     private String description;
     @Column(name = "is_active")
     private boolean active;
+
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GameStep> gameSteps;
 }

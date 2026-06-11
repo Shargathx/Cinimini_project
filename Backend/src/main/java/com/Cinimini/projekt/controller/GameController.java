@@ -9,6 +9,7 @@ import com.Cinimini.projekt.service.GameService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
@@ -95,6 +96,16 @@ public class GameController {
     public ResponseEntity<Void> deleteGamePermanently(@PathVariable Long gameId) {
         gameService.deleteGameFully(gameId);
         return ResponseEntity.noContent().build();
+    }
+
+    @Transactional
+    @DeleteMapping("/games/delete-cascading/{gameId}")
+    public ResponseEntity<String> deleteGameCascading(@PathVariable Long gameId) {
+        if (!gameRepository.existsById(gameId)) {
+            return ResponseEntity.notFound().build();
+        }
+        gameRepository.deleteById(gameId);
+        return ResponseEntity.ok("Mäng ja kõik sellega seotud andmed kustutatud.");
     }
 
 
