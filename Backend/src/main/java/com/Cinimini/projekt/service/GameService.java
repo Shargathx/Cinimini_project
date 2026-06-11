@@ -3,7 +3,9 @@ package com.Cinimini.projekt.service;
 import com.Cinimini.projekt.dto.GameStepDto;
 import com.Cinimini.projekt.dto.*;
 import com.Cinimini.projekt.entity.*;
-import com.Cinimini.projekt.repository.*;
+import com.Cinimini.projekt.repository.CategoryRepository;
+import com.Cinimini.projekt.repository.GameRepository;
+import com.Cinimini.projekt.repository.GameStepRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,12 +24,8 @@ import java.util.Set;
 public class GameService {
 
     private final GameStepRepository gameStepRepository;
-    private final DiscussionPointRepository discussionPointRepository;
-    private final MediaRepository mediaRepository;
-    private final QuestionRepository questionRepository;
     private final GameRepository gameRepository;
     private final CategoryRepository categoryRepository;
-    private final TeacherTextRepository teacherTextRepository;
     private final GameStepService gameStepService;
 
     public List<Game> getAllActiveGames() {

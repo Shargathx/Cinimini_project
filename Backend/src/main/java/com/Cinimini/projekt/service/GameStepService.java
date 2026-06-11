@@ -20,7 +20,6 @@ public class GameStepService {
     private final MediaRepository mediaRepository;
     private final TeacherTextRepository teacherTextRepository;
     private final DiscussionPointRepository discussionPointRepository;
-    private GameStepRepository gameStepRepository;
 
 
     public void validateAddGameStepsData(CreateGameRequest gameRequest) {
@@ -30,7 +29,7 @@ public class GameStepService {
                 throw new RuntimeException("Media file is empty");
             }
             String contentType = mediaFile.getContentType();
-            Long categoryId = gameRequest.getCategoryId();
+//            Long categoryId = gameRequest.getCategoryId();
 
             switch (gameRequest.getCategoryId().intValue()) { // intValue to get around Long -> int conversion
                 case 1: // Check for audio
@@ -63,7 +62,7 @@ public class GameStepService {
         if (multipartFile == null || multipartFile.isEmpty()) {
             return;
         }
-        String fileName = multipartFile.getOriginalFilename();
+//        String fileName = multipartFile.getOriginalFilename();
         Optional<MediaElement> existingMediaElement = mediaRepository.findByGameStep(savedStep);
         MediaElement mediaElement;
         if (existingMediaElement.isPresent()) {

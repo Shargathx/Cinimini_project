@@ -7,17 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface GameStepRepository extends JpaRepository<GameStep, Long> {
     @EntityGraph(attributePaths = {"discussionPoints", "mediaElements"})
     @Query("SELECT gs FROM GameStep gs")
-    List<GameStep> findAllRelated();
-
-    List<GameStep> findAllByGameId(Long gameId);
-
-//    List<GameStep> findByGame_Id(Long gameId);
-
     List<GameStep> findAllByGame_Id(Long gameId);
 
     List<GameStep> findByGame(Game existingGame);
