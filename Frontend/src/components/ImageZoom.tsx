@@ -5,10 +5,20 @@ type Props = {
 
 function ImageZoom({ value, onChange }: Props) {
     return (
-        <div className="slider-control">
-            <label>Zoom: {value}%</label>
+        <div className="text-and-slider">
+            <label
+                className="image-slider-text"
+                style={{
+                    display: "inline-block",
+                    width: "160px",
+                    fontVariantNumeric: "tabular-nums"
+                }}
+            >
+                Zoom: {value}%
+            </label>
 
             <input
+                className="image-slider"
                 type="range"
                 min="0"
                 max="500"
