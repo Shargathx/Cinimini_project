@@ -1,5 +1,6 @@
 package com.Cinimini.projekt.repository;
 
+import com.Cinimini.projekt.entity.Game;
 import com.Cinimini.projekt.entity.GameStep;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,6 @@ public interface GameStepRepository extends JpaRepository<GameStep, Long> {
 //    List<GameStep> findByGame_Id(Long gameId);
 
     List<GameStep> findAllByGame_Id(Long gameId);
+
+    List<GameStep> findByGame(Game existingGame);
 }

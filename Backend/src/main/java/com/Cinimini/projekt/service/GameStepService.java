@@ -119,22 +119,24 @@ public class GameStepService {
         }
     }
 
-    public void validateSteps(CreateGameRequest gameRequest, Game existingGame, boolean isCreate) {
+    public void validateSteps(CreateGameRequest gameRequest, boolean isCreate) {
         for (GameStepRequest step : gameRequest.getSteps()) {
 
             MultipartFile file = step.getImage();
 
-            if (isCreate && (file == null || file.isEmpty())) {
-                throw new RuntimeException("Media file is empty");
-            }
-            if (isCreate && (step.getQuestions() == null || step.getQuestions().isEmpty())) {
-                throw new RuntimeException("Questions is empty");
-            }
-            if (isCreate && step.getDiscussionPoints() == null || step.getDiscussionPoints().isEmpty()) {
-                throw new RuntimeException("DiscussionPoints is empty");
-            }
-            if (isCreate && step.getTeacherTexts() == null || step.getTeacherTexts().isEmpty()) {
-                throw new RuntimeException("TeacherTexts is empty");
+            if (isCreate) {
+                if (file == null || file.isEmpty()) {
+                    throw new RuntimeException("Media file is empty");
+                }
+                if (step.getQuestions() == null || step.getQuestions().isEmpty()) {
+                    throw new RuntimeException("Questions is empty");
+                }
+                if (step.getDiscussionPoints() == null || step.getDiscussionPoints().isEmpty()) {
+                    throw new RuntimeException("DiscussionPoints is empty");
+                }
+                if (step.getTeacherTexts() == null || step.getTeacherTexts().isEmpty()) {
+                    throw new RuntimeException("TeacherTexts is empty");
+                }
             }
 
             if (file != null && !file.isEmpty()) {
@@ -154,14 +156,8 @@ public class GameStepService {
                             throw new RuntimeException("Image required");
                         break;
                 }
-            }
-
-            if (isCreate && (step.getDiscussionPoints() == null || step.getDiscussionPoints().isEmpty())) {
-                throw new RuntimeException("Discussion points are empty");
-            }
-
-            if (isCreate && (step.getQuestions() == null || step.getQuestions().isEmpty())) {
-                throw new RuntimeException("Questions are empty");
+            } else if (!isCreate && step.getExistingImageId() == null) {
+                throw new RuntimeException("Every step must have either a new upload or an existing media reference");
             }
         }
     }
