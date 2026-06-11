@@ -1,6 +1,7 @@
 package com.Cinimini.projekt.repository;
 
 import com.Cinimini.projekt.entity.DiscussionPoint;
+import com.Cinimini.projekt.entity.GameStep;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,4 +15,6 @@ public interface DiscussionPointRepository extends JpaRepository<DiscussionPoint
     List<DiscussionPoint> findByGameStep_Game_Id(Long gameId);
 
     List<DiscussionPoint> findByGameStep_IdAndIsActiveTrue(Long id);
+
+    List<DiscussionPoint> findByGameStep(GameStep gameStep);
 }

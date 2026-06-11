@@ -1,5 +1,6 @@
 package com.Cinimini.projekt.repository;
 
+import com.Cinimini.projekt.entity.GameStep;
 import com.Cinimini.projekt.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,4 +13,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findOrderedActiveQuestions(@Param("stepId") Long stepId);
 
     List<Question> findByGameStep_Game_Id(Long gameId);
+
+    List<Question> findByGameStep(GameStep savedStep);
 }

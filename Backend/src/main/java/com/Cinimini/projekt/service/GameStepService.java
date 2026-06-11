@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Service
@@ -65,57 +68,95 @@ public class GameStepService {
     }
 
     public void handleAndSaveQuestions(GameStepRequest stepRequest, GameStep savedStep) {
-        int questionOrder = 1;
-        for (QuestionDto question : stepRequest.getQuestions()) {
-            Question questionEntity;
+        List<Question> currentDbQuestions = questionRepository.findByGameStep(savedStep);
+        Set<Long> remainingIds = new HashSet<>();
 
-            if (question.getId() != null) {
-                questionEntity = questionRepository.findById(question.getId()).orElseGet(Question::new);
-            } else {
-                questionEntity = new Question();
+        int questionOrder = 1;
+
+        if (stepRequest.getQuestions() != null) {
+            for (QuestionDto question : stepRequest.getQuestions()) {
+                Question questionEntity;
+
+                if (question.getId() != null) {
+                    remainingIds.add(question.getId());
+                    questionEntity = questionRepository.findById(question.getId()).orElseThrow(() -> new RuntimeException("Question not found"));
+                } else {
+                    questionEntity = new Question();
+                }
+
+                questionEntity.setQuestionText(question.getQuestionText());
+                questionEntity.setIsActive(true);
+                questionEntity.setQuestionOrder(questionOrder++);
+                questionEntity.setGameStep(savedStep);
+                questionRepository.save(questionEntity);
             }
 
-            questionEntity.setQuestionText(question.getQuestionText());
-            questionEntity.setIsActive(true);
-            questionEntity.setQuestionOrder(questionOrder++);
-            questionEntity.setGameStep(savedStep);
-            questionRepository.save(questionEntity);
+        }
+        for (Question dbItem : currentDbQuestions) {
+            if (!remainingIds.contains(dbItem.getId())) {
+                questionRepository.delete(dbItem);
+            }
         }
     }
 
     public void handleAndSaveTeacherTexts(GameStepRequest stepRequest, GameStep savedStep) {
-        int teacherOrder = 1;
-        for (TeacherTextDto teacherText : stepRequest.getTeacherTexts()) {
-            TeacherText teacherEntity;
+        List<TeacherText> currentDbTeacherTexts = teacherTextRepository.findByGameStep(savedStep);
+        Set<Long> remainingIds = new HashSet<>();
 
-            if (teacherText.getId() != null) {
-                teacherEntity = teacherTextRepository.findById(teacherText.getId()).orElseGet(TeacherText::new);
-            } else {
-                teacherEntity = new TeacherText();
+        int teacherOrder = 1;
+        if (stepRequest.getTeacherTexts() != null && !stepRequest.getTeacherTexts().isEmpty()) {
+            for (TeacherTextDto teacherText : stepRequest.getTeacherTexts()) {
+                TeacherText teacherEntity;
+
+                if (teacherText.getId() != null) {
+                    remainingIds.add(teacherText.getId());
+                    teacherEntity = teacherTextRepository.findById(teacherText.getId()).orElseThrow(() -> new RuntimeException("Teacher text not found"));
+                } else {
+                    teacherEntity = new TeacherText();
+                }
+                teacherEntity.setTeacherText(teacherText.getTeacherText());
+                teacherEntity.setIsActive(true);
+                teacherEntity.setTextOrder(teacherOrder++);
+                teacherEntity.setGameStep(savedStep);
+                teacherTextRepository.save(teacherEntity);
             }
-            teacherEntity.setTeacherText(teacherText.getTeacherText());
-            teacherEntity.setIsActive(true);
-            teacherEntity.setTextOrder(teacherOrder++);
-            teacherEntity.setGameStep(savedStep);
-            teacherTextRepository.save(teacherEntity);
+        }
+        for (TeacherText dbItem : currentDbTeacherTexts) {
+            if (!remainingIds.contains(dbItem.getId())) {
+                teacherTextRepository.delete(dbItem);
+            }
         }
     }
 
     public void handleAndSaveDiscussionText(GameStepRequest stepRequest, GameStep savedStep) {
-        int discussionPointOrder = 1;
-        for (DiscussionDto discussionPoint : stepRequest.getDiscussionPoints()) {
-            DiscussionPoint discussionText;
+        List<DiscussionPoint> currentDbDiscussions = discussionPointRepository.findByGameStep(savedStep);
+        Set<Long> remainingIds = new HashSet<>();
 
-            if (discussionPoint.getId() != null) {
-                discussionText = discussionPointRepository.findById(discussionPoint.getId()).orElseGet(DiscussionPoint::new);
-            } else {
-                discussionText = new DiscussionPoint();
+        int discussionPointOrder = 1;
+        if (stepRequest.getDiscussionPoints() != null) {
+            for (DiscussionDto discussionPoint : stepRequest.getDiscussionPoints()) {
+                DiscussionPoint discussionEntity;
+
+                if (discussionPoint.getId() != null) {
+                    remainingIds.add(discussionPoint.getId());
+                    discussionEntity = discussionPointRepository.findById(discussionPoint.getId()).orElseThrow(() -> new RuntimeException("Discussion point not found"));
+                } else {
+                    discussionEntity = new DiscussionPoint();
+                }
+                discussionEntity.setDiscussionText(discussionPoint.getDiscussionText());
+                discussionEntity.setIsActive(true);
+                discussionEntity.setDiscussionOrder(discussionPointOrder++);
+                discussionEntity.setGameStep(savedStep);
+                discussionPointRepository.save(discussionEntity);
             }
-            discussionText.setDiscussionText(discussionPoint.getDiscussionText());
-            discussionText.setIsActive(true);
-            discussionText.setDiscussionOrder(discussionPointOrder++);
-            discussionText.setGameStep(savedStep);
-            discussionPointRepository.save(discussionText);
+
+            for (DiscussionPoint dbItem : currentDbDiscussions) {
+                if (!remainingIds.contains(dbItem.getId())) {
+                    discussionPointRepository.delete(dbItem);
+                }
+            }
+
+
         }
     }
 
@@ -125,9 +166,10 @@ public class GameStepService {
             MultipartFile file = step.getImage();
 
             if (isCreate) {
-                if (file == null || file.isEmpty()) {
-                    throw new RuntimeException("Media file is empty");
-                }
+                // 🟢 COMMENTED OUT: Allows empty images during game creation
+                // if (file == null || file.isEmpty()) {
+                //     throw new RuntimeException("Media file is empty");
+                // }
                 if (step.getQuestions() == null || step.getQuestions().isEmpty()) {
                     throw new RuntimeException("Questions is empty");
                 }
@@ -156,9 +198,11 @@ public class GameStepService {
                             throw new RuntimeException("Image required");
                         break;
                 }
-            } else if (!isCreate && step.getExistingImageId() == null) {
-                throw new RuntimeException("Every step must have either a new upload or an existing media reference");
             }
+            // 🟢 COMMENTED OUT: Allows empty images during game updates/edits
+            // else if (!isCreate && step.getExistingImageId() == null) {
+            //     throw new RuntimeException("Every step must have either a new upload or an existing media reference");
+            // }
         }
     }
 }
