@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import type { Category } from "../models/Category"
 import type { CreateGameStep } from "../models/CreateGameStep"
 import "./AddGame.css";
+import type { Game } from "../models/Game";
+import { useFetch } from '../../components/hooks/useFetch';
 
 function AddGame() {
   const [categories, setCategories] = useState<Category[]>([])
@@ -9,6 +11,8 @@ function AddGame() {
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [category, setCategory] = useState("");
+  const [mode, setMode] = useState<String>("")
+  const { data, loading } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/games/${localStorage.getItem("catid")}/${localStorage.getItem("id")}`, []);
   //Game questions
   // const [newQuestion, setNewQuestion] = useState("")
   const [questionCounter, setQuestionCounter] = useState(0)
@@ -18,6 +22,8 @@ function AddGame() {
   //Teacher text
   // const [teacherText, setTeacherText] = useState("")
   const [teacherTextCounter, setTeacherTextCounter] = useState(0);
+
+  const game = data;
 
   const [steps, setSteps] = useState<CreateGameStep[]>([
     {
@@ -64,6 +70,51 @@ function AddGame() {
       .catch(err => console.error(err));
   }, []);
 
+  useEffect(() => {
+    setMode(localStorage.getItem("mode"));
+  }, [])
+
+  useEffect(() => {
+    if (mode == "edit") {
+      fillEditableDate()
+    }
+  }, [game])
+
+
+
+  function fillEditableDate() {
+    if (!game) return;
+
+    setName(game.name);
+    setDescription(game.description);
+    setCategory(String(localStorage.getItem("catid")));
+
+    setSteps(
+      game.gameSteps.map(step => ({
+        image: step.mediaElements[0], // existing image already on server
+
+        questions: step.questions.map(q => ({
+          id: q.id,
+          questionText: q.questionText
+        })),
+
+        discussionPoints: step.discussionPoints.map(dp => ({
+          id: dp.id,
+          discussionText: dp.discussionText
+        })),
+
+        teacherTexts: step.teacherTexts.map(tt => ({
+          id: tt.id,
+          teacherText: tt.teacherText
+        })),
+
+        questionInput: "",
+        discussionInput: "",
+        teacherTextInput: ""
+      }))
+    );
+  }
+
   function createEmptyStep(): GameStepForm {
     return {
       image: null,
@@ -80,6 +131,12 @@ function AddGame() {
 
   function addStep() {
     setSteps(prev => [...prev, createEmptyStep()]);
+  }
+
+  function deleteStep(stepIndex: number) {
+    setSteps(prev =>
+      prev.filter((_, index) => index !== stepIndex)
+    );
   }
 
   function updateQuestionInput(
@@ -263,39 +320,78 @@ function AddGame() {
       console.log(pair[0] + ", " + pair[1]);
     }
 
-    try {
-      const response = await fetch(
-        import.meta.env.VITE_BACK_URL + "/games/add-game",
-        {
-          method: "POST",
-          body: formData
-        }
-      );
+    if (mode == "add") {
+      try {
+        const response = await fetch(
+          import.meta.env.VITE_BACK_URL + "/games/add-game",
+          {
+            method: "POST",
+            body: formData
+          }
+        );
 
-      if (!response.ok) {
-        throw new Error("Failed to save game");
+        if (!response.ok) {
+          throw new Error("Failed to save game");
+        }
+
+        alert("Game saved!");
+
+        setName("");
+        setDescription("");
+
+        setSteps([
+          {
+            image: null,
+            questions: [],
+            discussionPoints: [],
+            teacherTexts: [],
+            questionInput: "",
+            discussionInput: "",
+            teacherTextInput: ""
+          }
+        ]);
+
+      } catch (err) {
+        console.error(err);
       }
-
-      alert("Game saved!");
-
-      setName("");
-      setDescription("");
-
-      setSteps([
-        {
-          image: null,
-          questions: [],
-          discussionPoints: [],
-          teacherTexts: [],
-          questionInput: "",
-          discussionInput: "",
-          teacherTextInput: ""
-        }
-      ]);
-
-    } catch (err) {
-      console.error(err);
     }
+    if (mode == "edit") {
+      try {
+        const gameId = localStorage.getItem("id");
+
+        const response = await fetch(
+          `${import.meta.env.VITE_BACK_URL}/games/edit-game/${gameId}`,
+          {
+            method: "PUT",
+            body: formData
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Failed to save game");
+        }
+
+        alert("Game saved!");
+
+        setName("");
+        setDescription("");
+
+        setSteps([
+          {
+            image: null,
+            questions: [],
+            discussionPoints: [],
+            teacherTexts: [],
+            questionInput: "",
+            discussionInput: "",
+            teacherTextInput: ""
+          }
+        ]);
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
   };
 
   function addDiscussionPoint(
@@ -347,180 +443,197 @@ function AddGame() {
   }
 
   return (<>
-
-    <h1 id="addGameTitle">Loo mäng</h1>
-    <label id="gameNameLabel">Mängu nimi: </label>
-    <input id="gameName" value={name} onChange={(e) => { setName(e.target.value) }}></input><br></br>
-    <label id="gameCatLabel">Kategooria: </label>
-    <select
-      value={category}
-      onChange={(e) => setCategory(e.target.value)}
-      id="gameCat"
-      name="gameCat"
-    >
-      <option value="" disabled>
-        Vali kategooria
-      </option>
-
-      {categories.map((category) => (
-        <option key={category.id} value={category.id}>
-          {category.name}
+    <div id="generalContainer">
+      <h1 id="addGameTitle">Loo mäng</h1>
+      <h2>Mode: {mode}</h2>
+      <button onClick={() => { console.log(game) }}>Get editable</button>
+      <label id="gameNameLabel">Mängu nimi: </label>
+      <input id="gameName" value={name} onChange={(e) => { setName(e.target.value) }}></input><br></br>
+      <label id="gameCatLabel">Kategooria: </label>
+      <select
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        id="gameCat"
+        name="gameCat"
+      >
+        <option value="" disabled>
+          Vali kategooria
         </option>
-      ))}
-    </select><br />
 
-    <label id="gameDescriptionLabel">Kirjeldus: </label><br />
-    <textarea id="gameDescriptionBox" onChange={(e) => { setDescription(e.target.value) }}></textarea>
+        {categories.map((category) => (
+          <option key={category.id} value={category.id}>
+            {category.name}
+          </option>
+        ))}
+      </select>
+
+      <br />
+
+      <label id="gameDescriptionLabel">Kirjeldus: </label>
+      <textarea
+        id="gameDescriptionBox"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+    </div>ˇ
     <hr></hr>
-    <button type="button" onClick={addStep}>
+    <button type="button" id="stepBtn" onClick={addStep}>
       Lisa uus samm
     </button>
+    <div id="step-container">
+      {steps.map((step, stepIndex) => (
+        <div key={stepIndex} id="singleStep">
+          <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
 
-    {steps.map((step, stepIndex) => (
-      <div key={stepIndex}>
-        <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
+          <button
+            type="button"
+            onClick={() => deleteStep(stepIndex)}
+          >
+            Kustuta samm
+          </button>
 
-
-        <input
-          type="file"
-          onChange={(e) =>
-            setSteps(prev =>
-              prev.map((s, index) =>
-                index === stepIndex
-                  ? {
-                    ...s,
-                    image: e.target.files?.[0] ?? null
-                  }
-                  : s
+          <input
+            type="file"
+            onChange={(e) =>
+              setSteps(prev =>
+                prev.map((s, index) =>
+                  index === stepIndex
+                    ? {
+                      ...s,
+                      image: e.target.files?.[0] ?? null
+                    }
+                    : s
+                )
               )
-            )
-          }
-        />
+            }
+          />
 
-        <h3 id="addQuestionTitle">Lisa küsimus</h3>
+          <h3 id="addQuestionTitle">Lisa küsimus</h3>
 
-        <input
-          value={step.questionInput}
-          onChange={(e) =>
-            updateQuestionInput(
-              stepIndex,
-              e.target.value
-            )
-          } id="addQuestion"
-        />
+          <input
+            value={step.questionInput}
+            onChange={(e) =>
+              updateQuestionInput(
+                stepIndex,
+                e.target.value
+              )
+            } id="addQuestion"
+          />
 
-        <button
-          type="button"
-          id="addQuestionBtn"
-          onClick={() => addQuestion(stepIndex)}
-        >
-          Lisa küsimus
-        </button>
+          <button
+            type="button"
+            id="addQuestionBtn"
+            onClick={() => addQuestion(stepIndex)}
+          >
+            Lisa küsimus
+          </button>
 
-        <div>Küsimused:</div>
-        {step.questions.map(question => (
-          <div key={question.id}>
-            {question.questionText}
+          <div>Küsimused:</div>
+          {step.questions.map(question => (
+            <div key={question.id}>
+              {question.questionText}
 
-            <button
-              type="button"
-              onClick={() =>
-                deleteQuestion(
-                  stepIndex,
-                  question.id
-                )
-              }
-            >
-              Kustuta
-            </button>
-          </div>
-        ))}
+              <button
+                type="button"
+                id="eraseBtn"
+                onClick={() =>
+                  deleteQuestion(
+                    stepIndex,
+                    question.id
+                  )
+                }
+              >
+                Kustuta
+              </button>
+            </div>
+          ))}
 
-        <h3 id="addDiscussionTitle">Lisa arutelupunkt</h3>
+          <h3 id="addDiscussionTitle">Lisa arutelupunkt</h3>
 
-        <input
-          value={step.discussionInput}
-          onChange={(e) =>
-            updateDiscussionInput(
-              stepIndex,
-              e.target.value
-            )
-          } id="addDiscussion"
-        />
+          <input
+            value={step.discussionInput}
+            onChange={(e) =>
+              updateDiscussionInput(
+                stepIndex,
+                e.target.value
+              )
+            } id="addDiscussion"
+          />
 
-        <button id="addDiscussionBtn"
-          type="button"
-          onClick={() =>
-            addDiscussionPoint(stepIndex)
-          }
-        >
-          Lisa arutelupunkt
-        </button>
+          <button id="addDiscussionBtn"
+            type="button"
+            onClick={() =>
+              addDiscussionPoint(stepIndex)
+            }
+          >
+            Lisa arutelupunkt
+          </button>
 
-        <div>Arutelu punktid:</div>
-        {step.discussionPoints.map(point => (
-          <div key={point.id}>
-            {point.discussionText}
+          <div>Arutelu punktid:</div>
+          {step.discussionPoints.map(point => (
+            <div key={point.id}>
+              {point.discussionText}
 
-            <button
-              type="button"
-              onClick={() =>
-                deletePoint(
-                  stepIndex,
-                  point.id
-                )
-              }
-            >
-              Kustuta
-            </button>
-          </div>
+              <button
+                type="button"
+                id="eraseBtn"
+                onClick={() =>
+                  deletePoint(
+                    stepIndex,
+                    point.id
+                  )
+                }
+              >
+                Kustuta
+              </button>
+            </div>
 
-        ))}
+          ))}
 
-        <h3 id="addTeacherTextTitle">Õpetaja tekst</h3>
+          <h3 id="addTeacherTextTitle">Õpetaja tekst</h3>
 
-        <input
-          type="text"
-          value={step.teacherTextInput}
-          onChange={(e) =>
-            updateTeacherTextInput(
-              stepIndex,
-              e.target.value
-            )
-          } id="addTeachText"
-        />
+          <input
+            type="text"
+            value={step.teacherTextInput}
+            onChange={(e) =>
+              updateTeacherTextInput(
+                stepIndex,
+                e.target.value
+              )
+            } id="addTeachText"
+          />
 
-        <button id="addTeachTextBtn"
-          type="button"
-          onClick={() => addTeacherText(stepIndex)}
-        >
-          Lisa õpetaja tekst
-        </button>
+          <button id="addTeachTextBtn"
+            type="button"
+            onClick={() => addTeacherText(stepIndex)}
+          >
+            Lisa õpetaja tekst
+          </button>
 
-        <div>Õpetaja tekstid:</div>
+          <div>Õpetaja tekstid:</div>
 
-        {step.teacherTexts.map(text => (
-          <div key={text.id}>
-            {text.teacherText}
+          {step.teacherTexts.map(text => (
+            <div key={text.id}>
+              {text.teacherText}
 
-            <button
-              type="button"
-              onClick={() =>
-                deleteTeacherText(
-                  stepIndex,
-                  text.id
-                )
-              }
-            >
-              Kustuta
-            </button>
-          </div>
-        ))}
-
-        <hr />
-      </div>
-    ))}
-
+              <button
+                type="button"
+                id="eraseBtn"
+                onClick={() =>
+                  deleteTeacherText(
+                    stepIndex,
+                    text.id
+                  )
+                }
+              >
+                Kustuta
+              </button>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+    <hr />
     <button id="saveGameBtn"
       type="button"
       onClick={() =>

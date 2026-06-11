@@ -27,6 +27,7 @@ public class GameService {
     private final GameRepository gameRepository;
     private final CategoryRepository categoryRepository;
     private final TeacherTextRepository teacherTextRepository;
+    private final GameStepService gameStepService;
 
     public List<Game> getAllActiveGames() {
         return gameRepository.findAllByActiveTrue();
@@ -42,7 +43,7 @@ public class GameService {
         Game game = gameRepository.findById(gameId)
                 .orElseThrow(() -> new RuntimeException("Game not found"));
 
-        if (game.getCategoryId().equals(categoryId)) {
+        if (!game.getCategoryId().equals(categoryId)) {
             throw new RuntimeException("Game does not belong to category");
         }
 
@@ -171,12 +172,25 @@ public class GameService {
         return gameDto;
     }
 
+    private void validateAddGameData(CreateGameRequest gameRequest) {
+        if (gameRequest.getName() == null || gameRequest.getName().isEmpty()) {
+            throw new RuntimeException("Game name is empty");
+        }
+        if (gameRequest.getCategoryId() == null || gameRequest.getCategoryId() <= 0 || gameRequest.getCategoryId() >= 4) {
+            throw new RuntimeException("Category id is out of range or missing");
+        }
+        if (gameRequest.getSteps() == null || gameRequest.getSteps().isEmpty()) {
+            throw new RuntimeException("Game steps are empty");
+        }
+        gameStepService.validateAddGameStepsData(gameRequest);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public void addNewGame(CreateGameRequest gameRequest) throws IOException {
         System.out.println(MediaElement.class.getName());
         System.out.println(MediaElement.class.getClassLoader());
 
-        validateGameData(gameRequest);
+        validateAddGameData(gameRequest);
 
         Game game = new Game();
         game.setName(gameRequest.getName());
@@ -201,18 +215,44 @@ public class GameService {
             GameStep savedStep = gameStepRepository.save(gameStep);
 
             // HANDLE MEDIA
-            handleAndSaveMediaFiles(stepRequest, savedStep);
+            gameStepService.handleAndSaveMediaFiles(stepRequest, savedStep);
 
             // HANDLE QUESTIONS
-            handleAndSaveQuestions(stepRequest, savedStep);
+            gameStepService.handleAndSaveQuestions(stepRequest, savedStep);
 
             // HANDLE TEACHER TEXTS
-            handleAndSaveTeacherTexts(stepRequest, savedStep);
+            gameStepService.handleAndSaveTeacherTexts(stepRequest, savedStep);
 
             // HANDLE DISCUSSIONS
-            handleAndSaveDiscussionText(stepRequest, savedStep);
+            gameStepService.handleAndSaveDiscussionText(stepRequest, savedStep);
         }
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void editGameData(Long gameId, CreateGameRequest gameRequest) throws IOException {
+        Game existingGame = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
+        applyGameUpdates(gameRequest, existingGame);
+
+        if (gameRequest.getSteps() != null) {
+            gameStepService.validateSteps(gameRequest, existingGame, false);
+        }
+        gameRepository.save(existingGame);
+    }
+
+
+    private static void applyGameUpdates(CreateGameRequest gameRequest, Game existingGame) {
+        if (gameRequest.getName() != null && !existingGame.getName().equals(gameRequest.getName())) {
+            existingGame.setName(gameRequest.getName());
+        }
+        if (gameRequest.getCategoryId() != null && !existingGame.getCategoryId().equals(gameRequest.getCategoryId())) {
+            existingGame.setCategoryId(gameRequest.getCategoryId());
+        }
+        if (gameRequest.getDescription() != null && !existingGame.getDescription().equals(gameRequest.getDescription())) {
+            existingGame.setDescription(gameRequest.getDescription());
+        }
+    }
+
+
 
 
     public void softDeleteGame(Long gameId) {
@@ -223,94 +263,11 @@ public class GameService {
     }
 
 
-    private static void validateGameData(CreateGameRequest gameRequest) {
-        if (gameRequest.getName() == null || gameRequest.getName().isEmpty()) {
-            throw new RuntimeException("Game name is empty");
-        }
-        if (gameRequest.getCategoryId() == null || gameRequest.getCategoryId() <= 0 || gameRequest.getCategoryId() >= 4) {
-            throw new RuntimeException("Category id is out of range or missing");
-        }
-        if (gameRequest.getSteps() == null || gameRequest.getSteps().isEmpty()) {
-            throw new RuntimeException("Game steps are empty");
-        }
-        for (GameStepRequest stepRequest : gameRequest.getSteps()) {
-            MultipartFile mediaFile = stepRequest.getImage();
-            if (mediaFile == null || mediaFile.isEmpty()) {
-                throw new RuntimeException("Media file is empty");
-            }
-            String contentType = mediaFile.getContentType();
 
-            switch (gameRequest.getCategoryId().intValue()) { // intValue to get around Long -> int conversion
-                case 1: // Check for audio
-                    if (contentType != null && !contentType.startsWith("audio/")) {
-                        throw new RuntimeException("CategoryId 1 requires audio");
-                    }
-                    break;
-                case 2: // Check for video
-                    if (contentType != null && !contentType.startsWith("video/")) {
-                        throw new RuntimeException("CategoryId 2 requires video");
-                    }
-                    break;
-                case 3: // Check for image
-                    if (contentType != null && !contentType.startsWith("image/")) {
-                        throw new RuntimeException("CategoryId 3 requires image");
-                    }
-                    break;
-            }
-            if (stepRequest.getDiscussionPoints() == null || stepRequest.getDiscussionPoints().isEmpty()) {
-                throw new RuntimeException("Discussion points are empty");
-            }
-            if (stepRequest.getQuestions() == null || stepRequest.getQuestions().isEmpty()) {
-                throw new RuntimeException("Questions are empty");
-            }
-        }
-    }
 
-    private void handleAndSaveMediaFiles(GameStepRequest stepRequest, GameStep savedStep) throws IOException {
-        MultipartFile multipartFile = stepRequest.getImage();
-        MediaElement media = new MediaElement();
-        media.setFileName(multipartFile.getOriginalFilename());
-        media.setMediaType(multipartFile.getContentType());
-        media.setFileData(multipartFile.getBytes());
-        media.setGameStep(savedStep);
-        mediaRepository.save(media);
-    }
 
-    private void handleAndSaveQuestions(GameStepRequest stepRequest, GameStep savedStep) {
-        int questionOrder = 1;
-        for (String question : stepRequest.getQuestions()) {
-            Question questionEntity = new Question();
-            questionEntity.setQuestionText(question);
-            questionEntity.setIsActive(true);
-            questionEntity.setQuestionOrder(questionOrder++);
-            questionEntity.setGameStep(savedStep);
-            questionRepository.save(questionEntity);
-        }
-    }
 
-    private void handleAndSaveTeacherTexts(GameStepRequest stepRequest, GameStep savedStep) {
-        int teacherOrder = 1;
-        for (String teacherText : stepRequest.getTeacherTexts()) {
-            TeacherText teacherEntity = new TeacherText();
-            teacherEntity.setTeacherText(teacherText);
-            teacherEntity.setIsActive(true);
-            teacherEntity.setTextOrder(teacherOrder++);
-            teacherEntity.setGameStep(savedStep);
-            teacherTextRepository.save(teacherEntity);
-        }
-    }
 
-    private void handleAndSaveDiscussionText(GameStepRequest stepRequest, GameStep savedStep) {
-        int discussionPointOrder = 1;
-        for (String discussionPoint : stepRequest.getDiscussionPoints()) {
-            DiscussionPoint discussionText = new DiscussionPoint();
-            discussionText.setDiscussionText(discussionPoint);
-            discussionText.setIsActive(true);
-            discussionText.setDiscussionOrder(discussionPointOrder++);
-            discussionText.setGameStep(savedStep);
-            discussionPointRepository.save(discussionText);
-        }
-    }
 
 
 }

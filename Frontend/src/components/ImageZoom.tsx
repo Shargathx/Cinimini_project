@@ -21,7 +21,7 @@ function ImageZoom({ value, onChange }: Props) {
                 className="image-slider"
                 type="range"
                 min="0"
-                max="200"
+                max="500"
                 value={value}
                 onChange={(e) => onChange(Number(e.target.value))}
             />

@@ -27,6 +27,7 @@ function App() {
             <Route path='/categories/:catid' element={<CategoryGame />} />
             <Route path='/categories/:catid/:id' element={<Game />} />
             <Route path='/add-game' element={<AddGame />} />
+            <Route path='/update-game/:id' element={<AddGame/>}/>
           </Routes>
         </main>
 
