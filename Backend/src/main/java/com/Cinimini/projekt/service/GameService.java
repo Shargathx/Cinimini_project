@@ -231,57 +231,67 @@ public class GameService {
 
     @Transactional(rollbackFor = Exception.class)
     public void editGameData(Long gameId, CreateGameRequest gameRequest) throws IOException {
-        Game existingGame = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
+        Game existingGame = gameRepository.findById(gameId)
+                .orElseThrow(() -> new RuntimeException("Game not found"));
 
         List<GameStep> currentDatabaseSteps = gameStepRepository.findByGame(existingGame);
         Set<Long> newDatabaseSteps = new HashSet<>();
-        // HashSet-i kasutame, et salvestada ID-d sinna ajutisel, et trackida, mis step-id
-        // jäävad kustutamata ja mis mitte. Lihtsustab seda, kui ühel mängul on mitu step-i.
 
         if (gameRequest.getSteps() != null) {
             gameStepService.validateSteps(gameRequest, false);
-        }
 
-        for (int i = 0; i < gameRequest.getSteps().size(); i++) {
-            GameStepRequest stepRequest = gameRequest.getSteps().get(i);
-            int stepOrder = i + 1;
-
-            if (stepRequest.getStepRequestId() != null) {
-                newDatabaseSteps.add(stepRequest.getStepRequestId());
-
-                GameStep gameStepEntity = gameStepRepository.findById(stepRequest.getStepRequestId()).orElseThrow(() -> new RuntimeException("Step not found"));
-                gameStepEntity.setStepOrder(stepOrder);
-
-                if (stepRequest.getImage() != null && !stepRequest.getImage().isEmpty()) {
-//                    mediaRepository.deleteByGameStep(gameStepEntity);
-                    gameStepService.handleAndSaveMediaFiles(stepRequest, gameStepEntity);
+            // 1. 🟢 Gather all the IDs that are coming in from the payload first
+            for (GameStepRequest stepRequest : gameRequest.getSteps()) {
+                if (stepRequest.getStepRequestId() != null) {
+                    newDatabaseSteps.add(stepRequest.getStepRequestId());
                 }
-                gameStepService.handleAndSaveQuestions(stepRequest, gameStepEntity);
-                gameStepService.handleAndSaveDiscussionText(stepRequest, gameStepEntity);
-                gameStepService.handleAndSaveTeacherTexts(stepRequest, gameStepEntity);
-
-            } else {
-                GameStep newStep = new GameStep();
-                newStep.setGame(existingGame);
-                newStep.setStepOrder(stepOrder);
-                gameStepRepository.save(newStep);
-
-                if (stepRequest.getImage() != null && !stepRequest.getImage().isEmpty()) {
-                    gameStepService.handleAndSaveMediaFiles(stepRequest, newStep);
-                }
-                gameStepService.handleAndSaveQuestions(stepRequest, newStep);
-                gameStepService.handleAndSaveDiscussionText(stepRequest, newStep);
-                gameStepService.handleAndSaveTeacherTexts(stepRequest, newStep);
             }
         }
-/*
+
+        // 2. 🟢 SWEEP AND CLEAN FIRST: Delete removed steps immediately
         for (GameStep gameStep : currentDatabaseSteps) {
             if (!newDatabaseSteps.contains(gameStep.getId())) {
                 gameStepRepository.delete(gameStep);
             }
         }
 
- */
+        // 3. 🟢 FORCE FLUSH NOW: Clears the step_order unique constraints in PostgreSQL
+        gameStepRepository.flush();
+
+        // 4. Proceed with processing updates and inserts safely
+        if (gameRequest.getSteps() != null) {
+            for (int i = 0; i < gameRequest.getSteps().size(); i++) {
+                GameStepRequest stepRequest = gameRequest.getSteps().get(i);
+                int stepOrder = i + 1;
+
+                if (stepRequest.getStepRequestId() != null) {
+                    GameStep gameStepEntity = gameStepRepository.findById(stepRequest.getStepRequestId())
+                            .orElseThrow(() -> new RuntimeException("Step not found"));
+                    gameStepEntity.setStepOrder(stepOrder);
+
+                    if (stepRequest.getImage() != null && !stepRequest.getImage().isEmpty()) {
+                        gameStepService.handleAndSaveMediaFiles(stepRequest, gameStepEntity);
+                    }
+                    gameStepService.handleAndSaveQuestions(stepRequest, gameStepEntity);
+                    gameStepService.handleAndSaveDiscussionText(stepRequest, gameStepEntity);
+                    gameStepService.handleAndSaveTeacherTexts(stepRequest, gameStepEntity);
+
+                } else {
+                    // Now this will NEVER crash because step_order slots have been completely emptied!
+                    GameStep newStep = new GameStep();
+                    newStep.setGame(existingGame);
+                    newStep.setStepOrder(stepOrder);
+                    gameStepRepository.save(newStep);
+
+                    if (stepRequest.getImage() != null && !stepRequest.getImage().isEmpty()) {
+                        gameStepService.handleAndSaveMediaFiles(stepRequest, newStep);
+                    }
+                    gameStepService.handleAndSaveQuestions(stepRequest, newStep);
+                    gameStepService.handleAndSaveDiscussionText(stepRequest, newStep);
+                    gameStepService.handleAndSaveTeacherTexts(stepRequest, newStep);
+                }
+            }
+        }
 
         applyGameUpdates(gameRequest, existingGame);
         gameRepository.save(existingGame);

@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -59,12 +60,23 @@ public class GameStepService {
 
     public void handleAndSaveMediaFiles(GameStepRequest stepRequest, GameStep savedStep) throws IOException {
         MultipartFile multipartFile = stepRequest.getImage();
-        MediaElement media = new MediaElement();
-        media.setFileName(multipartFile.getOriginalFilename());
-        media.setMediaType(multipartFile.getContentType());
-        media.setFileData(multipartFile.getBytes());
-        media.setGameStep(savedStep);
-        mediaRepository.save(media);
+        if (multipartFile == null || multipartFile.isEmpty()) {
+            return;
+        }
+        String fileName = multipartFile.getOriginalFilename();
+        Optional<MediaElement> existingMediaElement = mediaRepository.findByGameStep(savedStep);
+        MediaElement mediaElement;
+        if (existingMediaElement.isPresent()) {
+            mediaElement = existingMediaElement.get();
+        } else {
+            mediaElement = new MediaElement();
+            mediaElement.setGameStep(savedStep);
+        }
+        mediaElement.setFileName(multipartFile.getOriginalFilename());
+        mediaElement.setMediaType(multipartFile.getContentType());
+        mediaElement.setFileData(multipartFile.getBytes());
+        mediaElement.setGameStep(savedStep);
+        mediaRepository.save(mediaElement);
     }
 
     public void handleAndSaveQuestions(GameStepRequest stepRequest, GameStep savedStep) {

@@ -4,11 +4,14 @@ import com.Cinimini.projekt.dto.CreateGameRequest;
 import com.Cinimini.projekt.dto.GameDto;
 import com.Cinimini.projekt.dto.SingleGameDto;
 import com.Cinimini.projekt.entity.Game;
+import com.Cinimini.projekt.repository.GameRepository;
 import com.Cinimini.projekt.service.GameService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.List;
 @RestController
 public class GameController {
 
+    private final GameRepository gameRepository;
     GameService gameService;
 
     @GetMapping("category/games")
@@ -57,12 +61,28 @@ public class GameController {
         return ResponseEntity.ok("Game added successfully");
     }
 
-    @PatchMapping(value = "/games/edit-game/{gameId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> editGame(
+    @PutMapping(value = "/games/edit-game/{gameId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> editGame(
             @PathVariable Long gameId,
-            @ModelAttribute CreateGameRequest gameRequest) throws IOException {
+            @RequestPart("gameRequest") CreateGameRequest gameRequest,
+            MultipartRequest multipartRequest) throws IOException { // 🟢 Grabs all files dynamically
+
+        if (gameRequest.getSteps() != null) {
+            // Loop through your DTO steps
+            for (int i = 0; i < gameRequest.getSteps().size(); i++) {
+                // Check if a file matching this step's exact index was uploaded in Postman
+                MultipartFile file = multipartRequest.getFile("steps[" + i + "].image");
+
+                if (file != null && !file.isEmpty()) {
+                    // Link the file directly to its corresponding step DTO
+                    gameRequest.getSteps().get(i).setImage(file);
+                }
+            }
+        }
+
         gameService.editGameData(gameId, gameRequest);
-        return ResponseEntity.ok("Game updated successfully");
+        Game updatedGame = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
+        return ResponseEntity.ok(updatedGame);
     }
 
     @DeleteMapping("/games/{gameId}")
