@@ -1,7 +1,6 @@
 package com.Cinimini.projekt.service;
 
-import com.Cinimini.projekt.dto.CreateGameRequest;
-import com.Cinimini.projekt.dto.GameStepRequest;
+import com.Cinimini.projekt.dto.*;
 import com.Cinimini.projekt.entity.*;
 import com.Cinimini.projekt.repository.*;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 @AllArgsConstructor
 @Service
@@ -68,9 +66,16 @@ public class GameStepService {
 
     public void handleAndSaveQuestions(GameStepRequest stepRequest, GameStep savedStep) {
         int questionOrder = 1;
-        for (String question : stepRequest.getQuestions()) {
-            Question questionEntity = new Question();
-            questionEntity.setQuestionText(question);
+        for (QuestionDto question : stepRequest.getQuestions()) {
+            Question questionEntity;
+
+            if (question.getId() != null) {
+                questionEntity = questionRepository.findById(question.getId()).orElseGet(Question::new);
+            } else {
+                questionEntity = new Question();
+            }
+
+            questionEntity.setQuestionText(question.getQuestionText());
             questionEntity.setIsActive(true);
             questionEntity.setQuestionOrder(questionOrder++);
             questionEntity.setGameStep(savedStep);
@@ -80,9 +85,15 @@ public class GameStepService {
 
     public void handleAndSaveTeacherTexts(GameStepRequest stepRequest, GameStep savedStep) {
         int teacherOrder = 1;
-        for (String teacherText : stepRequest.getTeacherTexts()) {
-            TeacherText teacherEntity = new TeacherText();
-            teacherEntity.setTeacherText(teacherText);
+        for (TeacherTextDto teacherText : stepRequest.getTeacherTexts()) {
+            TeacherText teacherEntity;
+
+            if (teacherText.getId() != null) {
+                teacherEntity = teacherTextRepository.findById(teacherText.getId()).orElseGet(TeacherText::new);
+            } else {
+                teacherEntity = new TeacherText();
+            }
+            teacherEntity.setTeacherText(teacherText.getTeacherText());
             teacherEntity.setIsActive(true);
             teacherEntity.setTextOrder(teacherOrder++);
             teacherEntity.setGameStep(savedStep);
@@ -92,9 +103,15 @@ public class GameStepService {
 
     public void handleAndSaveDiscussionText(GameStepRequest stepRequest, GameStep savedStep) {
         int discussionPointOrder = 1;
-        for (String discussionPoint : stepRequest.getDiscussionPoints()) {
-            DiscussionPoint discussionText = new DiscussionPoint();
-            discussionText.setDiscussionText(discussionPoint);
+        for (DiscussionDto discussionPoint : stepRequest.getDiscussionPoints()) {
+            DiscussionPoint discussionText;
+
+            if (discussionPoint.getId() != null) {
+                discussionText = discussionPointRepository.findById(discussionPoint.getId()).orElseGet(DiscussionPoint::new);
+            } else {
+                discussionText = new DiscussionPoint();
+            }
+            discussionText.setDiscussionText(discussionPoint.getDiscussionText());
             discussionText.setIsActive(true);
             discussionText.setDiscussionOrder(discussionPointOrder++);
             discussionText.setGameStep(savedStep);

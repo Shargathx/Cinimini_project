@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -12,9 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 public class GameStepRequest {
     private MultipartFile image;
-    private List<String> questions;
-    private List<String> discussionPoints;
-    private List<String> teacherTexts;
+    private Long existingImageId;
+
+    private List<QuestionDto> questions = new ArrayList<>();
+    private List<DiscussionDto> discussionPoints = new ArrayList<>();
+    private List<TeacherTextDto> teacherTexts = new ArrayList<>();
 
     /*
     // COMMENT THESE IN FOR POSTMAN TESTING (COMMENT OUT THE ABOVE ONE)
