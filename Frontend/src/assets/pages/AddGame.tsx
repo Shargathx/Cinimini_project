@@ -274,46 +274,32 @@ function AddGame() {
   const handleSubmit = async () => {
     const formData = new FormData();
 
+    // 1. Basic Fields
     formData.append("name", name);
     formData.append("description", description);
-    formData.append("categoryId", (category));
+    formData.append("categoryId", String(category));
 
+    // 2. Steps Data
     steps.forEach((step, stepIndex) => {
-
-      // image
+      // Image
       if (step.image) {
-        formData.append(
-          `steps[${stepIndex}].image`,
-          step.image
-        );
+        formData.append(`steps[${stepIndex}].image`, step.image);
       }
 
-      // questions
+      // Questions (Note: Ensure your Java DTO has a field named 'questions')
       step.questions.forEach((question, questionIndex) => {
-        formData.append(
-          `steps[${stepIndex}].questions[${questionIndex}]`,
-          question.questionText
-        );
+        formData.append(`steps[${stepIndex}].questions[${questionIndex}].questionText`, question.questionText);
       });
 
-      step.teacherTexts.forEach(
-        (teacherText, teacherTextIndex) => {
-          formData.append(
-            `steps[${stepIndex}].teacherTexts[${teacherTextIndex}]`,
-            teacherText.teacherText
-          );
-        }
-      );
+      // Teacher Texts
+      step.teacherTexts.forEach((teacherText, teacherTextIndex) => {
+        formData.append(`steps[${stepIndex}].teacherTexts[${teacherTextIndex}].teacherText`, teacherText.teacherText);
+      });
 
-      // discussion points
-      step.discussionPoints.forEach(
-        (discussion, discussionIndex) => {
-          formData.append(
-            `steps[${stepIndex}].discussionPoints[${discussionIndex}]`,
-            discussion.discussionText
-          );
-        }
-      );
+      // Discussion Points
+      step.discussionPoints.forEach((discussion, discussionIndex) => {
+        formData.append(`steps[${stepIndex}].discussionPoints[${discussionIndex}].discussionText`, discussion.discussionText);
+      });
     });
 
     for (const pair of formData.entries()) {
