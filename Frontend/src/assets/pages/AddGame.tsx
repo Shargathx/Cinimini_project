@@ -91,7 +91,7 @@ function AddGame() {
 
     setSteps(
       game.gameSteps.map(step => ({
-        image: step.mediaElements[0], // existing image already on server
+        image: null, // existing image already on server
 
         questions: step.questions.map(q => ({
           id: q.id,
@@ -362,7 +362,7 @@ function AddGame() {
         const response = await fetch(
           `${import.meta.env.VITE_BACK_URL}/games/edit-game/${gameId}`,
           {
-            method: "PUT",
+            method: "PATCH",
             body: formData
           }
         );
