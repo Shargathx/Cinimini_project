@@ -277,7 +277,7 @@ function Game() {
 
             <div className="game-function">
                 {fileFormat.startsWith("image/") && (
-                    <>
+                    <div className="image-function">
                         <ImageSaturation
                             value={saturation}
                             onChange={setSaturation}
@@ -297,7 +297,7 @@ function Game() {
                             value={zoom}
                             onChange={setZoom}
                         />
-                    </>
+                    </div>
 
                 )}
             </div>

@@ -2,8 +2,6 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 10vh 1fr 10vh;
-    column-gap: 10px;
-	margin: 10px;
 
 }
 
@@ -49,4 +47,40 @@
 
 .image-container{
     width: 80%;
+}
+
+.image-function{
+    display: flex;
+    flex-direction: column;
+    row-gap: 4vh;
+}
+
+.image-slider-text{
+}
+
+.text-and-slider{
+    display: flex;
+    flex-direction: column;
+}
+
+.image-slider{
+    appearance: none;
+    background: transparent;
+    width: 15vw;
+}
+
+.image-slider::-webkit-slider-runnable-track {
+    height: 2.1vw;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 30px;
+    border: 0.25vw solid rgba(197, 170, 241, 0.6);
+}
+
+.image-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 1.4vw;
+    height: 1.4vw;
+    border-radius: 50%;
+    background: rgba(197, 170, 241, 0.8);
+    margin-top: 0.15vw;
 }

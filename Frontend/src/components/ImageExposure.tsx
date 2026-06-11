@@ -5,8 +5,9 @@ type Props = {
 
 function ImageExposure({ value, onChange }: Props) {
     return (
-        <div>
+        <div className="text-and-slider">
             <label
+                className="image-slider-text"
                 style={{
                     display: "inline-block",
                     width: "160px",
@@ -17,6 +18,7 @@ function ImageExposure({ value, onChange }: Props) {
             </label>
 
             <input
+                className="image-slider"
                 type="range"
                 min="0"
                 max="200"
