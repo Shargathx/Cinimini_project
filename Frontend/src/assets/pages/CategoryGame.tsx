@@ -1,4 +1,4 @@
-import { data, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import type { Game } from "../models/Game";
 import { useEffect, useState } from 'react'
 import { Link } from "react-router-dom";
@@ -43,7 +43,7 @@ function CategoryGame() {
                         {game.name}
                     </div>
                 </Link>
-                <button onClick={() => { deleteGame(game.id) }}>Delete game</button>
+                <button onClick={() => { deleteGame(Number(game.id)) }}>Delete game</button>
             </>
         )}
     </div>;
