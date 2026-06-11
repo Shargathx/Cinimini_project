@@ -47,20 +47,21 @@ function Game() {
 
                 return (
                     media && (
-                        <img
-                            className="image-container"
-                            src={`data:image/png;base64,${media}`}
-                            alt="Game"
-                            style={{
-                                filter: `
-                        saturate(${saturation}%)
-                        contrast(${contrast}%)
-                        brightness(${exposure}%)
-                    `,
-                                transform: `scale(${zoom / 100})`,
-                                transformOrigin: "center"
-                            }}
-                        />
+                        <div className="image-container">
+                            <img 
+                                src={`data:image/png;base64,${media}`}
+                                alt="Game"
+                                style={{
+                                    filter: `
+                            saturate(${saturation}%)
+                            contrast(${contrast}%)
+                            brightness(${exposure}%)
+                        `,
+                                    transform: `scale(${zoom / 100})`,
+                                    transformOrigin: "center"
+                                }}
+                            />
+                        </div>
                     )
                 );
             case "audio/mpeg":
@@ -303,8 +304,8 @@ function Game() {
             </div>
 
             <div className="name-and-description">
-                <h3 className="game-description">Kirjeldus: {data?.description}</h3>
                 <h1 className="game-name">Mängu nimi: {data?.name}</h1>
+                <h3 className="game-description">Kirjeldus: {data?.description}</h3>
             </div>
             <div className="game-info-buttons">
                 <button onClick={() => { getQuestions() }}>Questions</button>
