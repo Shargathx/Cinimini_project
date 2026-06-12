@@ -1,12 +1,14 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './Game.css';
 import { useFetch } from '../../components/hooks/useFetch';
 import type { Game } from '../models/Game';
 import type { Question } from '../models/Question';
 import type { Discussion } from '../models/Discussion';
 import type { TeacherText } from '../models/TeacherText';
+/*
 import ImageGame from '../../components/game-media/ImageGame';
+*/
 import AudioGame from '../../components/game-media/AudioGame';
 import VideoGame from '../../components/game-media/VideoGame';
 import ImageSaturation from '../../components/ImageSaturation';
@@ -21,7 +23,7 @@ function Game() {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [points, setPoints] = useState<Discussion[]>([]);
     const [teacherTexts, setTeacherText] = useState<TeacherText[]>([]);
-    const [mediaCount, setMediaCount] = useState<number | null>(0)
+
 
     const [saturation, setSaturation] = useState(100);
     const [contrast, setContrast] = useState(100);
@@ -32,15 +34,8 @@ function Game() {
     const media = step?.mediaElements?.[0]?.fileData ?? "";
     const fileFormat = step?.mediaElements?.[0]?.mediaType ?? "";
 
-    function getMediaCount() {
-        if (data) {
-            setMediaCount(data.gameSteps[0].mediaElements.length)
-        }
-    }
-
-    useEffect(() => {
-        getMediaCount()
-    }, [data])
+    // 1. Calculate media count on the fly during render
+    const mediaCount = data?.gameSteps?.[0]?.mediaElements?.length
 
     function getQuestions() {
         if (step) setQuestions(step.questions);
@@ -63,7 +58,7 @@ function Game() {
                 return (
                     media && (
                         <div className="image-container">
-                            <img 
+                            <img
                                 src={`data:image/png;base64,${media}`}
                                 alt="Game"
                                 style={{
