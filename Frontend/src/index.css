@@ -33,22 +33,38 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 2.5vw;
+  font-size: clamp(28px, 2.75vw, 52px);
 }
+
 h2 {
-  font-size: 5vw;
+  font-size: clamp(26px, 2.5vw, 36px);
 }
+
 h3 {
-  font-size: 24px;
+  font-size: clamp(24px, 2vw, 32px);
 }
+
 h4 {
-  font-size: 20px;
+  font-size: clamp(20px, 1.75vw, 28px);
 }
+
 h5 {
-  font-size: 18px;
+  font-size: clamp(18px, 1.5vw, 24px);
 }
+
 h6 {
-  font-size: 16px;
+  font-size: clamp(16px, 1.25vw, 20px);
+}
+
+p,
+li,
+a,
+button,
+input,
+textarea,
+select,
+label {
+  font-size: clamp(16px, 1vw, 18px);
 }
 
 
@@ -58,10 +74,12 @@ a {
 }
 
 a:hover {
-  color: var(--accent);
+  transform: scale(1.05);
+  color:white;
 }
 
 code {
+  font-size: clamp(14px, 0.9vw, 16px);
   font-family: var(--font-mono);
   background: #f4f3ec;
   padding: 4px 8px;

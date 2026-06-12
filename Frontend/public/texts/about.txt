@@ -1,4 +1,4 @@
-#MIS ON MINIKINO
+# MIS ON MINIKINO?
 
 Minikino eesmärk on anda õpetajatele valmis ning lihtsasti kohandatav õppekeskkond, mille alusel saab õpetada lastele meediaelementide olemust ning, kuidas nende mõjutamisel muutub edastatav sõnum. Õppekeskkonna fookuses on kasutajasõbralik disain, mis on kasutatav ka õpetajatele ja huvijuhtidele, kellel on vähesem digipädevus. Mänge saab kasutada nii erinevate õppeainete teemade raames kui ka vahetunni tegevusena, mis on lastele huvitav ja õpetlik.
 
