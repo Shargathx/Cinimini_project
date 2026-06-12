@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface GameStepRepository extends JpaRepository<GameStep, Long> {
     //    @EntityGraph(attributePaths = {"discussionPoints", "mediaElements"})
-    @Query("SELECT gs FROM GameStep gs")
+    @Query("SELECT gs FROM GameStep gs WHERE gs.game.id = :gameId")
     List<GameStep> findAllByGame_Id(Long gameId);
 
     List<GameStep> findByGame(Game existingGame);

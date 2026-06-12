@@ -56,9 +56,11 @@ VALUES (default, 2, 'Palu lastel tähele panna video olulisi detaile.', true, 1)
 INSERT INTO public.teacher_info(id, game_step_id, teacher_text, is_active, text_order)
 VALUES (default, 3, 'Kuulake heli lõpuni enne küsimuste arutamist.', true, 1);
 
-
+/*
 INSERT INTO public.media (id, game_step_id, media_type, file_name)
 VALUES (default, 1, 'image', 'Raul.png');
+
+ */
 
 INSERT INTO public.question(id, game_step_id, question_text, is_active, question_order)
 VALUES (default, 1, 'Mis on pildil?', true, 1);
