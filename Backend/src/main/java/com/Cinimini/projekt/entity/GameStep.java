@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.List;
 
@@ -30,16 +31,20 @@ public class GameStep {
     @OneToMany(mappedBy = "gameStep", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("discussionOrder ASC")
 
+    @BatchSize(size = 20)
     private List<DiscussionPoint> discussionPoints;
 
+    @BatchSize(size = 20)
     @OneToMany(mappedBy = "gameStep", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id ASC")
     private List<MediaElement> mediaElements;
 
+    @BatchSize(size = 20)
     @OneToMany(mappedBy = "gameStep", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("questionOrder ASC")
     private List<Question> questions;
 
+    @BatchSize(size = 20)
     @OneToMany(mappedBy = "gameStep", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("textOrder ASC")
     private List<TeacherText> teacherText;
