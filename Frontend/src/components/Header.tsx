@@ -24,13 +24,15 @@ function Header() {
 
     const [text, setText] = useState("");
     const [showPopup, setShowPopup] = useState(false);
+    const [popupType, setPopupType] = useState("");
 
-    const openPopup = async (file: string) => {
+    const openPopup = async (file: string, type:string) => {
         console.log("open popup clicked:", file);
         const response = await fetch(file);
         const data = await response.text();
         
         setText(data);
+        setPopupType(type);
         setShowPopup(true);
     };
 
@@ -57,35 +59,45 @@ function Header() {
                 )}
 
                 {showPageInfo && (
-                    <button className="page-info-button" onClick={() => openPopup('/texts/page-info.txt')}>
+                    <button className="page-info-button" onClick={() => openPopup('/texts/page-info.txt', 'page-info')}>
                         MIS ON MINIKINO?
                     </button>
                 )}
 
                 {showAbout && (
-                    <button className="about-button" onClick={() => openPopup('/texts/about.txt')}>
+                    <button className="about-button" onClick={() => openPopup('/texts/about.txt', 'about')}>
                         MEIST
                     </button>
                 )}
 
                 {showCategoriesInfo && (
-                    <button className="categories-info-button" onClick={() => openPopup('/texts/categories-info.txt')}>
+                    <button className="categories-info-button" onClick={() => openPopup('/texts/categories-info.txt', 'categories-info')}>
                         TUTVU KATEGOORIATEGA
                     </button>
                 )} 
                 </nav>
 
                  {showPopup && (
-                        <div className="popup-container">
+                    <div className='popup-overlay'
+                        onClick={(e) => {
+                            if (e.target === e.currentTarget) {
+                                setShowPopup(false);
+                            }
+                        }}>
+                    
+                        <div className={`popup-container popup-${popupType}`}
+                            onClick={(e)=> e.stopPropagation()} 
+                            >
                             <button 
-                            className="popup-close-button" 
-                            onClick={() => { setShowPopup(false);
-                        }}
+                                className="popup-close-button" 
+                                onClick={() => { setShowPopup(false);
+                            }}
                         >
-                        <img  src={CloseBtn} alt="Close" />
-                    </button>
-                    <div className="popup-text-container">
-                    <ReactMarkdown>{text}</ReactMarkdown>
+                            <img  src={CloseBtn} alt="Close" />
+                            </button>
+                                <div className="popup-text-container">
+                                <ReactMarkdown>{text}</ReactMarkdown>
+                        </div>
                     </div>
                 </div>
                 )}

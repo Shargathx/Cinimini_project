@@ -1,16 +1,18 @@
 .categories-container {
+  z-index: 1;
+  min-height: 75vh;
   display: flex;
-  justify-content: center; 
+  justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
-  gap: 40px;               
-  margin-top: 50px;
+  gap: clamp(40px, 2.5vw, 60px);
 }
 
 .category-card {
-  width: 315px;
-  height: 345px;
+  width: clamp(300px, 25vw, 550px);
+  height: clamp(350px, 27vw, 600px);
   background: #FAFAFA;
-  border-radius: 62px;
+  border-radius: clamp(62px, 4vw, 90px);
 
   display: flex;
   flex-direction: column;
@@ -19,15 +21,15 @@
 }
 
 .category-card.heli {
-  border: 10px solid rgba(124, 234, 255, 0.55);
+  border: clamp(10px, 0.75vw, 16px) solid rgba(124, 234, 255, 0.55);
 }
 
 .category-card.pilt {
-  border: 10px solid rgba(220, 205, 244, 0.8);
+  border: clamp(10px, 0.75vw, 16px) solid rgba(220, 205, 244, 0.8);
 }
 
 .category-card.video {
-  border: 10px solid rgba(145, 242, 190, 0.55);
+  border: clamp(10px, 0.75vw, 16px) solid rgba(145, 242, 190, 0.55);
 }
 
 .category-card:hover {
@@ -39,27 +41,27 @@
   color: var(--text);
   font-family: var(--font-heading);
   font-weight: bold;
-  font-size: 24px;
+  font-size: clamp(24px, 1.8vw, 36px);
   text-align: center;
 
   display: flex;
   flex-direction: column;
 }
 
-.category-info {
+.category-name {
   color: var(--text);
   text-transform: uppercase;
   font-family: var(--font-heading);
   font-weight: bold;
-  font-size: 36px;
-  margin-top: 20px;
+  font-size: clamp(36px, 2.5vw, 52px);
+  margin-top: clamp(24px, 1.25vw, 30px);
+  margin-bottom: clamp(24px, 1.25vw, 30px);
   text-align: center;
 }
 
-.icon{
-  width: 200px;
-  height: 200px;
-  margin-top: 20px;
+.icon {
+  width: clamp(180px, 15vw, 300px);
+  height: clamp(180px, 15vw, 300px);
+  margin-top: clamp(20px, 1.25vw, 30px);
   vertical-align: middle;
-
 }

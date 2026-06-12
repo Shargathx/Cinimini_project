@@ -2,17 +2,17 @@
   display: flex;
   justify-content: left; 
   flex-wrap: wrap;
-  gap: 40px;               
-  margin-top: 50px;
-  margin-left: 30px;
-  margin-right: 30px;
+  gap: clamp(40px, 2.5vw, 60px);
+  margin-top: clamp(50px, 3vw, 80px);
+  margin-left: clamp(30px, 2vw, 50px);
+  margin-right: clamp(30px, 2vw, 50px);
 }
 
 .game-card{
-  width: 221px;
-  height: 242px;
+  width: clamp(221px, 15vw, 300px);
+  height: clamp(242px, 16vw, 330px);
   background: #FAFAFA;
-  border-radius: 62px;
+  border-radius: clamp(62px, 4vw, 90px);
 
   display: flex;
   flex-direction: column;
@@ -20,19 +20,19 @@
   
   position: relative;
   justify-content: flex-end;
-  padding-bottom: 40px;
+  padding-bottom: clamp(40px, 2.5vw, 60px);
 }
 
-.game-card.heli{
-    border: 10px solid rgba(124, 234, 255, 0.55);
+.game-card.heli {
+  border: clamp(10px, 0.75vw, 16px) solid rgba(124, 234, 255, 0.55);
 }
 
-.game-card.pilt{
-    border: 10px solid rgba(220, 205, 244, 0.8);
+.game-card.pilt {
+  border: clamp(10px, 0.75vw, 16px) solid rgba(220, 205, 244, 0.8);
 }
 
-.game-card.video{
-    border: 10px solid rgba(145, 242, 190, 0.55);
+.game-card.video {
+  border: clamp(10px, 0.75vw, 16px) solid rgba(145, 242, 190, 0.55);
 }
 
 .game-card:hover {
@@ -41,11 +41,11 @@
 
 .game-name {
   position: absolute;
-  top: 140px;
+  top: clamp(140px, 9vw, 190px);
 
-  margin: 20px;
+  margin: clamp(20px, 1.25vw, 30px);
   width: 85%;
-  margin-top: 20px;
+  margin-top: clamp(20px, 1.25vw, 30px);
   margin-left: auto;
   margin-right: auto;
   word-wrap: break-word;
@@ -54,7 +54,7 @@
   text-transform: uppercase;
   font-family: var(--font-heading);
   font-weight: bold;
-  font-size: 20px;
+  font-size: clamp(20px, 1.5vw, 30px);
   text-align: center;
 
   display: -webkit-box;
@@ -64,10 +64,10 @@
   overflow: hidden;
 }
 
-.game-icon{
+.game-icon {
   position: absolute;
-  top: 20px;
-  width: 100px;
-  height: 100px;
-  margin-top: 20px;
+  top: clamp(20px, 1.25vw, 30px);
+  width: clamp(100px, 7vw, 140px);
+  height: clamp(100px, 7vw, 140px);
+  margin-top: clamp(20px, 1.25vw, 30px);
 }

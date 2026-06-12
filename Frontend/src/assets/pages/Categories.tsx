@@ -39,7 +39,7 @@ function Categories() {
                     {category.name === "Pilt" && <img src={imageIcon} alt="Pilt" className="icon" />}
                     {category.name === "Video" && <img src={videoIcon} alt="Video" className="icon" />}
 
-                    <div className="category-info">
+                    <div className="category-name">
                         {category.name}
                     </div>
                 </Link>
