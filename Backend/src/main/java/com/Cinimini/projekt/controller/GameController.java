@@ -62,28 +62,24 @@ public class GameController {
         return ResponseEntity.ok("Game added successfully");
     }
 
-    @PutMapping(value = "/games/edit-game/{gameId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/games/edit-game/{gameId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> editGame(
             @PathVariable Long gameId,
             @RequestPart("gameRequest") CreateGameRequest gameRequest,
-            MultipartRequest multipartRequest) throws IOException { // 🟢 Grabs all files dynamically
+            MultipartRequest multipartRequest) throws IOException {
 
         if (gameRequest.getSteps() != null) {
-            // Loop through your DTO steps
             for (int i = 0; i < gameRequest.getSteps().size(); i++) {
-                // Check if a file matching this step's exact index was uploaded in Postman
+                // This matches the key "steps[0].image" in Postman
                 MultipartFile file = multipartRequest.getFile("steps[" + i + "].image");
-
                 if (file != null && !file.isEmpty()) {
-                    // Link the file directly to its corresponding step DTO
                     gameRequest.getSteps().get(i).setImage(file);
                 }
             }
         }
 
         gameService.editGameData(gameId, gameRequest);
-        Game updatedGame = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
-        return ResponseEntity.ok(updatedGame);
+        return ResponseEntity.ok("Game updated successfully");
     }
 
     @DeleteMapping("/games/{gameId}")
