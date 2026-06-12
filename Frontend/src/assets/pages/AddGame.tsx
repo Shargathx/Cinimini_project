@@ -11,8 +11,8 @@ function AddGame() {
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [category, setCategory] = useState("");
-  const [mode, setMode] = useState<String>("")
-  const { data, loading } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/games/${localStorage.getItem("catid")}/${localStorage.getItem("id")}`, []);
+  const [mode, setMode] = useState<string>("")
+  const { data } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/games/${localStorage.getItem("catid")}/${localStorage.getItem("id")}`, []);
   //Game questions
   // const [newQuestion, setNewQuestion] = useState("")
   const [questionCounter, setQuestionCounter] = useState(0)
@@ -27,7 +27,7 @@ function AddGame() {
 
   const [steps, setSteps] = useState<CreateGameStep[]>([
     {
-      image: null,
+      images: null,
       questions: [],
       discussionPoints: [],
       teacherTexts: [],
@@ -43,7 +43,7 @@ function AddGame() {
   };
 
   type GameStepForm = {
-    image: File | null;
+    images: File[] | null;
 
     questions: {
       id: number;
@@ -71,53 +71,54 @@ function AddGame() {
   }, []);
 
   useEffect(() => {
-    setMode(localStorage.getItem("mode"));
+    setMode(localStorage.getItem("mode") ?? "");
   }, [])
+
 
   useEffect(() => {
     if (mode == "edit") {
+
+      function fillEditableDate() {
+        if (!game) return;
+
+        setName(game.name);
+        setDescription(game.description);
+        setCategory(String(localStorage.getItem("catid")));
+
+        setSteps(
+          game.gameSteps.map(step => ({
+            images: [],
+
+            questions: step.questions.map(q => ({
+              id: q.id,
+              questionText: q.questionText
+            })),
+
+            discussionPoints: step.discussionPoints.map(dp => ({
+              id: dp.id,
+              discussionText: dp.discussionText
+            })),
+
+            teacherTexts: step.teacherTexts.map(tt => ({
+              id: tt.id,
+              teacherText: tt.teacherText
+            })),
+
+            questionInput: "",
+            discussionInput: "",
+            teacherTextInput: ""
+          }))
+        );
+      }
       fillEditableDate()
     }
-  }, [game])
+  }, [game, mode])
 
 
-
-  function fillEditableDate() {
-    if (!game) return;
-
-    setName(game.name);
-    setDescription(game.description);
-    setCategory(String(localStorage.getItem("catid")));
-
-    setSteps(
-      game.gameSteps.map(step => ({
-        image: step.mediaElements[0], // existing image already on server
-
-        questions: step.questions.map(q => ({
-          id: q.id,
-          questionText: q.questionText
-        })),
-
-        discussionPoints: step.discussionPoints.map(dp => ({
-          id: dp.id,
-          discussionText: dp.discussionText
-        })),
-
-        teacherTexts: step.teacherTexts.map(tt => ({
-          id: tt.id,
-          teacherText: tt.teacherText
-        })),
-
-        questionInput: "",
-        discussionInput: "",
-        teacherTextInput: ""
-      }))
-    );
-  }
 
   function createEmptyStep(): GameStepForm {
     return {
-      image: null,
+      images: [],
 
       questions: [],
       discussionPoints: [],
@@ -282,9 +283,12 @@ function AddGame() {
     // 2. Steps Data
     steps.forEach((step, stepIndex) => {
       // Image
-      if (step.image) {
-        formData.append(`steps[${stepIndex}].image`, step.image);
-      }
+      step.images.forEach((image) => {
+        formData.append(
+          `steps[${stepIndex}].image`,
+          image
+        );
+      });
 
       // Questions (Note: Ensure your Java DTO has a field named 'questions')
       step.questions.forEach((question, questionIndex) => {
@@ -327,7 +331,7 @@ function AddGame() {
 
         setSteps([
           {
-            image: null,
+            images: null,
             questions: [],
             discussionPoints: [],
             teacherTexts: [],
@@ -363,7 +367,7 @@ function AddGame() {
 
         setSteps([
           {
-            image: null,
+            images: null,
             questions: [],
             discussionPoints: [],
             teacherTexts: [],
@@ -480,19 +484,29 @@ function AddGame() {
 
           <input
             type="file"
+            multiple
             onChange={(e) =>
               setSteps(prev =>
                 prev.map((s, index) =>
                   index === stepIndex
                     ? {
                       ...s,
-                      image: e.target.files?.[0] ?? null
+                      images: [
+                        ...(s.images ?? []),
+                        ...Array.from(e.target.files ?? [])
+                      ]
                     }
                     : s
                 )
               )
             }
           />
+
+          <div>
+            {(step.images ?? []).map((file, i) => (
+              <div key={i}>{file.name}</div>
+            ))}
+          </div>
 
           <h3 id="addQuestionTitle">Lisa küsimus</h3>
 
