@@ -77,7 +77,6 @@ function AddGame() {
 
   useEffect(() => {
     if (mode == "edit") {
-
       function fillEditableDate() {
         if (!game) return;
 
@@ -87,7 +86,7 @@ function AddGame() {
 
         setSteps(
           game.gameSteps.map(step => ({
-            images: [],
+            image: null,
 
             questions: step.questions.map(q => ({
               id: q.id,
@@ -113,6 +112,7 @@ function AddGame() {
       fillEditableDate()
     }
   }, [game, mode])
+
 
 
 

@@ -8,10 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -20,6 +18,7 @@ public class GameStepService {
     private final MediaRepository mediaRepository;
     private final TeacherTextRepository teacherTextRepository;
     private final DiscussionPointRepository discussionPointRepository;
+    private final jakarta.persistence.EntityManager entityManager;
 
 
     public void validateAddGameStepsData(CreateGameRequest gameRequest) {
@@ -78,6 +77,7 @@ public class GameStepService {
         mediaRepository.save(mediaElement);
     }
 
+/*
     public void handleAndSaveQuestions(GameStepRequest stepRequest, GameStep savedStep) {
         List<Question> currentDbQuestions = questionRepository.findByGameStep(savedStep);
         Set<Long> remainingIds = new HashSet<>();
@@ -168,6 +168,136 @@ public class GameStepService {
             }
 
 
+        }
+    }
+
+
+ */
+
+    //AI
+    public void handleAndSaveDiscussionText(GameStepRequest stepRequest, GameStep savedStep) {
+        List<DiscussionPoint> dbItems = discussionPointRepository.findByGameStep(savedStep);
+        Map<Long, DiscussionPoint> dbMap = dbItems.stream()
+                .collect(Collectors.toMap(DiscussionPoint::getId, item -> item));
+
+        // 1. IDENTIFY ORPHANS & DELETE THEM FIRST
+        // This clears the "slots" in the database so the unique constraint won't trigger
+        if (stepRequest.getDiscussionPoints() != null) {
+            Set<Long> requestIds = stepRequest.getDiscussionPoints().stream()
+                    .map(DiscussionDto::getId)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+
+            for (DiscussionPoint dbItem : dbItems) {
+                if (!requestIds.contains(dbItem.getId())) {
+                    discussionPointRepository.delete(dbItem);
+                    dbMap.remove(dbItem.getId());
+                }
+            }
+        }
+        discussionPointRepository.flush(); // Force DB to execute deletions NOW
+        entityManager.clear();
+
+        // 2. NOW Update or Create remaining items
+        int newOrder = 1;
+        for (DiscussionDto dto : stepRequest.getDiscussionPoints()) {
+            if (dto.getId() != null && dbMap.containsKey(dto.getId())) {
+                DiscussionPoint item = dbMap.get(dto.getId());
+                item.setDiscussionText(dto.getDiscussionText());
+                item.setDiscussionOrder(newOrder);
+                item.setIsActive(true);
+                discussionPointRepository.save(item);
+            } else {
+                DiscussionPoint newItem = new DiscussionPoint();
+                newItem.setDiscussionText(dto.getDiscussionText());
+                newItem.setDiscussionOrder(newOrder);
+                newItem.setGameStep(savedStep);
+                newItem.setIsActive(true);
+                discussionPointRepository.save(newItem);
+            }
+            newOrder++;
+        }
+    }
+
+    public void handleAndSaveQuestions(GameStepRequest stepRequest, GameStep savedStep) {
+        List<Question> dbItems = questionRepository.findByGameStep(savedStep);
+
+        // 1. DELETE ORPHANS FIRST
+        if (stepRequest.getQuestions() != null) {
+            Set<Long> requestIds = stepRequest.getQuestions().stream()
+                    .map(QuestionDto::getId)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+
+            for (Question dbItem : dbItems) {
+                if (!requestIds.contains(dbItem.getId())) {
+                    questionRepository.delete(dbItem);
+                }
+            }
+            questionRepository.flush(); // Execute deletions immediately
+            entityManager.clear();
+        }
+
+        // 2. RECONCILE (UPDATE/INSERT)
+        int newOrder = 1;
+        for (QuestionDto dto : stepRequest.getQuestions()) {
+            if (dto.getId() != null) {
+                Question item = questionRepository.findById(dto.getId())
+                        .orElseThrow(() -> new RuntimeException("Question not found"));
+                item.setQuestionText(dto.getQuestionText());
+                item.setQuestionOrder(newOrder);
+                item.setIsActive(true);
+                questionRepository.save(item);
+            } else {
+                Question newItem = new Question();
+                newItem.setQuestionText(dto.getQuestionText());
+                newItem.setQuestionOrder(newOrder);
+                newItem.setGameStep(savedStep);
+                newItem.setIsActive(true);
+                questionRepository.save(newItem);
+            }
+            newOrder++;
+        }
+    }
+
+    public void handleAndSaveTeacherTexts(GameStepRequest stepRequest, GameStep savedStep) {
+        List<TeacherText> dbItems = teacherTextRepository.findByGameStep(savedStep);
+
+        // 1. DELETE ORPHANS FIRST
+        if (stepRequest.getTeacherTexts() != null) {
+            Set<Long> requestIds = stepRequest.getTeacherTexts().stream()
+                    .map(TeacherTextDto::getId)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+
+            for (TeacherText dbItem : dbItems) {
+                if (!requestIds.contains(dbItem.getId())) {
+                    teacherTextRepository.delete(dbItem);
+                }
+            }
+            teacherTextRepository.flush(); // Execute deletions immediately
+            entityManager.clear();
+        }
+
+        // 2. RECONCILE (UPDATE/INSERT)
+        int newOrder = 1;
+        for (TeacherTextDto dto : stepRequest.getTeacherTexts()) {
+            if (dto.getId() != null) {
+                TeacherText item = teacherTextRepository.findById(dto.getId())
+                        .orElseThrow(() -> new RuntimeException("Teacher text not found"));
+                item.setTeacherText(dto.getTeacherText());
+                item.setTextOrder(newOrder);
+                item.setIsActive(true);
+                teacherTextRepository.save(item);
+            } else {
+                TeacherText newItem = new TeacherText();
+                newItem.setTeacherText(dto.getTeacherText());
+                newItem.setTextOrder(newOrder);
+                newItem.setGameStep(savedStep);
+                newItem.setIsActive(true);
+                teacherTextRepository.save(newItem);
+            }
+            newOrder++;
         }
     }
 
