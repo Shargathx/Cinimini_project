@@ -272,53 +272,40 @@ function AddGame() {
     );
   }
 
-  async function fileToBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
+  const fileToBase64 = (file) =>
+    new Promise((resolve, reject) => {
       const reader = new FileReader();
 
-      reader.onload = () => {
-        const result = reader.result as string;
-
-        // remove "data:image/png;base64,"
-        resolve(result.split(",")[1]);
-      };
-
-      reader.onerror = reject;
       reader.readAsDataURL(file);
+
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
     });
-  }
+
 
   const handleSubmit = async () => {
+    
     const gameRequest = {
       name,
       categoryId: Number(category),
       description,
-      steps: await Promise.all(
-        steps.map(async step => ({
-          questions: step.questions.map(q => ({
-            id: q.id,
-            questionText: q.questionText
-          })),
+      image: steps[0]?.image ?? null,
+      steps: steps.map(step => ({
+        questions: step.questions.map(q => ({
+          id: q.id,
+          questionText: q.questionText
+        })),
 
-          discussionPoints: step.discussionPoints.map(d => ({
-            id: d.id,
-            discussionText: d.discussionText
-          })),
+        discussionPoints: step.discussionPoints.map(d => ({
+          id: d.id,
+          discussionText: d.discussionText
+        })),
 
-          teacherTexts: step.teacherTexts.map(t => ({
-            id: t.id,
-            teacherText: t.teacherText
-          })),
-
-          mediaElements: await Promise.all(
-            (step.images ?? []).map(async file => ({
-              fileName: file.name,
-              mediaType: file.type,
-              fileData: await fileToBase64(file)
-            }))
-          )
+        teacherTexts: step.teacherTexts.map(t => ({
+          id: t.id,
+          teacherText: t.teacherText
         }))
-      )
+      }))
     };
 
     console.log(gameRequest)
@@ -503,17 +490,14 @@ function AddGame() {
 
           <input
             type="file"
-            multiple
+            accept="image/*"
             onChange={(e) =>
               setSteps(prev =>
                 prev.map((s, index) =>
                   index === stepIndex
                     ? {
                       ...s,
-                      images: [
-                        ...(s.images ?? []),
-                        ...Array.from(e.target.files ?? [])
-                      ]
+                      image: e.target.files?.[0] ?? null
                     }
                     : s
                 )
