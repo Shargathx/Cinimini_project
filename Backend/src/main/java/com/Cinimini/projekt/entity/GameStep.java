@@ -29,9 +29,8 @@ public class GameStep {
     private Game game;
 
     @OneToMany(mappedBy = "gameStep", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("discussionOrder ASC")
-
     @BatchSize(size = 20)
+    @OrderBy("discussionOrder ASC")
     private List<DiscussionPoint> discussionPoints;
 
     @BatchSize(size = 20)

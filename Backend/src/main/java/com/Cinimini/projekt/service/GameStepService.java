@@ -2,7 +2,10 @@ package com.Cinimini.projekt.service;
 
 import com.Cinimini.projekt.dto.*;
 import com.Cinimini.projekt.entity.*;
-import com.Cinimini.projekt.repository.*;
+import com.Cinimini.projekt.repository.DiscussionPointRepository;
+import com.Cinimini.projekt.repository.MediaRepository;
+import com.Cinimini.projekt.repository.QuestionRepository;
+import com.Cinimini.projekt.repository.TeacherTextRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,7 +58,7 @@ public class GameStepService {
             }
         }
     }
-
+/*
     public void handleAndSaveMediaFiles(GameStepRequest stepRequest, GameStep savedStep) throws IOException {
         MultipartFile multipartFile = stepRequest.getImage();
         if (multipartFile == null || multipartFile.isEmpty()) {
@@ -77,7 +80,6 @@ public class GameStepService {
         mediaRepository.save(mediaElement);
     }
 
-/*
     public void handleAndSaveQuestions(GameStepRequest stepRequest, GameStep savedStep) {
         List<Question> currentDbQuestions = questionRepository.findByGameStep(savedStep);
         Set<Long> remainingIds = new HashSet<>();
@@ -175,6 +177,31 @@ public class GameStepService {
  */
 
     //AI
+
+    public void handleAndSaveMediaFiles(GameStepRequest stepRequest, GameStep savedStep) throws IOException {
+        MultipartFile multipartFile = stepRequest.getImage();
+
+        if (savedStep.getMediaElements() == null) {
+            savedStep.setMediaElements(new ArrayList<>());
+        }
+
+        // 1. Clear the existing list - because of orphanRemoval=true,
+        // Hibernate will DELETE the old records from the DB automatically.
+        savedStep.getMediaElements().clear();
+
+        // 2. If a new file exists, add it to the list
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            MediaElement newMedia = new MediaElement();
+            newMedia.setFileName(multipartFile.getOriginalFilename());
+            newMedia.setMediaType(multipartFile.getContentType());
+            newMedia.setFileData(multipartFile.getBytes());
+            newMedia.setGameStep(savedStep);
+
+            // Add to the list (Hibernate will INSERT it)
+            savedStep.getMediaElements().add(newMedia);
+        }
+    }
+
     public void handleAndSaveDiscussionText(GameStepRequest stepRequest, GameStep savedStep) {
         List<DiscussionPoint> dbItems = discussionPointRepository.findByGameStep(savedStep);
         Map<Long, DiscussionPoint> dbMap = dbItems.stream()
