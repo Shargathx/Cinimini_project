@@ -5,6 +5,10 @@ import "./AddGame.css";
 import type { Game } from "../models/Game";
 import { useFetch } from '../../components/hooks/useFetch';
 
+interface Question { id: number; questionText: string; }
+interface Discussion { id: number; discussionText: string; }
+interface TeacherText { id: number; teacherText: string; }
+
 function AddGame() {
   const [categories, setCategories] = useState<Category[]>([])
   //Game file, name and category
@@ -25,25 +29,28 @@ function AddGame() {
 
   const game = data;
 
-  const [steps, setSteps] = useState<CreateGameStep[]>([
-    {
-      images: null,
-      questions: [],
-      discussionPoints: [],
-      teacherTexts: [],
-      questionInput: "",
-      discussionInput: "",
-      teacherTextInput: ""
-    }
-  ])
+  const [steps, setSteps] = useState<CreateGameStep[]>([createEmptyStep()])
 
   type TeacherText = {
     id: number;
     teacherText: string;
   };
 
+  function createEmptyStep(): CreateGameStep {
+    return {
+      id: Math.random().toString(36).substring(2, 9), // siia tuleb suvaline stepId number testimiseks
+      image: null,
+      questions: [],
+      discussionPoints: [],
+      teacherTexts: [],
+      questionInput: "",
+      discussionInput: "",
+      teacherTextInput: ""
+    };
+  }
+
   type GameStepForm = {
-    images: File[] | null;
+    image: File[] | null;
 
     questions: {
       id: number;
@@ -86,6 +93,10 @@ function AddGame() {
 
         setSteps(
           game.gameSteps.map(step => ({
+            // Add the ID here. If game steps have an ID from your backend, 
+            // use it (e.g., step.id). Otherwise, generate a new one.
+            id: step.id || Math.random().toString(36).substring(2, 9),
+
             image: null,
 
             questions: step.questions.map(q => ({
@@ -116,23 +127,12 @@ function AddGame() {
 
 
 
-  function createEmptyStep(): GameStepForm {
-    return {
-      images: [],
 
-      questions: [],
-      discussionPoints: [],
-      teacherTexts: [],
-
-      questionInput: "",
-      discussionInput: "",
-      teacherTextInput: ""
-    };
-  }
 
   function addStep() {
     setSteps(prev => [...prev, createEmptyStep()]);
   }
+
 
   function deleteStep(stepIndex: number) {
     setSteps(prev =>
@@ -271,124 +271,57 @@ function AddGame() {
       )
     );
   }
-
-  const fileToBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.readAsDataURL(file);
-
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-    });
-
+  /*
+    const fileToBase64 = (file) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+  
+        reader.readAsDataURL(file);
+  
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+      });
+      */
 
   const handleSubmit = async () => {
-    
-    const gameRequest = {
-      name,
-      categoryId: Number(category),
-      description,
-      image: steps[0]?.image ?? null,
-      steps: steps.map(step => ({
-        questions: step.questions.map(q => ({
-          id: q.id,
-          questionText: q.questionText
-        })),
+    try {
+      const formData = new FormData();
 
-        discussionPoints: step.discussionPoints.map(d => ({
-          id: d.id,
-          discussionText: d.discussionText
-        })),
-
-        teacherTexts: step.teacherTexts.map(t => ({
-          id: t.id,
-          teacherText: t.teacherText
+      // 1. Convert your state to the exact structure the backend expects
+      const gameData = {
+        name,
+        categoryId: Number(category),
+        description,
+        steps: steps.map((step) => ({
+          questions: step.questions,
+          discussionPoints: step.discussionPoints,
+          teacherTexts: step.teacherTexts
         }))
-      }))
-    };
+      };
 
-    console.log(gameRequest)
+      // 2. Append the JSON string
+      formData.append("gameRequest", JSON.stringify(gameData));
 
-    if (mode == "add") {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BACK_URL}/games/add-game`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(gameRequest)
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to save game");
+      // 3. Append the files using the expected index keys
+      steps.forEach((step, index) => {
+        if (step.image instanceof File) {
+          formData.append(`steps[${index}].image`, step.image);
         }
+      });
 
-        alert("Game saved!");
+      // 4. Send
+      const response = await fetch(`${import.meta.env.VITE_BACK_URL}/games/add-game`, {
+        method: "POST",
+        body: formData
+      });
 
-        setName("");
-        setDescription("");
-
-        setSteps([
-          {
-            images: null,
-            questions: [],
-            discussionPoints: [],
-            teacherTexts: [],
-            questionInput: "",
-            discussionInput: "",
-            teacherTextInput: ""
-          }
-        ]);
-
-      } catch (err) {
-        console.error(err);
-      }
+      if (!response.ok) throw new Error("Failed to save game");
+      alert("Game saved!");
+    } catch (err) {
+      console.error(err);
     }
-    if (mode == "edit") {
-      try {
-        const gameId = localStorage.getItem("id");
-
-        const response = await fetch(
-          `${import.meta.env.VITE_BACK_URL}/games/edit-game/${gameId}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to save game");
-        }
-
-        alert("Game saved!");
-
-        setName("");
-        setDescription("");
-
-        setSteps([
-          {
-            images: null,
-            questions: [],
-            discussionPoints: [],
-            teacherTexts: [],
-            questionInput: "",
-            discussionInput: "",
-            teacherTextInput: ""
-          }
-        ]);
-
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
   };
+
 
   function addDiscussionPoint(
     stepIndex: number
@@ -473,20 +406,20 @@ function AddGame() {
       />
     </div>ˇ
     <hr></hr>
-    <button type="button" id="stepBtn" onClick={addStep}>
+    {<button type="button" id="stepBtn" onClick={addStep}>
       Lisa uus samm
-    </button>
+    </button>}
     <div id="step-container">
       {steps.map((step, stepIndex) => (
-        <div key={stepIndex} id="singleStep">
+        <div key={step.id} id="singleStep">
           <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
 
-          <button
+          {<button
             type="button"
             onClick={() => deleteStep(stepIndex)}
           >
             Kustuta samm
-          </button>
+          </button>}
 
           <input
             type="file"
@@ -494,21 +427,18 @@ function AddGame() {
             onChange={(e) =>
               setSteps(prev =>
                 prev.map((s, index) =>
-                  index === stepIndex
-                    ? {
-                      ...s,
-                      image: e.target.files?.[0] ?? null
-                    }
-                    : s
+                  // Compare current map index (index) with the stepIndex 
+                  // provided by the outer map loop
+                  index === stepIndex ? { ...s, image: e.target.files?.[0] ?? null } : s
                 )
               )
             }
           />
 
           <div>
-            {(step.images ?? []).map((file, i) => (
-              <div key={i}>{file.name}</div>
-            ))}
+            {step.image && (
+              <div>{step.image.name}</div>
+            )}
           </div>
 
           <h3 id="addQuestionTitle">Lisa küsimus</h3>

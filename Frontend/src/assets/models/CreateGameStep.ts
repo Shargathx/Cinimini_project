@@ -3,7 +3,8 @@ import type { Question } from "./Question";
 import type { TeacherText } from "./TeacherText";
 
 export interface CreateGameStep {
-    images: File | null;
+    id: string;
+    image: File | null;
     questions: Question[];
     discussionPoints: Discussion[];
     teacherTexts: TeacherText[];
