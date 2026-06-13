@@ -272,51 +272,67 @@ function AddGame() {
     );
   }
 
-  const handleSubmit = async () => {
-    const formData = new FormData();
+  async function fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
 
-    // 1. Basic Fields
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("categoryId", String(category));
+      reader.onload = () => {
+        const result = reader.result as string;
 
-    // 2. Steps Data
-    steps.forEach((step, stepIndex) => {
-      // Image
-      step.images.forEach((image) => {
-        formData.append(
-          `steps[${stepIndex}].image`,
-          image
-        );
-      });
+        // remove "data:image/png;base64,"
+        resolve(result.split(",")[1]);
+      };
 
-      // Questions (Note: Ensure your Java DTO has a field named 'questions')
-      step.questions.forEach((question, questionIndex) => {
-        formData.append(`steps[${stepIndex}].questions[${questionIndex}].questionText`, question.questionText);
-      });
-
-      // Teacher Texts
-      step.teacherTexts.forEach((teacherText, teacherTextIndex) => {
-        formData.append(`steps[${stepIndex}].teacherTexts[${teacherTextIndex}].teacherText`, teacherText.teacherText);
-      });
-
-      // Discussion Points
-      step.discussionPoints.forEach((discussion, discussionIndex) => {
-        formData.append(`steps[${stepIndex}].discussionPoints[${discussionIndex}].discussionText`, discussion.discussionText);
-      });
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
     });
+  }
 
-    for (const pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
+  const handleSubmit = async () => {
+    const gameRequest = {
+      name,
+      categoryId: Number(category),
+      description,
+      steps: await Promise.all(
+        steps.map(async step => ({
+          questions: step.questions.map(q => ({
+            id: q.id,
+            questionText: q.questionText
+          })),
+
+          discussionPoints: step.discussionPoints.map(d => ({
+            id: d.id,
+            discussionText: d.discussionText
+          })),
+
+          teacherTexts: step.teacherTexts.map(t => ({
+            id: t.id,
+            teacherText: t.teacherText
+          })),
+
+          mediaElements: await Promise.all(
+            (step.images ?? []).map(async file => ({
+              fileName: file.name,
+              mediaType: file.type,
+              fileData: await fileToBase64(file)
+            }))
+          )
+        }))
+      )
+    };
+
+    console.log(gameRequest)
 
     if (mode == "add") {
       try {
         const response = await fetch(
-          import.meta.env.VITE_BACK_URL + "/games/add-game",
+          `${import.meta.env.VITE_BACK_URL}/games/add-game`,
           {
             method: "POST",
-            body: formData
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(gameRequest)
           }
         );
 
@@ -353,7 +369,10 @@ function AddGame() {
           `${import.meta.env.VITE_BACK_URL}/games/edit-game/${gameId}`,
           {
             method: "PUT",
-            body: formData
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
           }
         );
         if (!response.ok) {
