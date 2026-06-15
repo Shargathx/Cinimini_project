@@ -292,10 +292,19 @@ function AddGame() {
         name,
         categoryId: Number(category),
         description,
+
         steps: steps.map((step) => ({
-          questions: step.questions,
-          discussionPoints: step.discussionPoints,
-          teacherTexts: step.teacherTexts
+          questions: step.questions.map(q => ({
+            questionText: q.questionText
+          })),
+
+          discussionPoints: step.discussionPoints.map(dp => ({
+            discussionText: dp.discussionText
+          })),
+
+          teacherTexts: step.teacherTexts.map(tt => ({
+            teacherText: tt.teacherText
+          }))
         }))
       };
 

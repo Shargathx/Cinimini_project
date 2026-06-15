@@ -51,6 +51,7 @@ function Game() {
 
     function renderMediaComponent() {
         if (!media) return null;
+        console.log(step)
 
         switch (fileFormat) {
             case "image/png":
