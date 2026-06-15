@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class GameStepRequest {
     private Long stepRequestId;
-    private MultipartFile image;
+    private MultipartFile media;
     private Long existingImageId;
 
     private List<QuestionDto> questions = new ArrayList<>();

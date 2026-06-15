@@ -25,7 +25,7 @@ public class GameStepService {
 
     public void validateAddGameStepsData(CreateGameRequest gameRequest) {
         for (GameStepRequest stepRequest : gameRequest.getSteps()) {
-            MultipartFile mediaFile = stepRequest.getImage();
+            MultipartFile mediaFile = stepRequest.getMedia();
             if (mediaFile == null || mediaFile.isEmpty()) {
                 throw new RuntimeException("Media file is empty");
             }
@@ -59,7 +59,7 @@ public class GameStepService {
     }
 
     public void handleAndSaveMediaFiles(GameStepRequest stepRequest, GameStep savedStep) throws IOException {
-        MultipartFile multipartFile = stepRequest.getImage();
+        MultipartFile multipartFile = stepRequest.getMedia();
         if (multipartFile == null || multipartFile.isEmpty()) {
             return;
         }
@@ -125,9 +125,6 @@ public class GameStepService {
                 toBeSavedTeacherText.setIsActive(true);
                 toBeSavedTeacherText.setTextOrder(questionOrder++);
                 teacherTextRepository.save(toBeSavedTeacherText);
-
-                toBeSavedTeacherText.setTeacherText(emptyText);
-                teacherTextRepository.save(toBeSavedTeacherText);
             }
         }
     }
@@ -153,24 +150,7 @@ public class GameStepService {
                 }
             }
 
-            if (file != null && !file.isEmpty()) {
-                String contentType = file.getContentType();
 
-                switch (gameRequest.getCategoryId().intValue()) {
-                    case 1:
-                        if (contentType != null && !contentType.startsWith("audio/"))
-                            throw new RuntimeException("Audio required");
-                        break;
-                    case 2:
-                        if (contentType != null && !contentType.startsWith("video/"))
-                            throw new RuntimeException("Video required");
-                        break;
-                    case 3:
-                        if (contentType != null && !contentType.startsWith("image/"))
-                            throw new RuntimeException("Image required");
-                        break;
-                }
-            }
             // 🟢 COMMENTED OUT: Allows empty images during game updates/edits
             // else if (!isCreate && step.getExistingImageId() == null) {
             //     throw new RuntimeException("Every step must have either a new upload or an existing media reference");
