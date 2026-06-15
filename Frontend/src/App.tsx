@@ -20,7 +20,7 @@ function App() {
         <Header />
 
         {/* stiil tuleks pärast eraldi .css faili teha */}
-        <main> 
+        <main style={{ flex: 1, padding: "20px" }}> 
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/categories' element={<Categories />} />

@@ -95,10 +95,8 @@ function Header() {
                         >
                             <img  src={CloseBtn} alt="Close" />
                             </button>
-                            <div className='popup-scroll-area'>
                                 <div className="popup-text-container">
                                 <ReactMarkdown>{text}</ReactMarkdown>
-                            </div>
                         </div>
                     </div>
                 </div>

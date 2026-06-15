@@ -11,14 +11,12 @@ function Home() {
     }
 
     return (
-        <div className="home-page">
-            <div className="game-start-container">
-                <img src={gameLogo} alt="Minikino logo" className="game-logo" />
-                <button id="gameStart" onClick={handleStart}>
-                    <img src={gameStartIcon} alt="Alusta mängimist" />
-                </button>
-                <h1>Alusta Mängimist</h1>
-            </div>
+        <div className="game-start-container">
+            <img src={gameLogo} alt="Minikino logo" className="game-logo" />
+            <button id="gameStart" onClick={handleStart}>
+                <img src={gameStartIcon} alt="Alusta mängimist" />
+            </button>
+            <h1>Alusta Mängimist</h1>
         </div>
     )
 }
