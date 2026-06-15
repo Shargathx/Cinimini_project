@@ -6,6 +6,7 @@ import com.Cinimini.projekt.dto.SingleGameDto;
 import com.Cinimini.projekt.entity.Game;
 import com.Cinimini.projekt.repository.GameRepository;
 import com.Cinimini.projekt.service.GameService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +55,7 @@ public class GameController {
         gameService.addNewGame(gameRequest);
     }
  */
-
+/*
     @PostMapping(value = "/games/add-game", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> addGame(
             @ModelAttribute CreateGameRequest gameRequest) throws IOException {
@@ -62,29 +63,55 @@ public class GameController {
         return ResponseEntity.ok("Game added successfully");
     }
 
-    @PutMapping(value = "/games/edit-game/{gameId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+ */
+
+    @PostMapping(value = "/games/add-game", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> addGame(
+            @RequestPart("gameRequest") String gameRequestJson,
+            MultipartRequest multipartRequest) throws IOException {
+
+        // 1. Convert the JSON String into your DTO
+        ObjectMapper objectMapper = new ObjectMapper();
+        CreateGameRequest gameRequest = objectMapper.readValue(gameRequestJson, CreateGameRequest.class);
+
+        // 2. Manually map the files from multipartRequest to your DTO
+        // We loop through the steps to match files by index
+        if (gameRequest.getSteps() != null) {
+            for (int i = 0; i < gameRequest.getSteps().size(); i++) {
+                MultipartFile file = multipartRequest.getFile("steps[" + i + "].image");
+                if (file != null && !file.isEmpty()) {
+                    gameRequest.getSteps().get(i).setImage(file);
+                }
+            }
+        }
+
+        // 3. Pass to service
+        gameService.addNewGame(gameRequest);
+        return ResponseEntity.ok("Game added successfully");
+    }
+/*
+    @PatchMapping(value = "/games/edit-game/{gameId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> editGame(
             @PathVariable Long gameId,
             @RequestPart("gameRequest") CreateGameRequest gameRequest,
-            MultipartRequest multipartRequest) throws IOException { // 🟢 Grabs all files dynamically
+            MultipartRequest multipartRequest) throws IOException {
 
         if (gameRequest.getSteps() != null) {
-            // Loop through your DTO steps
             for (int i = 0; i < gameRequest.getSteps().size(); i++) {
-                // Check if a file matching this step's exact index was uploaded in Postman
+                // This matches the key "steps[0].image" in Postman
                 MultipartFile file = multipartRequest.getFile("steps[" + i + "].image");
-
+                System.out.println("Processing Step " + i + ": Found file? " + (file != null ? file.getOriginalFilename() : "NONE"));
                 if (file != null && !file.isEmpty()) {
-                    // Link the file directly to its corresponding step DTO
                     gameRequest.getSteps().get(i).setImage(file);
                 }
             }
         }
 
         gameService.editGameData(gameId, gameRequest);
-        Game updatedGame = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
-        return ResponseEntity.ok(updatedGame);
+        return ResponseEntity.ok("Game updated successfully");
     }
+
+ */
 
     @DeleteMapping("/games/{gameId}")
     public ResponseEntity<String> deleteGame(@PathVariable Long gameId) {

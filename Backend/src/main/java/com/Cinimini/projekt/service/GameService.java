@@ -14,9 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @AllArgsConstructor
@@ -186,8 +184,6 @@ public class GameService {
 
     @Transactional(rollbackFor = Exception.class)
     public void addNewGame(CreateGameRequest gameRequest) throws IOException {
-        System.out.println(MediaElement.class.getName());
-        System.out.println(MediaElement.class.getClassLoader());
 
         validateAddGameData(gameRequest);
 
@@ -217,16 +213,16 @@ public class GameService {
             gameStepService.handleAndSaveMediaFiles(stepRequest, savedStep);
 
             // HANDLE QUESTIONS
-            gameStepService.handleAndSaveQuestions(stepRequest, savedStep);
+            gameStepService.handleSavingNewQuestions(stepRequest, savedStep);
 
             // HANDLE TEACHER TEXTS
-            gameStepService.handleAndSaveTeacherTexts(stepRequest, savedStep);
+            gameStepService.handleSavingNewTeacherTexts(stepRequest, savedStep);
 
             // HANDLE DISCUSSIONS
-            gameStepService.handleAndSaveDiscussionText(stepRequest, savedStep);
+            gameStepService.handleSavingNewDiscussionPoints(stepRequest, savedStep);
         }
     }
-
+/*
     @Transactional(rollbackFor = Exception.class)
     public void editGameData(Long gameId, CreateGameRequest gameRequest) throws IOException {
         Game existingGame = gameRepository.findById(gameId)
@@ -270,7 +266,7 @@ public class GameService {
                     if (stepRequest.getImage() != null && !stepRequest.getImage().isEmpty()) {
                         gameStepService.handleAndSaveMediaFiles(stepRequest, gameStepEntity);
                     }
-                    gameStepService.handleAndSaveQuestions(stepRequest, gameStepEntity);
+                    gameStepService.handleSavingNewQuestion(stepRequest, gameStepEntity);
                     gameStepService.handleAndSaveDiscussionText(stepRequest, gameStepEntity);
                     gameStepService.handleAndSaveTeacherTexts(stepRequest, gameStepEntity);
 
@@ -284,7 +280,7 @@ public class GameService {
                     if (stepRequest.getImage() != null && !stepRequest.getImage().isEmpty()) {
                         gameStepService.handleAndSaveMediaFiles(stepRequest, newStep);
                     }
-                    gameStepService.handleAndSaveQuestions(stepRequest, newStep);
+                    gameStepService.handleSavingNewQuestion(stepRequest, newStep);
                     gameStepService.handleAndSaveDiscussionText(stepRequest, newStep);
                     gameStepService.handleAndSaveTeacherTexts(stepRequest, newStep);
                 }
@@ -294,6 +290,8 @@ public class GameService {
         applyGameUpdates(gameRequest, existingGame);
         gameRepository.save(existingGame);
     }
+
+
 
 
     private static void applyGameUpdates(CreateGameRequest gameRequest, Game existingGame) {
@@ -307,6 +305,8 @@ public class GameService {
             existingGame.setDescription(gameRequest.getDescription());
         }
     }
+
+ */
 
 
     public void softDeleteGame(Long gameId) {

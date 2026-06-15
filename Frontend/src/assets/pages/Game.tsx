@@ -1,12 +1,14 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './Game.css';
 import { useFetch } from '../../components/hooks/useFetch';
 import type { Game } from '../models/Game';
 import type { Question } from '../models/Question';
 import type { Discussion } from '../models/Discussion';
 import type { TeacherText } from '../models/TeacherText';
+/*
 import ImageGame from '../../components/game-media/ImageGame';
+*/
 import AudioGame from '../../components/game-media/AudioGame';
 import VideoGame from '../../components/game-media/VideoGame';
 import ImageSaturation from '../../components/ImageSaturation';
@@ -21,37 +23,31 @@ function Game() {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [points, setPoints] = useState<Discussion[]>([]);
     const [teacherTexts, setTeacherText] = useState<TeacherText[]>([]);
-    const [mediaCount, setMediaCount] = useState<number | null>(0)
+
 
     const [saturation, setSaturation] = useState(100);
     const [contrast, setContrast] = useState(100);
     const [exposure, setExposure] = useState(100);
     const [zoom, setZoom] = useState(100);
+    const [currentStep, setCurrentStep] = useState(0);
 
-    const step = data?.gameSteps?.[0];
+    const step = data?.gameSteps?.[currentStep];
     const media = step?.mediaElements?.[0]?.fileData ?? "";
     const fileFormat = step?.mediaElements?.[0]?.mediaType ?? "";
 
-    function getMediaCount() {
-        if (data) {
-            setMediaCount(data.gameSteps[0].mediaElements.length)
-        }
-    }
-
-    useEffect(() => {
-        getMediaCount()
-    }, [data])
+    // 1. Calculate media count on the fly during render
+    const mediaCount = data?.gameSteps?.length ?? 0;
 
     function getQuestions() {
-        if (step) setQuestions(step.questions);
+        setQuestions(step?.questions ?? []);
     }
 
     function getPoints() {
-        if (step) setPoints(step.discussionPoints);
+        setPoints(step?.discussionPoints ?? []);
     }
 
     function getTeacherText() {
-        if (step) setTeacherText(step.teacherTexts);
+        setTeacherText(step?.teacherTexts ?? []);
     }
 
     function renderMediaComponent() {
@@ -63,7 +59,7 @@ function Game() {
                 return (
                     media && (
                         <div className="image-container">
-                            <img 
+                            <img
                                 src={`data:image/png;base64,${media}`}
                                 alt="Game"
                                 style={{
@@ -97,10 +93,52 @@ function Game() {
         );
     }
 
+    function nextStep() {
+        if (!data?.gameSteps) return;
+
+        setCurrentStep(prev =>
+            Math.min(prev + 1, data.gameSteps.length - 1)
+        );
+
+        setQuestions([]);
+        setPoints([]);
+        setTeacherText([]);
+    }
+
+    function previousStep() {
+        setCurrentStep(prev =>
+            Math.max(prev - 1, 0)
+        );
+
+        setQuestions([]);
+        setPoints([]);
+        setTeacherText([]);
+    }
+
     return (
         <div className="game-grid-container">
 
-            <div>1/{mediaCount}</div>
+            <div className="step-navigation">
+
+                <button
+                    onClick={previousStep}
+                    disabled={currentStep === 0}
+                >
+                    ←
+                </button>
+
+                <span>
+                    {currentStep + 1}/{mediaCount}
+                </span>
+
+                <button
+                    onClick={nextStep}
+                    disabled={currentStep >= mediaCount - 1}
+                >
+                    →
+                </button>
+
+            </div>
             <div className="game-content">
                 {renderMediaComponent()}
             </div>
@@ -131,26 +169,21 @@ function Game() {
                 )}
             </div>
 
-            <div className="name-and-description">
-                <h1 className="game-name">Mängu nimi: {data?.name}</h1>
-                <h3 className="game-description">Kirjeldus: {data?.description}</h3>
-            </div>
+            <h3 className="game-name">Mängu nimi: {data?.name}</h3>
+            <h3 className="game-description">Kirjeldus: {data?.description}</h3>
 
             <div className="game-info-buttons">
                 <button onClick={getQuestions}>Questions</button>
-                <div>Küsimused:</div>
                 {questions.map((question) => (
                     <div key={question.id}>{question.questionText}</div>
                 ))}
 
                 <button onClick={getPoints}>Discussion points</button>
-                <div>Arutelu punktid:</div>
                 {points.map((point) => (
                     <div key={point.id}>{point.discussionText}</div>
                 ))}
 
                 <button onClick={getTeacherText}>Info õpetajale</button>
-                <div>Ideed, mõtted:</div>
                 {teacherTexts.map((teacherText) => (
                     <div key={teacherText.id}>{teacherText.teacherText}</div>
                 ))}

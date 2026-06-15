@@ -1,4 +1,4 @@
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import CategoryGame from './assets/pages/CategoryGame'
 import Categories from './assets/pages/Categories'
