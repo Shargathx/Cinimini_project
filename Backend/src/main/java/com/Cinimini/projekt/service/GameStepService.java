@@ -57,7 +57,7 @@ public class GameStepService {
             }
         }
     }
-/*
+
     public void handleAndSaveMediaFiles(GameStepRequest stepRequest, GameStep savedStep) throws IOException {
         MultipartFile multipartFile = stepRequest.getImage();
         if (multipartFile == null || multipartFile.isEmpty()) {
@@ -79,9 +79,6 @@ public class GameStepService {
         mediaRepository.save(mediaElement);
     }
 
-    public void handleAndSaveQuestions(GameStepRequest stepRequest, GameStep savedStep) {
-        List<Question> currentDbQuestions = questionRepository.findByGameStep(savedStep);
-        Set<Long> remainingIds = new HashSet<>();
 
     public void handleSavingNewQuestions(GameStepRequest stepRequest, GameStep savedStep) {
         var questionOrder = 1;
@@ -99,87 +96,26 @@ public class GameStepService {
         }
     }
 
-    public void handleAndSaveDiscussionText(GameStepRequest stepRequest, GameStep savedStep) {
-        List<DiscussionPoint> currentDbDiscussions = discussionPointRepository.findByGameStep(savedStep);
-        Set<Long> remainingIds = new HashSet<>();
+    public void handleSavingNewDiscussionPoints(GameStepRequest stepRequest, GameStep savedStep) {
+        var questionOrder = 1;
 
-        int discussionPointOrder = 1;
-        if (stepRequest.getDiscussionPoints() != null) {
-            for (DiscussionDto discussionPoint : stepRequest.getDiscussionPoints()) {
-                DiscussionPoint discussionEntity;
+        if(stepRequest.getDiscussionPoints() != null) {
+            for (DiscussionDto discussionDto : stepRequest.getDiscussionPoints()) {
+                DiscussionPoint toBeSavedDiscussionPoint = new DiscussionPoint();
 
-                if (discussionPoint.getId() != null) {
-                    remainingIds.add(discussionPoint.getId());
-                    discussionEntity = discussionPointRepository.findById(discussionPoint.getId()).orElseThrow(() -> new RuntimeException("Discussion point not found"));
-                } else {
-                    discussionEntity = new DiscussionPoint();
-                }
-                discussionEntity.setDiscussionText(discussionPoint.getDiscussionText());
-                discussionEntity.setIsActive(true);
-                discussionEntity.setDiscussionOrder(discussionPointOrder++);
-                discussionEntity.setGameStep(savedStep);
-                discussionPointRepository.save(discussionEntity);
-            }
-
-            for (DiscussionPoint dbItem : currentDbDiscussions) {
-                if (!remainingIds.contains(dbItem.getId())) {
-                    discussionPointRepository.delete(dbItem);
-                }
-            }
-
-
-        }
-    }
-
-
- */
-
-    //AI
-    public void handleAndSaveDiscussionText(GameStepRequest stepRequest, GameStep savedStep) {
-        List<DiscussionPoint> dbItems = discussionPointRepository.findByGameStep(savedStep);
-        Map<Long, DiscussionPoint> dbMap = dbItems.stream()
-                .collect(Collectors.toMap(DiscussionPoint::getId, item -> item));
-
-        // 1. IDENTIFY ORPHANS & DELETE THEM FIRST
-        // This clears the "slots" in the database so the unique constraint won't trigger
-        if (stepRequest.getDiscussionPoints() != null) {
-            Set<Long> requestIds = stepRequest.getDiscussionPoints().stream()
-                    .map(DiscussionDto::getId)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toSet());
-
-            for (DiscussionPoint dbItem : dbItems) {
-                if (!requestIds.contains(dbItem.getId())) {
-                    discussionPointRepository.delete(dbItem);
-                    dbMap.remove(dbItem.getId());
-                }
-            }
-        }
-        discussionPointRepository.flush(); // Force DB to execute deletions NOW
-        entityManager.clear();
-
-        // 2. NOW Update or Create remaining items
-        int newOrder = 1;
-        for (DiscussionDto dto : stepRequest.getDiscussionPoints()) {
-            if (dto.getId() != null && dbMap.containsKey(dto.getId())) {
-                DiscussionPoint item = dbMap.get(dto.getId());
-                item.setDiscussionText(dto.getDiscussionText());
-                item.setDiscussionOrder(newOrder);
-                item.setIsActive(true);
-                discussionPointRepository.save(item);
-            } else {
-                DiscussionPoint newItem = new DiscussionPoint();
-                newItem.setDiscussionText(dto.getDiscussionText());
-                newItem.setDiscussionOrder(newOrder);
-                newItem.setGameStep(savedStep);
-                newItem.setIsActive(true);
-                discussionPointRepository.save(newItem);
+                toBeSavedDiscussionPoint.setDiscussionText(discussionDto.getDiscussionText());
+                toBeSavedDiscussionPoint.setGameStep(savedStep);
+                toBeSavedDiscussionPoint.setIsActive(true);
+                toBeSavedDiscussionPoint.setDiscussionOrder(questionOrder++);
+                discussionPointRepository.save(toBeSavedDiscussionPoint);
             }
         }
     }
 
+    // ära kustuta/muuda stepId-d, lihtsalt re-order 1, 2, 3 -> 1, 3, (4)
     public void handleSavingNewTeacherTexts(GameStepRequest stepRequest, GameStep savedStep) {
         var questionOrder = 1;
+        var emptyText="empty";
 
         if (stepRequest.getTeacherTexts() != null) {
             for (TeacherTextDto teacherTextDto : stepRequest.getTeacherTexts()) {
@@ -188,6 +124,9 @@ public class GameStepService {
                 toBeSavedTeacherText.setGameStep(savedStep);
                 toBeSavedTeacherText.setIsActive(true);
                 toBeSavedTeacherText.setTextOrder(questionOrder++);
+                teacherTextRepository.save(toBeSavedTeacherText);
+
+                toBeSavedTeacherText.setTeacherText(emptyText);
                 teacherTextRepository.save(toBeSavedTeacherText);
             }
         }
