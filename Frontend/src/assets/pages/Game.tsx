@@ -118,9 +118,6 @@ function Game() {
     return (
         <div className="game-grid-container">
 
-<<<<<<< HEAD
-            <div className="media-count">1/{mediaCount}</div>
-=======
             <div className="step-navigation">
 
                 <button
@@ -142,7 +139,6 @@ function Game() {
                 </button>
 
             </div>
->>>>>>> origin/multi_file_add_TEST
             <div className="game-content">
                 {renderMediaComponent()}
             </div>

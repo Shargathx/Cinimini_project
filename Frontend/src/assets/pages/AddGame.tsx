@@ -507,7 +507,6 @@ function AddGame() {
                   return {
                     ...s,
 
-                    // append instead of replace
                     images: [
                       ...(s.images ?? []),
                       ...files
