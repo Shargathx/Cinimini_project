@@ -95,7 +95,7 @@ function Game() {
     return (
         <div className="game-grid-container">
 
-            <div>1/{mediaCount}</div>
+            <div className="media-count">1/{mediaCount}</div>
             <div className="game-content">
                 {renderMediaComponent()}
             </div>
@@ -126,26 +126,21 @@ function Game() {
                 )}
             </div>
 
-            <div className="name-and-description">
-                <h1 className="game-name">Mängu nimi: {data?.name}</h1>
-                <h3 className="game-description">Kirjeldus: {data?.description}</h3>
-            </div>
+            <h3 className="game-name">Mängu nimi: {data?.name}</h3>
+            <h3 className="game-description">Kirjeldus: {data?.description}</h3>
 
             <div className="game-info-buttons">
                 <button onClick={getQuestions}>Questions</button>
-                <div>Küsimused:</div>
                 {questions.map((question) => (
                     <div key={question.id}>{question.questionText}</div>
                 ))}
 
                 <button onClick={getPoints}>Discussion points</button>
-                <div>Arutelu punktid:</div>
                 {points.map((point) => (
                     <div key={point.id}>{point.discussionText}</div>
                 ))}
 
                 <button onClick={getTeacherText}>Info õpetajale</button>
-                <div>Ideed, mõtted:</div>
                 {teacherTexts.map((teacherText) => (
                     <div key={teacherText.id}>{teacherText.teacherText}</div>
                 ))}
