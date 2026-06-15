@@ -5,9 +5,9 @@ import "./AddGame.css";
 import type { Game } from "../models/Game";
 import { useFetch } from '../../components/hooks/useFetch';
 
-interface Question { id: number; questionText: string; }
-interface Discussion { id: number; discussionText: string; }
-interface TeacherText { id: number; teacherText: string; }
+// interface Question { id: number; questionText: string; }
+// interface Discussion { id: number; discussionText: string; }
+// interface TeacherText { id: number; teacherText: string; }
 
 function AddGame() {
   const [categories, setCategories] = useState<Category[]>([])
@@ -31,10 +31,10 @@ function AddGame() {
 
   const [steps, setSteps] = useState<CreateGameStep[]>([createEmptyStep()])
 
-  type TeacherText = {
-    id: number;
-    teacherText: string;
-  };
+  // type TeacherText = {
+  //   id: number;
+  //   teacherText: string;
+  // };
 
   function createEmptyStep(): CreateGameStep {
     return {
@@ -49,25 +49,25 @@ function AddGame() {
     };
   }
 
-  type GameStepForm = {
-    images: File[] | null;
+  // type GameStepForm = {
+  //   images: File[] | null;
 
-    questions: {
-      id: number;
-      questionText: string;
-    }[];
+  //   questions: {
+  //     id: number;
+  //     questionText: string;
+  //   }[];
 
-    discussionPoints: {
-      id: number;
-      discussionText: string;
-    }[];
+  //   discussionPoints: {
+  //     id: number;
+  //     discussionText: string;
+  //   }[];
 
-    teacherTexts: TeacherText[];
+  //   teacherTexts: TeacherText[];
 
-    questionInput: string;
-    discussionInput: string;
-    teacherTextInput: string;
-  };
+  //   questionInput: string;
+  //   discussionInput: string;
+  //   teacherTextInput: string;
+  // };
   //Form data
 
   useEffect(() => {
