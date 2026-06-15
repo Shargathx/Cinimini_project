@@ -29,29 +29,29 @@ function Game() {
     const [contrast, setContrast] = useState(100);
     const [exposure, setExposure] = useState(100);
     const [zoom, setZoom] = useState(100);
+    const [currentStep, setCurrentStep] = useState(0);
 
-    const step = data?.gameSteps?.[0];
+    const step = data?.gameSteps?.[currentStep];
     const media = step?.mediaElements?.[0]?.fileData ?? "";
     const fileFormat = step?.mediaElements?.[0]?.mediaType ?? "";
 
     // 1. Calculate media count on the fly during render
-    const mediaCount = data?.gameSteps?.[0]?.mediaElements?.length
+    const mediaCount = data?.gameSteps?.length ?? 0;
 
     function getQuestions() {
-        if (step) setQuestions(step.questions);
+        setQuestions(step?.questions ?? []);
     }
 
     function getPoints() {
-        if (step) setPoints(step.discussionPoints);
+        setPoints(step?.discussionPoints ?? []);
     }
 
     function getTeacherText() {
-        if (step) setTeacherText(step.teacherTexts);
+        setTeacherText(step?.teacherTexts ?? []);
     }
 
     function renderMediaComponent() {
         if (!media) return null;
-        console.log(step)
 
         switch (fileFormat) {
             case "image/png":
@@ -93,10 +93,52 @@ function Game() {
         );
     }
 
+    function nextStep() {
+        if (!data?.gameSteps) return;
+
+        setCurrentStep(prev =>
+            Math.min(prev + 1, data.gameSteps.length - 1)
+        );
+
+        setQuestions([]);
+        setPoints([]);
+        setTeacherText([]);
+    }
+
+    function previousStep() {
+        setCurrentStep(prev =>
+            Math.max(prev - 1, 0)
+        );
+
+        setQuestions([]);
+        setPoints([]);
+        setTeacherText([]);
+    }
+
     return (
         <div className="game-grid-container">
 
-            <div>1/{mediaCount}</div>
+            <div className="step-navigation">
+
+                <button
+                    onClick={previousStep}
+                    disabled={currentStep === 0}
+                >
+                    ←
+                </button>
+
+                <span>
+                    {currentStep + 1}/{mediaCount}
+                </span>
+
+                <button
+                    onClick={nextStep}
+                    disabled={currentStep >= mediaCount - 1}
+                >
+                    →
+                </button>
+
+            </div>
             <div className="game-content">
                 {renderMediaComponent()}
             </div>
