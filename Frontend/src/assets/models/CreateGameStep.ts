@@ -4,7 +4,7 @@ import type { TeacherText } from "./TeacherText";
 
 export interface CreateGameStep {
     id: string;
-    image: File | null;
+    images: [];
     questions: Question[];
     discussionPoints: Discussion[];
     teacherTexts: TeacherText[];

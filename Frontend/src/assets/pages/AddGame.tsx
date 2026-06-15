@@ -39,7 +39,7 @@ function AddGame() {
   function createEmptyStep(): CreateGameStep {
     return {
       id: Math.random().toString(36).substring(2, 9), // siia tuleb suvaline stepId number testimiseks
-      image: null,
+      images: [],
       questions: [],
       discussionPoints: [],
       teacherTexts: [],
@@ -50,7 +50,7 @@ function AddGame() {
   }
 
   type GameStepForm = {
-    image: File[] | null;
+    images: File[] | null;
 
     questions: {
       id: number;
@@ -97,7 +97,7 @@ function AddGame() {
             // use it (e.g., step.id). Otherwise, generate a new one.
             id: step.id || Math.random().toString(36).substring(2, 9),
 
-            image: null,
+            images: [],
 
             questions: step.questions.map(q => ({
               id: q.id,
@@ -303,11 +303,18 @@ function AddGame() {
       formData.append("gameRequest", JSON.stringify(gameData));
 
       // 3. Append the files using the expected index keys
-      steps.forEach((step, index) => {
-        if (step.image instanceof File) {
-          formData.append(`steps[${index}].image`, step.image);
-        }
+      steps.forEach((step, stepIndex) => {
+        step.images?.forEach((file) => {
+          formData.append(
+            `steps[${stepIndex}].image`,
+            file
+          );
+        });
       });
+
+      for (const [key, value] of formData) {
+        console.log('»', key, value)
+      }
 
       // 4. Send
       const response = await fetch(`${import.meta.env.VITE_BACK_URL}/games/add-game`, {
@@ -424,21 +431,35 @@ function AddGame() {
           <input
             type="file"
             accept="image/*"
-            onChange={(e) =>
+            multiple
+            onChange={(e) => {
+              const files = Array.from(e.target.files ?? []);
+
               setSteps(prev =>
-                prev.map((s, index) =>
-                  // Compare current map index (index) with the stepIndex 
-                  // provided by the outer map loop
-                  index === stepIndex ? { ...s, image: e.target.files?.[0] ?? null } : s
-                )
-              )
-            }
+                prev.map((s, index) => {
+                  if (index !== stepIndex) return s;
+
+                  return {
+                    ...s,
+
+                    // append instead of replace
+                    images: [
+                      ...(s.images ?? []),
+                      ...files
+                    ]
+                  };
+                })
+              );
+
+              // allow selecting same files again
+              e.target.value = "";
+            }}
           />
 
           <div>
-            {step.image && (
-              <div>{step.image.name}</div>
-            )}
+            {(step.images ?? []).map((img, i) => (
+              <div key={i}>{img.name}</div>
+            ))}
           </div>
 
           <h3 id="addQuestionTitle">Lisa küsimus</h3>
