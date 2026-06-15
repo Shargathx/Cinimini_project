@@ -311,9 +311,8 @@ function AddGame() {
           );
         });
       });
-
-      for (const [key, value] of formData) {
-        console.log('»', key, value)
+      for (const [key, value] of formData.entries()) {
+        console.log(key, value);
       }
 
       // 4. Send
