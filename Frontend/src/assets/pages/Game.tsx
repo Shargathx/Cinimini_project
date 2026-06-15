@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import './Game.css';
+import './GameImage.css';
 import { useFetch } from '../../components/hooks/useFetch';
 import type { Game } from '../models/Game';
 import type { Question } from '../models/Question';
