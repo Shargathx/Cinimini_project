@@ -126,7 +126,7 @@ public class GameStepService {
             }
         }
     }
-
+/*
     public void validateSteps(CreateGameRequest gameRequest, boolean isCreate) {
         for (GameStepRequest step : gameRequest.getSteps()) {
 
@@ -172,4 +172,6 @@ public class GameStepService {
             // }
         }
     }
+
+ */
 }
