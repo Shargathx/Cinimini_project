@@ -23,27 +23,29 @@ function Categories() {
 
 
     return (
-        <div className="categories-container">
-            {categories.map((category) => (
-                <Link
-                    key={category.id}
-                    to={`/categories/${category.id}`}
-                    className={
-                        "category-card category-link" +
-                        (category.name === "Heli" ? " heli" : "") +
-                        (category.name === "Pilt" ? " pilt" : "") +
-                        (category.name === "Video" ? " video" : "")
-                    }
-                >
-                    {category.name === "Heli" && <img src={soundIcon} alt="Heli" className="icon" />}
-                    {category.name === "Pilt" && <img src={imageIcon} alt="Pilt" className="icon" />}
-                    {category.name === "Video" && <img src={videoIcon} alt="Video" className="icon" />}
+        <div className="categories-page">
+            <div className="categories-container">
+                {categories.map((category) => (
+                    <Link
+                        key={category.id}
+                        to={`/categories/${category.id}`}
+                        className={
+                            "category-card category-link" +
+                            (category.name === "Heli" ? " heli" : "") +
+                            (category.name === "Pilt" ? " pilt" : "") +
+                            (category.name === "Video" ? " video" : "")
+                        }
+                    >
+                        {category.name === "Heli" && <img src={soundIcon} alt="Heli" className="icon" />}
+                        {category.name === "Pilt" && <img src={imageIcon} alt="Pilt" className="icon" />}
+                        {category.name === "Video" && <img src={videoIcon} alt="Video" className="icon" />}
 
-                    <div className="category-name">
-                        {category.name}
-                    </div>
-                </Link>
-            ))}
+                        <div className="category-name">
+                            {category.name}
+                        </div>
+                    </Link>
+                ))}
+            </div>
         </div>
     );
 }
