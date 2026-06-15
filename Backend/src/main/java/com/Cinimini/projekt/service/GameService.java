@@ -216,7 +216,7 @@ public class GameService {
             gameStepService.handleSavingNewQuestions(stepRequest, savedStep);
 
             // HANDLE TEACHER TEXTS
-            gameStepService.handleAndSaveTeacherTexts(stepRequest, savedStep);
+            gameStepService.handleSavingNewTeacherTexts(stepRequest, savedStep);
 
             // HANDLE DISCUSSIONS
             gameStepService.handleSavingNewDiscussionPoints(stepRequest, savedStep);

@@ -112,6 +112,21 @@ public class GameStepService {
         }
     }
 
+    public void handleSavingNewTeacherTexts(GameStepRequest stepRequest, GameStep savedStep) {
+        var questionOrder = 1;
+
+        if (stepRequest.getTeacherTexts() != null) {
+            for (TeacherTextDto teacherTextDto : stepRequest.getTeacherTexts()) {
+                TeacherText toBeSavedTeacherText = new TeacherText();
+                toBeSavedTeacherText.setTeacherText(teacherTextDto.getTeacherText());
+                toBeSavedTeacherText.setGameStep(savedStep);
+                toBeSavedTeacherText.setIsActive(true);
+                toBeSavedTeacherText.setTextOrder(questionOrder++);
+                teacherTextRepository.save(toBeSavedTeacherText);
+            }
+        }
+    }
+
     public void validateSteps(CreateGameRequest gameRequest, boolean isCreate) {
         for (GameStepRequest step : gameRequest.getSteps()) {
 

@@ -89,7 +89,7 @@ public class GameController {
         gameService.addNewGame(gameRequest);
         return ResponseEntity.ok("Game added successfully");
     }
-
+/*
     @PatchMapping(value = "/games/edit-game/{gameId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> editGame(
             @PathVariable Long gameId,
@@ -110,6 +110,8 @@ public class GameController {
         gameService.editGameData(gameId, gameRequest);
         return ResponseEntity.ok("Game updated successfully");
     }
+
+ */
 
     @DeleteMapping("/games/{gameId}")
     public ResponseEntity<String> deleteGame(@PathVariable Long gameId) {
