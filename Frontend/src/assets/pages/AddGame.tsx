@@ -5,6 +5,10 @@ import "./AddGame.css";
 import type { Game } from "../models/Game";
 import { useFetch } from '../../components/hooks/useFetch';
 
+interface Question { id: number; questionText: string; }
+interface Discussion { id: number; discussionText: string; }
+interface TeacherText { id: number; teacherText: string; }
+
 function AddGame() {
   const [categories, setCategories] = useState<Category[]>([])
   //Game file, name and category
@@ -25,25 +29,28 @@ function AddGame() {
 
   const game = data;
 
-  const [steps, setSteps] = useState<CreateGameStep[]>([
-    {
-      image: null,
-      questions: [],
-      discussionPoints: [],
-      teacherTexts: [],
-      questionInput: "",
-      discussionInput: "",
-      teacherTextInput: ""
-    }
-  ])
+  const [steps, setSteps] = useState<CreateGameStep[]>([createEmptyStep()])
 
   type TeacherText = {
     id: number;
     teacherText: string;
   };
 
+  function createEmptyStep(): CreateGameStep {
+    return {
+      id: Math.random().toString(36).substring(2, 9), // siia tuleb suvaline stepId number testimiseks
+      images: [],
+      questions: [],
+      discussionPoints: [],
+      teacherTexts: [],
+      questionInput: "",
+      discussionInput: "",
+      teacherTextInput: ""
+    };
+  }
+
   type GameStepForm = {
-    image: File | null;
+    images: File[] | null;
 
     questions: {
       id: number;
@@ -74,6 +81,7 @@ function AddGame() {
     setMode(localStorage.getItem("mode") ?? "");
   }, [])
 
+
   useEffect(() => {
     if (mode == "edit") {
       function fillEditableDate() {
@@ -85,7 +93,11 @@ function AddGame() {
 
         setSteps(
           game.gameSteps.map(step => ({
-            image: null,
+            // Add the ID here. If game steps have an ID from your backend, 
+            // use it (e.g., step.id). Otherwise, generate a new one.
+            id: step.id || Math.random().toString(36).substring(2, 9),
+
+            images: [],
 
             questions: step.questions.map(q => ({
               id: q.id,
@@ -115,23 +127,12 @@ function AddGame() {
 
 
 
-  function createEmptyStep(): GameStepForm {
-    return {
-      image: null,
 
-      questions: [],
-      discussionPoints: [],
-      teacherTexts: [],
-
-      questionInput: "",
-      discussionInput: "",
-      teacherTextInput: ""
-    };
-  }
 
   function addStep() {
     setSteps(prev => [...prev, createEmptyStep()]);
   }
+
 
   function deleteStep(stepIndex: number) {
     setSteps(prev =>
@@ -270,115 +271,129 @@ function AddGame() {
       )
     );
   }
+  /*
+    const fileToBase64 = (file) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+  
+        reader.readAsDataURL(file);
+  
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+      });
+      */
 
   const handleSubmit = async () => {
-    const formData = new FormData();
 
-    // 1. Basic Fields
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("categoryId", String(category));
-
-    // 2. Steps Data
-    steps.forEach((step, stepIndex) => {
-      // Image
-      if (step.image) {
-        formData.append(`steps[${stepIndex}].image`, step.image);
-      }
-
-      // Questions (Note: Ensure your Java DTO has a field named 'questions')
-      step.questions.forEach((question, questionIndex) => {
-        formData.append(`steps[${stepIndex}].questions[${questionIndex}].questionText`, question.questionText);
-      });
-
-      // Teacher Texts
-      step.teacherTexts.forEach((teacherText, teacherTextIndex) => {
-        formData.append(`steps[${stepIndex}].teacherTexts[${teacherTextIndex}].teacherText`, teacherText.teacherText);
-      });
-
-      // Discussion Points
-      step.discussionPoints.forEach((discussion, discussionIndex) => {
-        formData.append(`steps[${stepIndex}].discussionPoints[${discussionIndex}].discussionText`, discussion.discussionText);
-      });
-    });
-
-    for (const pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
-
-    if (mode == "add") {
+    if (localStorage.getItem("mode") == "add") {
       try {
-        const response = await fetch(
-          import.meta.env.VITE_BACK_URL + "/games/add-game",
-          {
-            method: "POST",
-            body: formData
-          }
-        );
+        const formData = new FormData();
 
-        if (!response.ok) {
-          throw new Error("Failed to save game");
+        // 1. Convert your state to the exact structure the backend expects
+        const gameData = {
+          name,
+          categoryId: Number(category),
+          description,
+
+          steps: steps.map((step) => ({
+            questions: step.questions.map(q => ({
+              questionText: q.questionText
+            })),
+
+            discussionPoints: step.discussionPoints.map(dp => ({
+              discussionText: dp.discussionText
+            })),
+
+            teacherTexts: step.teacherTexts.map(tt => ({
+              teacherText: tt.teacherText
+            }))
+          }))
+        };
+
+        // 2. Append the JSON string
+        formData.append("gameRequest", JSON.stringify(gameData));
+
+        // 3. Append the files using the expected index keys
+        steps.forEach((step, stepIndex) => {
+          step.images?.forEach((file) => {
+            formData.append(
+              `steps[${stepIndex}].image`,
+              file
+            );
+          });
+        });
+        for (const [key, value] of formData.entries()) {
+          console.log(key, value);
         }
 
+        // 4. Send
+        const response = await fetch(`${import.meta.env.VITE_BACK_URL}/games/add-game`, {
+          method: "POST",
+          body: formData
+        });
+
+        if (!response.ok) throw new Error("Failed to save game");
         alert("Game saved!");
-
-        setName("");
-        setDescription("");
-
-        setSteps([
-          {
-            image: null,
-            questions: [],
-            discussionPoints: [],
-            teacherTexts: [],
-            questionInput: "",
-            discussionInput: "",
-            teacherTextInput: ""
-          }
-        ]);
-
       } catch (err) {
         console.error(err);
       }
-    }
-    if (mode == "edit") {
-      try {
-        const gameId = localStorage.getItem("id");
+    };
 
-        const response = await fetch(
-          `${import.meta.env.VITE_BACK_URL}/games/edit-game/${gameId}`,
-          {
-            method: "PUT",
-            body: formData
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to save game");
+    if (localStorage.getItem("mode") == "edit") {
+      try {
+        const formData = new FormData();
+
+        // 1. Convert your state to the exact structure the backend expects
+        const gameData = {
+          name,
+          categoryId: Number(category),
+          description,
+
+          steps: steps.map((step) => ({
+            questions: step.questions.map(q => ({
+              questionText: q.questionText
+            })),
+
+            discussionPoints: step.discussionPoints.map(dp => ({
+              discussionText: dp.discussionText
+            })),
+
+            teacherTexts: step.teacherTexts.map(tt => ({
+              teacherText: tt.teacherText
+            }))
+          }))
+        };
+
+        // 2. Append the JSON string
+        formData.append("gameRequest", JSON.stringify(gameData));
+
+        // 3. Append the files using the expected index keys
+        steps.forEach((step, stepIndex) => {
+          step.images?.forEach((file) => {
+            formData.append(
+              `steps[${stepIndex}].image`,
+              file
+            );
+          });
+        });
+        for (const [key, value] of formData.entries()) {
+          console.log(key, value);
         }
 
+        // 4. Send
+        const response = await fetch(`${import.meta.env.VITE_BACK_URL}/games/add-game`, {
+          method: "PATCH",
+          body: formData
+        });
+
+        if (!response.ok) throw new Error("Failed to save game");
         alert("Game saved!");
-
-        setName("");
-        setDescription("");
-
-        setSteps([
-          {
-            image: null,
-            questions: [],
-            discussionPoints: [],
-            teacherTexts: [],
-            questionInput: "",
-            discussionInput: "",
-            teacherTextInput: ""
-          }
-        ]);
-
       } catch (err) {
         console.error(err);
       }
-    }
+    };
+  }
 
-  };
 
   function addDiscussionPoint(
     stepIndex: number
@@ -463,36 +478,54 @@ function AddGame() {
       />
     </div>ˇ
     <hr></hr>
-    <button type="button" id="stepBtn" onClick={addStep}>
+    {<button type="button" id="stepBtn" onClick={addStep}>
       Lisa uus samm
-    </button>
+    </button>}
     <div id="step-container">
       {steps.map((step, stepIndex) => (
-        <div key={stepIndex} id="singleStep">
+        <div key={step.id} id="singleStep">
           <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
 
-          <button
+          {<button
             type="button"
             onClick={() => deleteStep(stepIndex)}
           >
             Kustuta samm
-          </button>
+          </button>}
 
           <input
             type="file"
-            onChange={(e) =>
+            accept="image/*"
+            multiple
+            onChange={(e) => {
+              const files = Array.from(e.target.files ?? []);
+
               setSteps(prev =>
-                prev.map((s, index) =>
-                  index === stepIndex
-                    ? {
-                      ...s,
-                      image: e.target.files?.[0] ?? null
-                    }
-                    : s
-                )
-              )
-            }
+                prev.map((s, index) => {
+                  if (index !== stepIndex) return s;
+
+                  return {
+                    ...s,
+
+                    // append instead of replace
+                    images: [
+                      ...(s.images ?? []),
+                      ...files
+                    ]
+                  };
+                })
+              );
+
+              // allow selecting same files again
+              e.target.value = "";
+            }}
           />
+
+          <div>
+            {(step.images ?? []).map((img, i) => (
+              <div key={i}>{img.name}</div>
+            ))}
+          </div>
 
           <h3 id="addQuestionTitle">Lisa küsimus</h3>
 

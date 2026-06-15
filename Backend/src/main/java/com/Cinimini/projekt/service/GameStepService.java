@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -84,59 +83,18 @@ public class GameStepService {
         List<Question> currentDbQuestions = questionRepository.findByGameStep(savedStep);
         Set<Long> remainingIds = new HashSet<>();
 
-        int questionOrder = 1;
+    public void handleSavingNewQuestions(GameStepRequest stepRequest, GameStep savedStep) {
+        var questionOrder = 1;
 
         if (stepRequest.getQuestions() != null) {
-            for (QuestionDto question : stepRequest.getQuestions()) {
-                Question questionEntity;
+            for (QuestionDto questionDto : stepRequest.getQuestions()) {
+                Question toBeSavedQuestion = new Question();
 
-                if (question.getId() != null) {
-                    remainingIds.add(question.getId());
-                    questionEntity = questionRepository.findById(question.getId()).orElseThrow(() -> new RuntimeException("Question not found"));
-                } else {
-                    questionEntity = new Question();
-                }
-
-                questionEntity.setQuestionText(question.getQuestionText());
-                questionEntity.setIsActive(true);
-                questionEntity.setQuestionOrder(questionOrder++);
-                questionEntity.setGameStep(savedStep);
-                questionRepository.save(questionEntity);
-            }
-
-        }
-        for (Question dbItem : currentDbQuestions) {
-            if (!remainingIds.contains(dbItem.getId())) {
-                questionRepository.delete(dbItem);
-            }
-        }
-    }
-
-    public void handleAndSaveTeacherTexts(GameStepRequest stepRequest, GameStep savedStep) {
-        List<TeacherText> currentDbTeacherTexts = teacherTextRepository.findByGameStep(savedStep);
-        Set<Long> remainingIds = new HashSet<>();
-
-        int teacherOrder = 1;
-        if (stepRequest.getTeacherTexts() != null && !stepRequest.getTeacherTexts().isEmpty()) {
-            for (TeacherTextDto teacherText : stepRequest.getTeacherTexts()) {
-                TeacherText teacherEntity;
-
-                if (teacherText.getId() != null) {
-                    remainingIds.add(teacherText.getId());
-                    teacherEntity = teacherTextRepository.findById(teacherText.getId()).orElseThrow(() -> new RuntimeException("Teacher text not found"));
-                } else {
-                    teacherEntity = new TeacherText();
-                }
-                teacherEntity.setTeacherText(teacherText.getTeacherText());
-                teacherEntity.setIsActive(true);
-                teacherEntity.setTextOrder(teacherOrder++);
-                teacherEntity.setGameStep(savedStep);
-                teacherTextRepository.save(teacherEntity);
-            }
-        }
-        for (TeacherText dbItem : currentDbTeacherTexts) {
-            if (!remainingIds.contains(dbItem.getId())) {
-                teacherTextRepository.delete(dbItem);
+                toBeSavedQuestion.setQuestionText(questionDto.getQuestionText());
+                toBeSavedQuestion.setGameStep(savedStep);
+                toBeSavedQuestion.setQuestionOrder(questionOrder++);
+                toBeSavedQuestion.setIsActive(true);
+                questionRepository.save(toBeSavedQuestion);
             }
         }
     }
@@ -177,31 +135,6 @@ public class GameStepService {
  */
 
     //AI
-
-    public void handleAndSaveMediaFiles(GameStepRequest stepRequest, GameStep savedStep) throws IOException {
-        MultipartFile multipartFile = stepRequest.getImage();
-
-        if (savedStep.getMediaElements() == null) {
-            savedStep.setMediaElements(new ArrayList<>());
-        }
-
-        // 1. Clear the existing list - because of orphanRemoval=true,
-        // Hibernate will DELETE the old records from the DB automatically.
-        savedStep.getMediaElements().clear();
-
-        // 2. If a new file exists, add it to the list
-        if (multipartFile != null && !multipartFile.isEmpty()) {
-            MediaElement newMedia = new MediaElement();
-            newMedia.setFileName(multipartFile.getOriginalFilename());
-            newMedia.setMediaType(multipartFile.getContentType());
-            newMedia.setFileData(multipartFile.getBytes());
-            newMedia.setGameStep(savedStep);
-
-            // Add to the list (Hibernate will INSERT it)
-            savedStep.getMediaElements().add(newMedia);
-        }
-    }
-
     public void handleAndSaveDiscussionText(GameStepRequest stepRequest, GameStep savedStep) {
         List<DiscussionPoint> dbItems = discussionPointRepository.findByGameStep(savedStep);
         Map<Long, DiscussionPoint> dbMap = dbItems.stream()
@@ -242,92 +175,24 @@ public class GameStepService {
                 newItem.setIsActive(true);
                 discussionPointRepository.save(newItem);
             }
-            newOrder++;
         }
     }
 
-    public void handleAndSaveQuestions(GameStepRequest stepRequest, GameStep savedStep) {
-        List<Question> dbItems = questionRepository.findByGameStep(savedStep);
+    public void handleSavingNewTeacherTexts(GameStepRequest stepRequest, GameStep savedStep) {
+        var questionOrder = 1;
 
-        // 1. DELETE ORPHANS FIRST
-        if (stepRequest.getQuestions() != null) {
-            Set<Long> requestIds = stepRequest.getQuestions().stream()
-                    .map(QuestionDto::getId)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toSet());
-
-            for (Question dbItem : dbItems) {
-                if (!requestIds.contains(dbItem.getId())) {
-                    questionRepository.delete(dbItem);
-                }
-            }
-            questionRepository.flush(); // Execute deletions immediately
-            entityManager.clear();
-        }
-
-        // 2. RECONCILE (UPDATE/INSERT)
-        int newOrder = 1;
-        for (QuestionDto dto : stepRequest.getQuestions()) {
-            if (dto.getId() != null) {
-                Question item = questionRepository.findById(dto.getId())
-                        .orElseThrow(() -> new RuntimeException("Question not found"));
-                item.setQuestionText(dto.getQuestionText());
-                item.setQuestionOrder(newOrder);
-                item.setIsActive(true);
-                questionRepository.save(item);
-            } else {
-                Question newItem = new Question();
-                newItem.setQuestionText(dto.getQuestionText());
-                newItem.setQuestionOrder(newOrder);
-                newItem.setGameStep(savedStep);
-                newItem.setIsActive(true);
-                questionRepository.save(newItem);
-            }
-            newOrder++;
-        }
-    }
-
-    public void handleAndSaveTeacherTexts(GameStepRequest stepRequest, GameStep savedStep) {
-        List<TeacherText> dbItems = teacherTextRepository.findByGameStep(savedStep);
-
-        // 1. DELETE ORPHANS FIRST
         if (stepRequest.getTeacherTexts() != null) {
-            Set<Long> requestIds = stepRequest.getTeacherTexts().stream()
-                    .map(TeacherTextDto::getId)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toSet());
-
-            for (TeacherText dbItem : dbItems) {
-                if (!requestIds.contains(dbItem.getId())) {
-                    teacherTextRepository.delete(dbItem);
-                }
+            for (TeacherTextDto teacherTextDto : stepRequest.getTeacherTexts()) {
+                TeacherText toBeSavedTeacherText = new TeacherText();
+                toBeSavedTeacherText.setTeacherText(teacherTextDto.getTeacherText());
+                toBeSavedTeacherText.setGameStep(savedStep);
+                toBeSavedTeacherText.setIsActive(true);
+                toBeSavedTeacherText.setTextOrder(questionOrder++);
+                teacherTextRepository.save(toBeSavedTeacherText);
             }
-            teacherTextRepository.flush(); // Execute deletions immediately
-            entityManager.clear();
-        }
-
-        // 2. RECONCILE (UPDATE/INSERT)
-        int newOrder = 1;
-        for (TeacherTextDto dto : stepRequest.getTeacherTexts()) {
-            if (dto.getId() != null) {
-                TeacherText item = teacherTextRepository.findById(dto.getId())
-                        .orElseThrow(() -> new RuntimeException("Teacher text not found"));
-                item.setTeacherText(dto.getTeacherText());
-                item.setTextOrder(newOrder);
-                item.setIsActive(true);
-                teacherTextRepository.save(item);
-            } else {
-                TeacherText newItem = new TeacherText();
-                newItem.setTeacherText(dto.getTeacherText());
-                newItem.setTextOrder(newOrder);
-                newItem.setGameStep(savedStep);
-                newItem.setIsActive(true);
-                teacherTextRepository.save(newItem);
-            }
-            newOrder++;
         }
     }
-
+/*
     public void validateSteps(CreateGameRequest gameRequest, boolean isCreate) {
         for (GameStepRequest step : gameRequest.getSteps()) {
 
@@ -373,4 +238,6 @@ public class GameStepService {
             // }
         }
     }
+
+ */
 }
