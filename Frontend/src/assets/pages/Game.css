@@ -117,20 +117,16 @@
 .image-container {
     width: 100%;
     max-width: clamp(300px, 80%, 650px);
-    min-width: clamp(200px, 40%, 650px);
-    min-height: clamp(45vh, 40%, 650px);
-    max-height: 100%;
-    /*aspect-ratio: 16 / 10;*/
-    z-index: 1;
+    height: clamp(100px, 50vh, 500px);
+
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+
     background-color: rgb(235, 237, 239);
     border: clamp(8px, 0.5vw, 16px) solid rgb(213, 198, 237);
     border-radius: 20px;
-
 }
 
 @media (min-width: 1800px) {
