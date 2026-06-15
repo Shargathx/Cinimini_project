@@ -2,8 +2,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Sono:wght@200;300;400;500;600;700;800&display=swap');
 
 
-#root {
-  height: 100%;
+.app {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.footer {
+  flex-shrink: 0;
 }

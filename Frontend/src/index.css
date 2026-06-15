@@ -15,6 +15,7 @@
   --font-mono: 'Sono', SF Mono, Consolas, 'Liberation Mono', Menlo, Courier, monospace;
 }
 
+
 /* Global resets */
 html, body {
   margin: 0;
@@ -24,6 +25,26 @@ html, body {
   background-size: cover;
   color: var(--text);
   height: 100%;
+}
+
+html,
+body,
+#root {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: url('/assets/background.svg') no-repeat center center fixed;
+  background-size: cover;
+  color: var(--text);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
 }
 
 h1, h2, h3, h4, h5, h6 {

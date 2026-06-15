@@ -8,7 +8,7 @@
     border-bottom-left-radius: 0.5vw;
     border-bottom-right-radius: 1vw;
     border-bottom: 0.05vw solid rgb(58,58,58,0.03);
-    padding: clamp(18px, 1vw, 18px) ;
+    padding: clamp(10px, 1vw, 12px);
 }
 
 .nav {
@@ -59,13 +59,13 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: clamp(1000px, 78vw, 1600px);
-    
-    height: auto;
+
     max-height: 85.5vh;
-    padding: 1.8vw;
-    background-color: rgb(255, 248,248 ,1);
+    padding: clamp(20px, 2vw, 40px);
+
+    background-color: rgb(255, 248, 248, 1);
     border: 0.5vw solid rgb(145, 242, 190, 0.5);
-    border-radius: 3vw;
+    border-radius: clamp(48px, 3vw, 72px);
 }
 
 .popup-overlay {
@@ -78,13 +78,41 @@
 }
 
 .popup-text-container {
+    overflow-y: visible;
     width: 100%;
+    max-height: none;
+    padding-right: 0;
+    display: block;
+    padding: 0 2vw 0 0;
 
-    overflow-y: auto;
-    display:block;
     text-align: left;
     font-family: 'Sono', sans-serif;
     text-transform: uppercase;
+}
+
+.popup-scroll-area {
+    max-height: calc(85.5vh - clamp(100px, 2vw, 120px));
+    overflow-y: auto;
+    padding-right: clamp(20px, 3vw, 40px);
+}
+
+.popup-scroll-area::-webkit-scrollbar {
+    width: 10px;
+}
+
+.popup-scroll-area::-webkit-scrollbar-track {
+    background: transparent;
+    margin-top: 5.5vh;      
+    margin-bottom: 20px;
+}
+
+.popup-scroll-area::-webkit-scrollbar-thumb {
+    background: rgba(194, 194, 194, 0.565);
+    border-radius: 999px;
+}
+
+.popup-scroll-area::-webkit-scrollbar-thumb:hover {
+    background: rgb(131, 131, 131);
 }
 
 .popup-text-container h1,
@@ -98,17 +126,19 @@
 
 .popup-text-container h1 {
     text-align: center;
-    font-size: clamp(14px, 1.8vw, 36px);
-    margin-bottom: 1.2vw;
+    font-size: clamp(16px, 3vw, 36px);
+    margin-bottom: 1.5vw;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .popup-text-container h2 {
-    font-size: clamp(14px, 0.75vw, 28px);
+    font-size: clamp(14px, 0.75vw, 34px);
     margin-bottom: 1vw;
 }
 
 .popup-text-container h3 {
-    font-size: clamp(12px, 0.7vw, 28px);
+    font-size: clamp(12px, 0.7vw, 32px);
     font-weight: 600;
     margin-top: 0.8vw;
     margin-bottom: 0vw;
@@ -116,7 +146,7 @@
 }
 
 .popup-text-container p {
-    font-size: clamp(12px, 0.75vw, 28px);
+    font-size: clamp(12px, 0.75vw, 32px);
     line-height: 1;
     margin-bottom: 0.8vw;
 }
@@ -124,12 +154,12 @@
 .popup-text-container ul {
     list-style-type: disc;
     list-style-position: outside;
-    padding-left: clamp(40px, 2.5vw, 60px);
+    padding-left: clamp(30px, 2.5vw, 40px);
     margin-top: 0.2vw;
 }
 
 .popup-text-container li {
-    font-size: clamp(12px, 0.75vw, 28px);
+    font-size: clamp(12px, 0.75vw, 32px);
     margin-bottom: 0.18vw;
     line-height: 1;
 }
@@ -164,33 +194,33 @@
 }
 
 .popup-page-info h2 {
-    font-size: clamp(16px, 1vw, 32px);
+    font-size: clamp(16px, 1vw, 30px);
     margin-top: 1vw;
     margin-bottom: 0vw;
 }
 
 .popup-page-info h3 {
-    font-size: clamp(16px, 1vw, 32px);
+    font-size: clamp(16px, 1vw, 28px);
     margin-top: 1vw;
     margin-bottom: 0vw;
 }
 
 
 .popup-page-info p {
-    font-size: clamp(14px, 0.8vw, 28px);
+    font-size: clamp(14px, 0.8vw, 24px);
     margin-bottom: 1vw;
 }
 
 .popup-page-info li {
-    font-size: clamp(14px, 0.8vw, 28px);
+    font-size: clamp(14px, 0.8vw, 24px);
     line-height: 1;
 }
 
 .popup-close-button {
     position: absolute;
-    top: 1vw;
-    right: 1.3vw;
-
+    top: clamp(10px, 1vw, 20px);
+    right: clamp(20px, 1.5vw, 35px);
+    z-index: 1000;
     border: none;
     background: transparent;
     cursor: pointer;
@@ -201,3 +231,5 @@
     width: 3vw;
     height: 3vw;
 }
+
+
