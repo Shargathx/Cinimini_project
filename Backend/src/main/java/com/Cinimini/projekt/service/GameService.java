@@ -10,11 +10,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @AllArgsConstructor
@@ -182,6 +185,98 @@ public class GameService {
         gameStepService.validateAddGameStepsData(gameRequest);
     }
 
+    @Transactional
+    public void validateAndSaveEditGameData(Long gameId, CreateGameRequest updateRequest) throws IOException {
+        Game existingGame = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
+
+        if (updateRequest.getName() != null && !updateRequest.getName().equals(existingGame.getName())) {
+            existingGame.setName(updateRequest.getName());
+        }
+        if (existingGame.getDescription() != updateRequest.getDescription()) {
+            existingGame.setDescription(updateRequest.getDescription());
+        }
+
+        Map<Long, GameStep> existingStepsMap = gameStepRepository.getGameStepsByGame_Id(gameId)
+                .stream()
+                .collect(Collectors.toMap(GameStep::getId, step -> step));
+
+        for (GameStepRequest stepRequest : updateRequest.getSteps()) {
+            if (!validateMediaForCategory(updateRequest.getCategoryId(), stepRequest.getMedia())) {
+                throw new RuntimeException("Invalid media content");
+            }
+            GameStep existingStep = existingStepsMap.get(stepRequest.getStepRequestId());
+            if (existingStep != null) {
+                gameStepService.handleAndSaveMediaFiles(stepRequest, existingStep);
+                syncTeacherTexts(existingStep, stepRequest.getTeacherTexts());
+                syncQuestions(existingStep, stepRequest.getQuestions());
+                syncDiscussions(existingStep, stepRequest.getDiscussionPoints());
+            }
+        }
+        gameRepository.save(existingGame);
+    }
+
+    private void syncDiscussions(GameStep existingStep, List<DiscussionDto> discussionDtos) {
+        Map<Long, DiscussionPoint> existingDiscussions = existingStep.getDiscussionPoints().stream()
+                .collect(Collectors.toMap(DiscussionPoint::getId, t -> t));
+        for (DiscussionDto discussionDto : discussionDtos) {
+            DiscussionPoint existingDiscussion = existingDiscussions.get(discussionDto.getId());
+            if (existingDiscussion != null) {
+                existingDiscussion.setDiscussionText(discussionDto.getDiscussionText());
+            } else {
+                existingDiscussion = new DiscussionPoint();
+                existingDiscussion.setDiscussionText(discussionDto.getDiscussionText());
+                existingStep.getDiscussionPoints().add(existingDiscussion);
+            }
+        }
+    }
+
+    private void syncQuestions(GameStep existingStep, List<QuestionDto> questionDtos) {
+        Map<Long, Question> existingQuestions = existingStep.getQuestions().stream()
+                .collect(Collectors.toMap(Question::getId, t -> t));
+        for (QuestionDto questionDto : questionDtos) {
+            Question existingQuestion = existingQuestions.get(questionDto.getId());
+            if (existingQuestion != null) {
+                existingQuestion.setQuestionText(questionDto.getQuestionText());
+            } else {
+                Question newQuestion = new Question();
+                newQuestion.setQuestionText(questionDto.getQuestionText());
+                existingStep.getQuestions().add(newQuestion);
+            }
+        }
+    }
+
+    private void syncTeacherTexts(GameStep existingStep, List<TeacherTextDto> dtos) {
+        Map<Long, TeacherText> existingTexts = existingStep.getTeacherText().stream()
+                .collect(Collectors.toMap(TeacherText::getId, t -> t));
+
+        for (TeacherTextDto teacherTextdto : dtos) {
+            TeacherText existing = existingTexts.get(teacherTextdto.getId());
+            if (existing != null) {
+                existing.setTeacherText(teacherTextdto.getTeacherText());
+            } else {
+                TeacherText newText = new TeacherText();
+                newText.setTeacherText(teacherTextdto.getTeacherText());
+                newText.setGameStep(existingStep);
+                existingStep.getTeacherText().add(newText);
+            }
+        }
+    }
+
+    private Boolean validateMediaForCategory(Long categoryId, MultipartFile media) {
+        if (media == null || media.isEmpty()) {
+            return true; // no new file uploaded during edit
+        }
+
+        String mediaType = media.getContentType();
+
+        return switch (categoryId.intValue()) {
+            case 1 -> mediaType.startsWith("audio/");
+            case 2 -> mediaType.startsWith("video/");
+            case 3 -> mediaType.startsWith("image/");
+            default -> false;
+        };
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public void addNewGame(CreateGameRequest gameRequest) throws IOException {
 
@@ -222,91 +317,12 @@ public class GameService {
             gameStepService.handleSavingNewDiscussionPoints(stepRequest, savedStep);
         }
     }
-/*
-    @Transactional(rollbackFor = Exception.class)
-    public void editGameData(Long gameId, CreateGameRequest gameRequest) throws IOException {
-        Game existingGame = gameRepository.findById(gameId)
-                .orElseThrow(() -> new RuntimeException("Game not found"));
 
-        List<GameStep> currentDatabaseSteps = gameStepRepository.findByGame(existingGame);
-        Set<Long> newDatabaseSteps = new HashSet<>();
-
-        if (gameRequest.getSteps() != null) {
-            gameStepService.validateSteps(gameRequest, false);
-
-            // 1. 🟢 Gather all the IDs that are coming in from the payload first
-            for (GameStepRequest stepRequest : gameRequest.getSteps()) {
-                if (stepRequest.getStepRequestId() != null) {
-                    newDatabaseSteps.add(stepRequest.getStepRequestId());
-                }
-            }
-        }
-
-        // 2. 🟢 SWEEP AND CLEAN FIRST: Delete removed steps immediately
-        for (GameStep gameStep : currentDatabaseSteps) {
-            if (!newDatabaseSteps.contains(gameStep.getId())) {
-                gameStepRepository.delete(gameStep);
-            }
-        }
-
-        // 3. 🟢 FORCE FLUSH NOW: Clears the step_order unique constraints in PostgreSQL
-        gameStepRepository.flush();
-
-        // 4. Proceed with processing updates and inserts safely
-        if (gameRequest.getSteps() != null) {
-            for (int i = 0; i < gameRequest.getSteps().size(); i++) {
-                GameStepRequest stepRequest = gameRequest.getSteps().get(i);
-                int stepOrder = i + 1;
-
-                if (stepRequest.getStepRequestId() != null) {
-                    GameStep gameStepEntity = gameStepRepository.findById(stepRequest.getStepRequestId())
-                            .orElseThrow(() -> new RuntimeException("Step not found"));
-                    gameStepEntity.setStepOrder(stepOrder);
-
-                    if (stepRequest.getImage() != null && !stepRequest.getImage().isEmpty()) {
-                        gameStepService.handleAndSaveMediaFiles(stepRequest, gameStepEntity);
-                    }
-                    gameStepService.handleSavingNewQuestion(stepRequest, gameStepEntity);
-                    gameStepService.handleAndSaveDiscussionText(stepRequest, gameStepEntity);
-                    gameStepService.handleAndSaveTeacherTexts(stepRequest, gameStepEntity);
-
-                } else {
-                    // Now this will NEVER crash because step_order slots have been completely emptied!
-                    GameStep newStep = new GameStep();
-                    newStep.setGame(existingGame);
-                    newStep.setStepOrder(stepOrder);
-                    gameStepRepository.save(newStep);
-
-                    if (stepRequest.getImage() != null && !stepRequest.getImage().isEmpty()) {
-                        gameStepService.handleAndSaveMediaFiles(stepRequest, newStep);
-                    }
-                    gameStepService.handleSavingNewQuestion(stepRequest, newStep);
-                    gameStepService.handleAndSaveDiscussionText(stepRequest, newStep);
-                    gameStepService.handleAndSaveTeacherTexts(stepRequest, newStep);
-                }
-            }
-        }
-
-        applyGameUpdates(gameRequest, existingGame);
+    public void updateGame(Long gameId, CreateGameRequest updateGameRequestJson) throws IOException {
+        Game existingGame = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
+        validateAndSaveEditGameData(gameId, updateGameRequestJson);
         gameRepository.save(existingGame);
     }
-
-
-
-
-    private static void applyGameUpdates(CreateGameRequest gameRequest, Game existingGame) {
-        if (gameRequest.getName() != null && !existingGame.getName().equals(gameRequest.getName())) {
-            existingGame.setName(gameRequest.getName());
-        }
-        if (gameRequest.getCategoryId() != null && !existingGame.getCategoryId().equals(gameRequest.getCategoryId())) {
-            existingGame.setCategoryId(gameRequest.getCategoryId());
-        }
-        if (gameRequest.getDescription() != null && !existingGame.getDescription().equals(gameRequest.getDescription())) {
-            existingGame.setDescription(gameRequest.getDescription());
-        }
-    }
-
- */
 
 
     public void softDeleteGame(Long gameId) {
