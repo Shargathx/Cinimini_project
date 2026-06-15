@@ -135,8 +135,6 @@
     position: relative;
     top: 50%;
     transform: translateY(-50%);
-}
-
 .fullscreen-overlay {
     position: fixed;
     inset: 0;

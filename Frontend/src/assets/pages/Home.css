@@ -1,14 +1,9 @@
-.home-page {
-    min-height: calc(100vh - 15vh - clamp(40px, 4vw, 64px));
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .game-start-container {
     display: flex;
+    padding-top: 6vw;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     text-align: center;
     text-transform: uppercase;
 }
@@ -18,19 +13,19 @@
     height: auto;
 }
 
-#gameStart {
+#gameStart{
     background: none;
     border: none;
     padding: 4vw;
     cursor: pointer;
-}
 
+}
 #gameStart:hover {
     transform: scale(1.05);
 }
 
 #gameStart img {
-    display: block;
+    display: block; 
     width: 10.5vw;
     height: auto;
     margin-top: -3vw;
