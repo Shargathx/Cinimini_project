@@ -2,14 +2,16 @@ package com.Cinimini.projekt.service;
 
 import com.Cinimini.projekt.dto.*;
 import com.Cinimini.projekt.entity.*;
-import com.Cinimini.projekt.repository.*;
+import com.Cinimini.projekt.repository.DiscussionPointRepository;
+import com.Cinimini.projekt.repository.MediaRepository;
+import com.Cinimini.projekt.repository.QuestionRepository;
+import com.Cinimini.projekt.repository.TeacherTextRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -77,227 +79,36 @@ public class GameStepService {
         mediaRepository.save(mediaElement);
     }
 
-/*
-    public void handleAndSaveQuestions(GameStepRequest stepRequest, GameStep savedStep) {
-        List<Question> currentDbQuestions = questionRepository.findByGameStep(savedStep);
-        Set<Long> remainingIds = new HashSet<>();
 
-        int questionOrder = 1;
+    public void handleSavingNewQuestions(GameStepRequest stepRequest, GameStep savedStep) {
+        var questionOrder = 1;
 
         if (stepRequest.getQuestions() != null) {
-            for (QuestionDto question : stepRequest.getQuestions()) {
-                Question questionEntity;
+            for (QuestionDto questionDto : stepRequest.getQuestions()) {
+                Question toBeSavedQuestion = new Question();
 
-                if (question.getId() != null) {
-                    remainingIds.add(question.getId());
-                    questionEntity = questionRepository.findById(question.getId()).orElseThrow(() -> new RuntimeException("Question not found"));
-                } else {
-                    questionEntity = new Question();
-                }
-
-                questionEntity.setQuestionText(question.getQuestionText());
-                questionEntity.setIsActive(true);
-                questionEntity.setQuestionOrder(questionOrder++);
-                questionEntity.setGameStep(savedStep);
-                questionRepository.save(questionEntity);
-            }
-
-        }
-        for (Question dbItem : currentDbQuestions) {
-            if (!remainingIds.contains(dbItem.getId())) {
-                questionRepository.delete(dbItem);
+                toBeSavedQuestion.setQuestionText(questionDto.getQuestionText());
+                toBeSavedQuestion.setGameStep(savedStep);
+                toBeSavedQuestion.setQuestionOrder(questionOrder++);
+                toBeSavedQuestion.setIsActive(true);
+                questionRepository.save(toBeSavedQuestion);
             }
         }
     }
 
-    public void handleAndSaveTeacherTexts(GameStepRequest stepRequest, GameStep savedStep) {
-        List<TeacherText> currentDbTeacherTexts = teacherTextRepository.findByGameStep(savedStep);
-        Set<Long> remainingIds = new HashSet<>();
+    public void handleSavingNewDiscussionPoints(GameStepRequest stepRequest, GameStep savedStep) {
+        var questionOrder = 1;
 
-        int teacherOrder = 1;
-        if (stepRequest.getTeacherTexts() != null && !stepRequest.getTeacherTexts().isEmpty()) {
-            for (TeacherTextDto teacherText : stepRequest.getTeacherTexts()) {
-                TeacherText teacherEntity;
+        if(stepRequest.getDiscussionPoints() != null) {
+            for (DiscussionDto discussionDto : stepRequest.getDiscussionPoints()) {
+                DiscussionPoint toBeSavedDiscussionPoint = new DiscussionPoint();
 
-                if (teacherText.getId() != null) {
-                    remainingIds.add(teacherText.getId());
-                    teacherEntity = teacherTextRepository.findById(teacherText.getId()).orElseThrow(() -> new RuntimeException("Teacher text not found"));
-                } else {
-                    teacherEntity = new TeacherText();
-                }
-                teacherEntity.setTeacherText(teacherText.getTeacherText());
-                teacherEntity.setIsActive(true);
-                teacherEntity.setTextOrder(teacherOrder++);
-                teacherEntity.setGameStep(savedStep);
-                teacherTextRepository.save(teacherEntity);
+                toBeSavedDiscussionPoint.setDiscussionText(discussionDto.getDiscussionText());
+                toBeSavedDiscussionPoint.setGameStep(savedStep);
+                toBeSavedDiscussionPoint.setIsActive(true);
+                toBeSavedDiscussionPoint.setDiscussionOrder(questionOrder++);
+                discussionPointRepository.save(toBeSavedDiscussionPoint);
             }
-        }
-        for (TeacherText dbItem : currentDbTeacherTexts) {
-            if (!remainingIds.contains(dbItem.getId())) {
-                teacherTextRepository.delete(dbItem);
-            }
-        }
-    }
-
-    public void handleAndSaveDiscussionText(GameStepRequest stepRequest, GameStep savedStep) {
-        List<DiscussionPoint> currentDbDiscussions = discussionPointRepository.findByGameStep(savedStep);
-        Set<Long> remainingIds = new HashSet<>();
-
-        int discussionPointOrder = 1;
-        if (stepRequest.getDiscussionPoints() != null) {
-            for (DiscussionDto discussionPoint : stepRequest.getDiscussionPoints()) {
-                DiscussionPoint discussionEntity;
-
-                if (discussionPoint.getId() != null) {
-                    remainingIds.add(discussionPoint.getId());
-                    discussionEntity = discussionPointRepository.findById(discussionPoint.getId()).orElseThrow(() -> new RuntimeException("Discussion point not found"));
-                } else {
-                    discussionEntity = new DiscussionPoint();
-                }
-                discussionEntity.setDiscussionText(discussionPoint.getDiscussionText());
-                discussionEntity.setIsActive(true);
-                discussionEntity.setDiscussionOrder(discussionPointOrder++);
-                discussionEntity.setGameStep(savedStep);
-                discussionPointRepository.save(discussionEntity);
-            }
-
-            for (DiscussionPoint dbItem : currentDbDiscussions) {
-                if (!remainingIds.contains(dbItem.getId())) {
-                    discussionPointRepository.delete(dbItem);
-                }
-            }
-
-
-        }
-    }
-
-
- */
-
-    //AI
-    public void handleAndSaveDiscussionText(GameStepRequest stepRequest, GameStep savedStep) {
-        List<DiscussionPoint> dbItems = discussionPointRepository.findByGameStep(savedStep);
-        Map<Long, DiscussionPoint> dbMap = dbItems.stream()
-                .collect(Collectors.toMap(DiscussionPoint::getId, item -> item));
-
-        // 1. IDENTIFY ORPHANS & DELETE THEM FIRST
-        // This clears the "slots" in the database so the unique constraint won't trigger
-        if (stepRequest.getDiscussionPoints() != null) {
-            Set<Long> requestIds = stepRequest.getDiscussionPoints().stream()
-                    .map(DiscussionDto::getId)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toSet());
-
-            for (DiscussionPoint dbItem : dbItems) {
-                if (!requestIds.contains(dbItem.getId())) {
-                    discussionPointRepository.delete(dbItem);
-                    dbMap.remove(dbItem.getId());
-                }
-            }
-        }
-        discussionPointRepository.flush(); // Force DB to execute deletions NOW
-        entityManager.clear();
-
-        // 2. NOW Update or Create remaining items
-        int newOrder = 1;
-        for (DiscussionDto dto : stepRequest.getDiscussionPoints()) {
-            if (dto.getId() != null && dbMap.containsKey(dto.getId())) {
-                DiscussionPoint item = dbMap.get(dto.getId());
-                item.setDiscussionText(dto.getDiscussionText());
-                item.setDiscussionOrder(newOrder);
-                item.setIsActive(true);
-                discussionPointRepository.save(item);
-            } else {
-                DiscussionPoint newItem = new DiscussionPoint();
-                newItem.setDiscussionText(dto.getDiscussionText());
-                newItem.setDiscussionOrder(newOrder);
-                newItem.setGameStep(savedStep);
-                newItem.setIsActive(true);
-                discussionPointRepository.save(newItem);
-            }
-            newOrder++;
-        }
-    }
-
-    public void handleAndSaveQuestions(GameStepRequest stepRequest, GameStep savedStep) {
-        List<Question> dbItems = questionRepository.findByGameStep(savedStep);
-
-        // 1. DELETE ORPHANS FIRST
-        if (stepRequest.getQuestions() != null) {
-            Set<Long> requestIds = stepRequest.getQuestions().stream()
-                    .map(QuestionDto::getId)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toSet());
-
-            for (Question dbItem : dbItems) {
-                if (!requestIds.contains(dbItem.getId())) {
-                    questionRepository.delete(dbItem);
-                }
-            }
-            questionRepository.flush(); // Execute deletions immediately
-            entityManager.clear();
-        }
-
-        // 2. RECONCILE (UPDATE/INSERT)
-        int newOrder = 1;
-        for (QuestionDto dto : stepRequest.getQuestions()) {
-            if (dto.getId() != null) {
-                Question item = questionRepository.findById(dto.getId())
-                        .orElseThrow(() -> new RuntimeException("Question not found"));
-                item.setQuestionText(dto.getQuestionText());
-                item.setQuestionOrder(newOrder);
-                item.setIsActive(true);
-                questionRepository.save(item);
-            } else {
-                Question newItem = new Question();
-                newItem.setQuestionText(dto.getQuestionText());
-                newItem.setQuestionOrder(newOrder);
-                newItem.setGameStep(savedStep);
-                newItem.setIsActive(true);
-                questionRepository.save(newItem);
-            }
-            newOrder++;
-        }
-    }
-
-    public void handleAndSaveTeacherTexts(GameStepRequest stepRequest, GameStep savedStep) {
-        List<TeacherText> dbItems = teacherTextRepository.findByGameStep(savedStep);
-
-        // 1. DELETE ORPHANS FIRST
-        if (stepRequest.getTeacherTexts() != null) {
-            Set<Long> requestIds = stepRequest.getTeacherTexts().stream()
-                    .map(TeacherTextDto::getId)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toSet());
-
-            for (TeacherText dbItem : dbItems) {
-                if (!requestIds.contains(dbItem.getId())) {
-                    teacherTextRepository.delete(dbItem);
-                }
-            }
-            teacherTextRepository.flush(); // Execute deletions immediately
-            entityManager.clear();
-        }
-
-        // 2. RECONCILE (UPDATE/INSERT)
-        int newOrder = 1;
-        for (TeacherTextDto dto : stepRequest.getTeacherTexts()) {
-            if (dto.getId() != null) {
-                TeacherText item = teacherTextRepository.findById(dto.getId())
-                        .orElseThrow(() -> new RuntimeException("Teacher text not found"));
-                item.setTeacherText(dto.getTeacherText());
-                item.setTextOrder(newOrder);
-                item.setIsActive(true);
-                teacherTextRepository.save(item);
-            } else {
-                TeacherText newItem = new TeacherText();
-                newItem.setTeacherText(dto.getTeacherText());
-                newItem.setTextOrder(newOrder);
-                newItem.setGameStep(savedStep);
-                newItem.setIsActive(true);
-                teacherTextRepository.save(newItem);
-            }
-            newOrder++;
         }
     }
 
