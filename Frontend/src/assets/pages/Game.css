@@ -113,99 +113,10 @@
     min-height: 0;
 }
 
-
-.image-container {
-    width: 100%;
-    max-width: clamp(300px, 80%, 650px);
-    height: clamp(100px, 50vh, 500px);
-
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background-color: rgb(235, 237, 239);
-    border: clamp(8px, 0.5vw, 16px) solid rgb(213, 198, 237);
-    border-radius: 20px;
-}
-
-@media (min-width: 1800px) {
-    .image-container {
-        max-width: 75%;
-        min-height: 80%;
-    }
-}
-
-.image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-    transform-origin: center center !important;
-    backface-visibility: hidden;
-}
-
-.image-function{
-    display: flex;
-    flex-direction: column;
-    row-gap: clamp(0.5rem, 3vh, 5rem);
-}
-
-
-.image-slider-text{
-    font-size: clamp(0.8rem, 1vw, 1.5rem);
-    margin-bottom: 0.5vh;
-    width: 100%;
-    white-space: nowrap;
-}
-
-@media (min-width: 1800px) {
-    .image-slider-text {
-        margin-bottom: 1.5vh;
-    }
-}
-
 .text-and-slider{
     display: flex;
     flex-direction: column;
     width: 100%;
-}
-
-.image-slider{
-    height: clamp(24px, 2vh, 60px);
-    appearance: none;
-    background: transparent;
-    width: 100%; 
-    max-width: clamp(150px, 45%, 450px);
-    margin-bottom: 1.5vh;
-    
-    row-gap: clamp(0.1rem, 1vh, 5rem)
-}
-
-@media (min-width: 1800px) {
-    .image-slider {
-        margin-bottom: clamp(24px, 2.5vh, 60px);
-    }
-}
-
-.image-slider::-webkit-slider-runnable-track {
-    height: clamp(25px, 6vh, 5vh);
-    /*min-height: clamp(25px, 2vw, 60px);*/
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 30px;
-    border: clamp(3px, 0.25vw, 4px) solid rgba(197, 170, 241, 0.6);
-}
-
-.image-slider::-webkit-slider-thumb {
-    appearance: none;
-    width: clamp(18px, 1.4vw, 62px);
-    height: clamp(18px, 1.4vw, 62px);
-    border-radius: 50%;
-    background: rgba(197, 170, 241, 0.8);
-    margin-top: 0; 
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
 }
 
 .fullscreen-overlay {
@@ -270,6 +181,7 @@
     opacity: calc(25%);
     border: none;
     cursor: pointer;
+    z-index: 3;
 }
 
 .fullscreen-btn img {
