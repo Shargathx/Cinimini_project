@@ -181,7 +181,7 @@
     opacity: calc(25%);
     border: none;
     cursor: pointer;
-    z-index: 3;
+    /*z-index: 3;*/
 }
 
 .fullscreen-btn img {
