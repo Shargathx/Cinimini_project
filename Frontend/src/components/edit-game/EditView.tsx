@@ -115,19 +115,6 @@ function EditView() {
         );
     }
 
-    function updateDiscussionInput(
-        stepIndex: number,
-        value: string
-    ) {
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? { ...step, discussionInput: value }
-                    : step
-            )
-        );
-    }
-
     function addQuestion(stepIndex: number) {
         const questionText =
             steps[stepIndex].questionInput.trim();
@@ -155,6 +142,25 @@ function EditView() {
             )
         );
     }
+
+    function deleteQuestion(
+        stepIndex: number,
+        questionId: number
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        questions: step.questions.filter(
+                            q => q.id !== questionId
+                        )
+                    }
+                    : step
+            )
+        );
+    }
+
     function updateTeacherTextInput(
         stepIndex: number,
         value: string
@@ -216,19 +222,14 @@ function EditView() {
         );
     }
 
-    function deleteQuestion(
+    function updateDiscussionInput(
         stepIndex: number,
-        questionId: number
+        value: string
     ) {
         setSteps(prev =>
             prev.map((step, index) =>
                 index === stepIndex
-                    ? {
-                        ...step,
-                        questions: step.questions.filter(
-                            q => q.id !== questionId
-                        )
-                    }
+                    ? { ...step, discussionInput: value }
                     : step
             )
         );
@@ -281,6 +282,7 @@ function EditView() {
             )
         );
     }
+
 
     const handleSubmit = async () => {
         EditGame(name, category, description, steps)
