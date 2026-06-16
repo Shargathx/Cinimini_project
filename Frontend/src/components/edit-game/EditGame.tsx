@@ -14,7 +14,7 @@ interface TeacherText {
 }
 
 interface Step {
-    stepRequestId?: number; // <-- Defined as stepRequestId
+    id?: number; // <-- Defined as stepRequestId
     questions: Question[];
     discussionPoints: DiscussionPoint[];
     teacherTexts: TeacherText[];
