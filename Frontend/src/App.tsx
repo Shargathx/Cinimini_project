@@ -7,6 +7,7 @@ import Footer from './components/Footer'
 import Home from './assets/pages/Home'
 import AddGame from './assets/pages/AddGame'
 import Game from './assets/pages/Game'
+import EditView from './components/edit-game/EditView'
 
 function App() {
   return (
@@ -27,7 +28,7 @@ function App() {
             <Route path='/categories/:catid' element={<CategoryGame />} />
             <Route path='/categories/:catid/:id' element={<Game />} />
             <Route path='/add-game' element={<AddGame />} />
-            <Route path='/update-game/:id' element={<AddGame/>}/>
+            <Route path='/update-game/:id' element={<EditView/>}/>
           </Routes>
         </main>
 
