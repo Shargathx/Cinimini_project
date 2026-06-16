@@ -432,6 +432,24 @@ function EditView() {
 
                     <h3 id="addQuestionTitle">Lisa küsimus</h3>
 
+                    <input
+                        value={step.questionInput}
+                        onChange={(e) =>
+                            updateQuestionInput(
+                                stepIndex,
+                                e.target.value
+                            )
+                        } id="addQuestion"
+                    />
+
+                    <button
+                        type="button"
+                        id="addQuestionBtn"
+                        onClick={() => addQuestion(stepIndex)}
+                    >
+                        Lisa küsimus
+                    </button>
+
                     <div>Küsimused:</div>
                     {step.questions.map(question => (
                         <div key={question.id}>
@@ -449,6 +467,25 @@ function EditView() {
                     ))}
 
                     <h3 id="addDiscussionTitle">Arutelupunktid</h3>
+
+                    <input
+                        value={step.discussionInput}
+                        onChange={(e) =>
+                            updateDiscussionInput(
+                                stepIndex,
+                                e.target.value
+                            )
+                        } id="addDiscussion"
+                    />
+
+                    <button id="addDiscussionBtn"
+                        type="button"
+                        onClick={() =>
+                            addDiscussionPoint(stepIndex)
+                        }
+                    >
+                        Lisa arutelupunkt
+                    </button>
 
 
                     <div>Arutelu punktid:</div>
@@ -468,6 +505,24 @@ function EditView() {
                     ))}
 
                     <h3 id="addTeacherTextTitle">Õpetaja tekst</h3>
+
+                    <input
+                        type="text"
+                        value={step.teacherTextInput}
+                        onChange={(e) =>
+                            updateTeacherTextInput(
+                                stepIndex,
+                                e.target.value
+                            )
+                        } id="addTeachText"
+                    />
+
+                    <button id="addTeachTextBtn"
+                        type="button"
+                        onClick={() => addTeacherText(stepIndex)}
+                    >
+                        Lisa õpetaja tekst
+                    </button>
 
 
                     <div>Õpetaja tekstid:</div>
