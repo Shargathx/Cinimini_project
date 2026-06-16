@@ -22,9 +22,6 @@ import ImageContrast from '../../components/ImageContrast';
 import ImageExposure from '../../components/ImageExposure';
 import ImageZoom from '../../components/ImageZoom';
 
-import LessThanB from '../icons/LessThanB.svg';
-import GreaterThanB from '../icons/GreaterThanB.svg';
-
 function Game() {
     const { id } = useParams<{ id: string }>();
     const { data, loading } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/category/games/${id}/steps`, [id]);
@@ -127,34 +124,30 @@ function Game() {
     return (
         <div className="game-grid-container">
 
-            <div className="counter-and-media">
-                <span className="media-count">
+            <div className="step-navigation">
+
+                <button
+                    onClick={previousStep}
+                    disabled={currentStep === 0}
+                >
+                    ←
+                </button>
+
+                <span>
                     {currentStep + 1}/{mediaCount}
                 </span>
 
-                <div className="steps-and-media">
-                    <button
-                        className="previous-step"
-                        onClick={previousStep}
-                        disabled={currentStep === 0}
-                        >
-                        <img src={LessThanB} alt="less-than-sign-black" />
-                    </button>
+                <button
+                    onClick={nextStep}
+                    disabled={currentStep >= mediaCount - 1}
+                >
+                    →
+                </button>
 
-                    <div className="game-content">
-                        {renderMediaComponent()}
-                    </div>
-
-                    <button
-                        className="next-step"
-                        onClick={nextStep}
-                        disabled={currentStep >= mediaCount - 1}
-                        >
-                        <img src={GreaterThanB} alt="greater-than-sign-black" />
-                    </button>
-                </div>
             </div>
-            
+            <div className="game-content">
+                {renderMediaComponent()}
+            </div>
             <div className="game-function">
                 {fileFormat.startsWith("image/") && (
                     <div className="image-function">
