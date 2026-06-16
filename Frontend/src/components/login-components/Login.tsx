@@ -23,7 +23,7 @@ function Login() {
         <input onChange={(e) => { createUsername(e.target.value) }} autocomplete="off" id='username' name='username' type='text'></input><br /><br />
         <label>Salasõna:</label><br></br>
         <input onChange={(e) => { createPassword(e.target.value) }} id='password' name='password' type='password'></input><br /><br />
-        <button onClick={() => { handleSubmit() }}>Registreeri Kasutaja</button>
+        <button onClick={() => { handleSubmit() }}>Login</button>
     </>
     )
 }
