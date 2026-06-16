@@ -23,7 +23,7 @@ function EditView() {
 
     function createEmptyStep(): CreateGameStep {
         return {
-            id: 0, // siia tuleb suvaline stepId number testimiseks
+            id: undefined, // siia tuleb suvaline stepId number testimiseks
             images: [],
             questions: [],
             discussionPoints: [],
