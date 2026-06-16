@@ -17,14 +17,20 @@ function Login() {
         console.log(password)
     }
 
-    return (<>
-        <div>Log in here:</div><br />
-        <label>Kasutajanimi:</label><br></br>
-        <input onChange={(e) => { createUsername(e.target.value) }} autocomplete="off" id='username' name='username' type='text'></input><br /><br />
-        <label>Salasõna:</label><br></br>
-        <input onChange={(e) => { createPassword(e.target.value) }} id='password' name='password' type='password'></input><br /><br />
-        <button onClick={() => { handleSubmit() }}>Login</button>
-    </>
+    return (
+        <>
+            <div>Log in here:</div>
+            <br />
+
+            <label>Kasutajanimi:</label><br />
+            <input onChange={(e: React.ChangeEvent<HTMLInputElement>) => createUsername(e.target.value)} autoComplete="off" id="username" name="username" type="text" /><br /><br />
+
+            <label>Salasõna:</label>
+            <br />
+            <input onChange={(e: React.ChangeEvent<HTMLInputElement>) => createPassword(e.target.value)} id="password" name="password" type="password" /><br /><br />
+
+            <button onClick={handleSubmit}>Login</button>
+        </>
     )
 }
 

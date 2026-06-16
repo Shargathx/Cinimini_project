@@ -26,11 +26,11 @@ function Register() {
   return (<>
     <div>Register As User Here</div>
     <label>Sisestage kasutajanimi:</label><br></br>
-    <input onChange={(e) => { createUsername(e.target.value) }} autocomplete="off" id='username' name='username' type='text'></input><br /><br />
+    <input onChange={(e: React.ChangeEvent<HTMLInputElement>) => createUsername(e.target.value)} autoComplete="off" id="username" name="username" type="text" /><br /><br />
     <label>Sisestage Salasõna:</label><br></br>
-    <input onChange={(e) => { createPassword(e.target.value) }} id='password' name='password' type='password'></input><br /><br />
+    <input onChange={(e: React.ChangeEvent<HTMLInputElement>) => createPassword(e.target.value)} id="password" name="password" type="password" /><br /><br />
     <label>Sisestage Salasõna Uuesti:</label><br></br>
-    <input onChange={(e) => { reEnterPassword(e.target.value) }} id='password' name='password' type='password'></input><br /><br />
+    <input onChange={(e: React.ChangeEvent<HTMLInputElement>) => reEnterPassword(e.target.value)} id="password" name="password" type="password" /><br /><br />
     <button onClick={() => { handleSubmit() }}>Registreeri Kasutaja</button>
   </>
   )
