@@ -79,6 +79,12 @@
     z-index: 2;
 }
 
+#gameInfoButtons{
+    border-radius:50px;
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+}
+
 .game-info-buttons button,
 .game-info-buttons .btn { 
     font-size: clamp(0.6rem, 0.7vw, 1rem);
