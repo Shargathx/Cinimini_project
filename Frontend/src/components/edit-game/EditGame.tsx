@@ -1,0 +1,87 @@
+interface Question {
+    id?: number;
+    questionText: string;
+}
+
+interface DiscussionPoint {
+    id?: number;
+    discussionText: string;
+}
+
+interface TeacherText {
+    id?: number;
+    teacherText: string;
+}
+
+interface Step {
+    id?: number; // <-- Defined as stepRequestId
+    questions: Question[];
+    discussionPoints: DiscussionPoint[];
+    teacherTexts: TeacherText[];
+    images?: File[];
+}
+
+async function EditGame(
+    gameId: number,
+    name: string,
+    category: string,
+    description: string,
+    steps: Step[]
+): Promise<void> {
+    const formData = new FormData();
+
+    const gameRequest = {
+        name,
+        categoryId: Number(category),
+        description,
+        steps: (steps || []).map(step => ({
+            stepRequestId: step.id, // <-- Fixed: Use stepRequestId instead of step.id
+
+            questions: (step.questions || []).map(q => ({
+                id: q.id, // Preserves Question ID
+                questionText: q.questionText,
+            })),
+
+            discussionPoints: (step.discussionPoints || []).map(dp => ({
+                id: dp.id, // Preserves DiscussionPoint ID
+                discussionText: dp.discussionText,
+            })),
+
+            teacherTexts: (step.teacherTexts || []).map(tt => ({
+                id: tt.id, // Preserves TeacherText ID
+                teacherText: tt.teacherText,
+            })),
+        })),
+    };
+
+console.log("PAYLOAD BEING SENT:", JSON.stringify(gameRequest, null, 2));
+
+    formData.append(
+        "updateGameRequest",
+        new Blob([JSON.stringify(gameRequest)], {
+            type: "application/json",
+        })
+    );
+
+    steps.forEach((step, index) => {
+        step.images?.forEach(file => {
+            formData.append(`steps[${index}].image`, file);
+        });
+    });
+
+    const response = await fetch(
+        `${import.meta.env.VITE_BACK_URL}/games/edit-game/${gameId}`,
+        {
+            method: "PATCH",
+            body: formData,
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Failed to update game");
+    }
+
+    alert("Game updated!");
+}
+
+export default EditGame;
