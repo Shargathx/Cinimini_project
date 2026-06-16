@@ -128,7 +128,7 @@ function Game() {
         <div className="game-grid-container">
 
             <div className="counter-and-media">
-                <span>
+                <span className="media-count">
                     {currentStep + 1}/{mediaCount}
                 </span>
 
