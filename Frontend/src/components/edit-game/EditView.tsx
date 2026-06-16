@@ -280,6 +280,69 @@ function EditView() {
         );
     }
 
+    function updateQuestionText(
+        stepIndex: number,
+        questionId: number,
+        value: string
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        questions: step.questions.map(q =>
+                            q.id === questionId
+                                ? { ...q, questionText: value }
+                                : q
+                        )
+                    }
+                    : step
+            )
+        );
+    }
+
+    function updateDiscussionText(
+        stepIndex: number,
+        pointId: number,
+        value: string
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        discussionPoints: step.discussionPoints.map(p =>
+                            p.id === pointId
+                                ? { ...p, discussionText: value }
+                                : p
+                        )
+                    }
+                    : step
+            )
+        );
+    }
+
+    function updateTeacherText(
+        stepIndex: number,
+        textId: number,
+        value: string
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        teacherTexts: step.teacherTexts.map(t =>
+                            t.id === textId
+                                ? { ...t, teacherText: value }
+                                : t
+                        )
+                    }
+                    : step
+            )
+        );
+    }
+
 
     const handleSubmit = async () => {
         EditGame(currId, name, category, description, steps)
@@ -327,12 +390,12 @@ function EditView() {
                 <div key={step.id} id="singleStep">
                     <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
 
-                    {<button
+                    {/* {<button
                         type="button"
                         onClick={() => deleteStep(stepIndex)}
                     >
                         Kustuta samm
-                    </button>}
+                    </button>} */}
 
                     <input
                         type="file"
@@ -369,124 +432,58 @@ function EditView() {
 
                     <h3 id="addQuestionTitle">Lisa küsimus</h3>
 
-                    <input
-                        value={step.questionInput}
-                        onChange={(e) =>
-                            updateQuestionInput(
-                                stepIndex,
-                                e.target.value
-                            )
-                        } id="addQuestion"
-                    />
-
-                    <button
-                        type="button"
-                        id="addQuestionBtn"
-                        onClick={() => addQuestion(stepIndex)}
-                    >
-                        Lisa küsimus
-                    </button>
-
                     <div>Küsimused:</div>
                     {step.questions.map(question => (
                         <div key={question.id}>
-                            {question.questionText}
-
-                            <button
-                                type="button"
-                                id="eraseBtn"
-                                onClick={() =>
-                                    deleteQuestion(
+                            <input
+                                value={question.questionText}
+                                onChange={(e) =>
+                                    updateQuestionText(
                                         stepIndex,
-                                        question.id
+                                        question.id,
+                                        e.target.value
                                     )
                                 }
-                            >
-                                Kustuta
-                            </button>
+                            />
                         </div>
                     ))}
 
-                    <h3 id="addDiscussionTitle">Lisa arutelupunkt</h3>
+                    <h3 id="addDiscussionTitle">Arutelupunktid</h3>
 
-                    <input
-                        value={step.discussionInput}
-                        onChange={(e) =>
-                            updateDiscussionInput(
-                                stepIndex,
-                                e.target.value
-                            )
-                        } id="addDiscussion"
-                    />
-
-                    <button id="addDiscussionBtn"
-                        type="button"
-                        onClick={() =>
-                            addDiscussionPoint(stepIndex)
-                        }
-                    >
-                        Lisa arutelupunkt
-                    </button>
 
                     <div>Arutelu punktid:</div>
                     {step.discussionPoints.map(point => (
                         <div key={point.id}>
-                            {point.discussionText}
-
-                            <button
-                                type="button"
-                                id="eraseBtn"
-                                onClick={() =>
-                                    deletePoint(
+                            <input
+                                value={point.discussionText}
+                                onChange={(e) =>
+                                    updateDiscussionText(
                                         stepIndex,
-                                        point.id
+                                        point.id,
+                                        e.target.value
                                     )
                                 }
-                            >
-                                Kustuta
-                            </button>
+                            />
                         </div>
-
                     ))}
 
                     <h3 id="addTeacherTextTitle">Õpetaja tekst</h3>
 
-                    <input
-                        type="text"
-                        value={step.teacherTextInput}
-                        onChange={(e) =>
-                            updateTeacherTextInput(
-                                stepIndex,
-                                e.target.value
-                            )
-                        } id="addTeachText"
-                    />
-
-                    <button id="addTeachTextBtn"
-                        type="button"
-                        onClick={() => addTeacherText(stepIndex)}
-                    >
-                        Lisa õpetaja tekst
-                    </button>
 
                     <div>Õpetaja tekstid:</div>
 
                     {step.teacherTexts.map(text => (
                         <div key={text.id}>
-                            {text.teacherText}
-
-                            <button
-                                type="button"
-                                id="eraseBtn"
-                                onClick={() =>
-                                    deleteTeacherText(
+                            <input
+                                value={text.teacherText}
+                                onChange={(e) =>
+                                    updateTeacherText(
                                         stepIndex,
-                                        text.id
+                                        text.id,
+                                        e.target.value
                                     )
                                 }
-                            >
-                                Kustuta
-                            </button>
+                            />
                         </div>
                     ))}
                 </div>
