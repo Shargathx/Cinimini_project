@@ -15,7 +15,7 @@ INSERT INTO public.category (id, name, description, is_active)
 VALUES (default, 'Pilt', 'See mäng on pildi baasil', true);
 INSERT INTO public.category (id, name, description, is_active)
 VALUES (default, 'Anomaalia', 'Mitteaktiivne kategooria, testimiseks', false);
-
+/*
 INSERT INTO public.game (id, name, category_id, description, is_active)
 VALUES (default, 'Mida näed pildilt?', 1,
         'Mida see pilt sind tundma paneb? Kas sinu emotsiooni mõjutab fakt, et pilt on värvitu/värviline?', true);
@@ -70,3 +70,5 @@ INSERT INTO public.question(id, game_step_id, question_text, is_active, question
 VALUES (default, 1, 'Miks pilt eksisteerib?', false, 3);
 INSERT INTO public.question(id, game_step_id, question_text, is_active, question_order)
 VALUES (default, 2, 'Mis on pildil?', true, 1);
+
+*/

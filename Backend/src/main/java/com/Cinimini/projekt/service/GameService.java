@@ -211,6 +211,16 @@ public class GameService {
                 syncTeacherTexts(existingStep, stepRequest.getTeacherTexts());
                 syncQuestions(existingStep, stepRequest.getQuestions());
                 syncDiscussions(existingStep, stepRequest.getDiscussionPoints());
+            } else {
+                GameStep newStep = new GameStep();
+                newStep.setGame(existingGame);
+                if (existingGame.getGameSteps() == null) {
+                    existingGame.setGameSteps(new ArrayList<>());
+                }
+                existingGame.getGameSteps().add(newStep);
+                syncQuestions(newStep, stepRequest.getQuestions());
+                syncDiscussions(newStep, stepRequest.getDiscussionPoints());
+                syncTeacherTexts(newStep, stepRequest.getTeacherTexts());
             }
         }
         gameRepository.save(existingGame);
