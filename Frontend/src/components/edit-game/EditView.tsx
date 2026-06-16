@@ -24,12 +24,14 @@ function EditView() {
     const [teacherTextCounter, setTeacherTextCounter] = useState(0);
 
     const game = data;
+    const currId = localStorage.getItem("id")
+    
 
     const [steps, setSteps] = useState<CreateGameStep[]>([createEmptyStep()])
 
     function createEmptyStep(): CreateGameStep {
         return {
-            id: Math.random().toString(36).substring(2, 9), // siia tuleb suvaline stepId number testimiseks
+            id: "", // siia tuleb suvaline stepId number testimiseks
             images: [],
             questions: [],
             discussionPoints: [],
@@ -39,6 +41,7 @@ function EditView() {
             teacherTextInput: ""
         };
     }
+    
 
     //Form data
     useEffect(() => {
@@ -50,45 +53,39 @@ function EditView() {
 
 
     useEffect(() => {
-        function fillEditableDate() {
-            if (!game) return;
+        if (!game) return;
 
-            setName(game.name);
-            setDescription(game.description);
-            setCategory(String(localStorage.getItem("catid")));
+        setName(game.name);
+        setDescription(game.description);
+        setCategory(String(localStorage.getItem("catid") ?? ""));
 
-            setSteps(
-                game.gameSteps.map(step => ({
-                    // Add the ID here. If game steps have an ID from your backend, 
-                    // use it (e.g., step.id). Otherwise, generate a new one.
-                    id: step.id || Math.random().toString(36).substring(2, 9),
+        setSteps(
+            game.gameSteps.map(step => ({
+                id: step.stepId,
 
-                    images: [],
+                images: [],
 
-                    questions: step.questions.map(q => ({
-                        id: q.id,
-                        questionText: q.questionText
-                    })),
+                questions: step.questions.map(q => ({
+                    id: q.id,
+                    questionText: q.questionText,
+                })),
 
-                    discussionPoints: step.discussionPoints.map(dp => ({
-                        id: dp.id,
-                        discussionText: dp.discussionText
-                    })),
+                discussionPoints: step.discussionPoints.map(dp => ({
+                    id: dp.id,
+                    discussionText: dp.discussionText,
+                })),
 
-                    teacherTexts: step.teacherTexts.map(tt => ({
-                        id: tt.id,
-                        teacherText: tt.teacherText
-                    })),
+                teacherTexts: step.teacherTexts.map(tt => ({
+                    id: tt.id,
+                    teacherText: tt.teacherText,
+                })),
 
-                    questionInput: "",
-                    discussionInput: "",
-                    teacherTextInput: ""
-                }))
-            );
-        }
-        fillEditableDate()
-
-    }, [game])
+                questionInput: "",
+                discussionInput: "",
+                teacherTextInput: "",
+            }))
+        );
+    }, [game]);
 
 
     function addStep() {
@@ -285,7 +282,7 @@ function EditView() {
 
 
     const handleSubmit = async () => {
-        EditGame(name, category, description, steps)
+        EditGame(currId, name, category, description, steps)
     }
 
     return (<>

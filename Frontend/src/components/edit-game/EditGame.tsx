@@ -1,56 +1,76 @@
 interface Question {
+    id?: number;
     questionText: string;
 }
 
 interface DiscussionPoint {
+    id?: number;
     discussionText: string;
 }
 
 interface TeacherText {
+    id?: number;
     teacherText: string;
 }
 
 interface Step {
+    stepRequestId?: number;
     questions: Question[];
     discussionPoints: DiscussionPoint[];
     teacherTexts: TeacherText[];
     images?: File[];
 }
 
-async function EditGame(name: string,category: string,description: string,steps: Step[]): Promise<void> {
+async function EditGame(
+    gameId: number,
+    name: string,
+    category: string,
+    description: string,
+    steps: Step[]
+): Promise<void> {
     const formData = new FormData();
 
-    const gameData = {
+    const gameRequest = {
         name,
-        categoryId: category,
+        categoryId: Number(category),
         description,
-        steps: steps.map((step) => ({
-            questions: step.questions.map((q) => ({
+        steps: (steps || []).map(step => ({
+            stepRequestId: step.id, // <-- use step.id here
+
+            questions: (step.questions || []).map(q => ({
+                id: q.id,
                 questionText: q.questionText,
             })),
-            discussionPoints: step.discussionPoints.map((dp) => ({
+
+            discussionPoints: (step.discussionPoints || []).map(dp => ({
+                id: dp.id,
                 discussionText: dp.discussionText,
             })),
-            teacherTexts: step.teacherTexts.map((tt) => ({
+
+            teacherTexts: (step.teacherTexts || []).map(tt => ({
+                id: tt.id,
                 teacherText: tt.teacherText,
             })),
         })),
     };
 
-    formData.append("gameRequest", JSON.stringify(gameData));
+    console.log(gameRequest);
 
-    steps.forEach((step, stepIndex) => {
-        step.images?.forEach((file: File) => {
-            formData.append(`steps[${stepIndex}].image`, file);
+    formData.append(
+        "gameRequest",
+        new Blob([JSON.stringify(gameRequest)], {
+            type: "application/json",
+        })
+    );
+
+    steps.forEach((step, index) => {
+        step.images?.forEach(file => {
+            formData.append(`steps[${index}].image`, file);
         });
     });
 
-    for (const [key, value] of formData.entries()) {
-        console.log(key, value);
-    }
-
     const response = await fetch(
-        `${import.meta.env.VITE_BACK_URL}/games/add-game`,
+        `${import.meta.env.VITE_BACK_URL}/games/edit-game/${gameId}`,
         {
             method: "PATCH",
             body: formData,
@@ -58,10 +78,12 @@ async function EditGame(name: string,category: string,description: string,steps:
     );
 
     if (!response.ok) {
-        throw new Error("Failed to save game");
+        throw new Error("Failed to update game");
     }
 
-    alert("Game saved!");
+    alert("Game updated!");
+
+
 }
 
-export default EditGame;
+export default EditGame
