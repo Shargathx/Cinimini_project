@@ -67,6 +67,7 @@
 
 .step-and-media{
     position: relative;
+    display: inline-flex;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -79,20 +80,26 @@
     transform: translateY(-50%);
     z-index: 10;
 
-    background: rgba(0,0,0,0.3);
-    color: white;
+    width: clamp(40px, 5vh, 80px);
+    height: clamp(40px, 5vh, 80px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
     border: none;
-    padding: 10px;
     cursor: pointer;
-    border-radius: 50%;
+
+    font-size: clamp(20px, 3vh, 40px);
 }
 
 .previous-step {
-    left: 10px;
+    left: 0;
 }
 
 .next-step {
-    right: 10px;
+    right: 0;
 }
 
 .game-info-buttons{

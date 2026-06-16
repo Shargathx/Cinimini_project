@@ -126,7 +126,7 @@ function Game() {
                     onClick={previousStep}
                     disabled={currentStep === 0}
                 >
-                    ←
+                    ⟨
                 </button>
 
                 <span>
@@ -142,7 +142,7 @@ function Game() {
                     onClick={nextStep}
                     disabled={currentStep >= mediaCount - 1}
                 >
-                    →
+                    ⟩
                 </button>
 
             </div>
