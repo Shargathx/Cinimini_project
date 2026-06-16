@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { CreateGameStep } from "../../models/CreateGameStep";
+import type { CreateGameStep } from "../../assets/models/CreateGameStep";
 
 export function useGameSteps() {
     const [questionCounter, setQuestionCounter] = useState(0);

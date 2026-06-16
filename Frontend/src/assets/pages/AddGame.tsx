@@ -200,7 +200,6 @@ function AddGame() {
             }
           />
 
-
           <DiscussionPointManager
             value={step.discussionInput}
             points={step.discussionPoints}
@@ -224,7 +223,6 @@ function AddGame() {
               deleteTeacherText(stepIndex, id)
             }
           />
-
         </div>
       ))}
     </div>
