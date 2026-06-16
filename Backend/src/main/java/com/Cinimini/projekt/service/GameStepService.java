@@ -115,7 +115,6 @@ public class GameStepService {
     // ära kustuta/muuda stepId-d, lihtsalt re-order 1, 2, 3 -> 1, 3, (4)
     public void handleSavingNewTeacherTexts(GameStepRequest stepRequest, GameStep savedStep) {
         var questionOrder = 1;
-        var emptyText="empty";
 
         if (stepRequest.getTeacherTexts() != null) {
             for (TeacherTextDto teacherTextDto : stepRequest.getTeacherTexts()) {
