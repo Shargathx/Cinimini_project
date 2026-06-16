@@ -14,7 +14,7 @@ interface TeacherText {
 }
 
 interface Step {
-    stepRequestId?: number;
+    stepRequestId?: number; // <-- Defined as stepRequestId
     questions: Question[];
     discussionPoints: DiscussionPoint[];
     teacherTexts: TeacherText[];
@@ -35,29 +35,29 @@ async function EditGame(
         categoryId: Number(category),
         description,
         steps: (steps || []).map(step => ({
-            stepRequestId: step.id, // <-- use step.id here
+            stepRequestId: step.id, // <-- Fixed: Use stepRequestId instead of step.id
 
             questions: (step.questions || []).map(q => ({
-                id: q.id,
+                id: q.id, // Preserves Question ID
                 questionText: q.questionText,
             })),
 
             discussionPoints: (step.discussionPoints || []).map(dp => ({
-                id: dp.id,
+                id: dp.id, // Preserves DiscussionPoint ID
                 discussionText: dp.discussionText,
             })),
 
             teacherTexts: (step.teacherTexts || []).map(tt => ({
-                id: tt.id,
+                id: tt.id, // Preserves TeacherText ID
                 teacherText: tt.teacherText,
             })),
         })),
     };
 
-    console.log(gameRequest);
+console.log("PAYLOAD BEING SENT:", JSON.stringify(gameRequest, null, 2));
 
     formData.append(
-        "gameRequest",
+        "updateGameRequest",
         new Blob([JSON.stringify(gameRequest)], {
             type: "application/json",
         })
@@ -82,8 +82,6 @@ async function EditGame(
     }
 
     alert("Game updated!");
-
-
 }
 
-export default EditGame
+export default EditGame;

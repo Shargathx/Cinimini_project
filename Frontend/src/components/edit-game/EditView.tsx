@@ -25,7 +25,7 @@ function EditView() {
 
     const game = data;
     const currId = localStorage.getItem("id")
-    
+
 
     const [steps, setSteps] = useState<CreateGameStep[]>([createEmptyStep()])
 
@@ -41,7 +41,7 @@ function EditView() {
             teacherTextInput: ""
         };
     }
-    
+
 
     //Form data
     useEffect(() => {
