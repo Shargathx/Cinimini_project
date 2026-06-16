@@ -7,6 +7,11 @@ import type { Game } from '../models/Game';
 import type { Question } from '../models/Question';
 import type { Discussion } from '../models/Discussion';
 import type { TeacherText } from '../models/TeacherText';
+
+import discussionImg from "../icons/discussion.svg";
+import questionImg from "../icons/question.svg";
+import teacherImg from "../icons/teacherTextImg.svg";
+
 /*
 import ImageGame from '../../components/game-media/ImageGame';
 */
@@ -174,17 +179,20 @@ function Game() {
             <h3 className="game-description">Kirjeldus: {data?.description}</h3>
 
             <div className="game-info-buttons">
-                <button onClick={getQuestions}>Questions</button>
+                <button onClick={getQuestions} id="gameInfoButtons">
+                    <img  src={questionImg} alt="Küsimused" /></button>
                 {questions.map((question) => (
                     <div key={question.id}>{question.questionText}</div>
                 ))}
 
-                <button onClick={getPoints}>Discussion points</button>
+                <button onClick={getPoints} id="gameInfoButtons">
+                    <img  src={discussionImg} alt="Arutelupunktid" /></button>
                 {points.map((point) => (
                     <div key={point.id}>{point.discussionText}</div>
                 ))}
 
-                <button onClick={getTeacherText}>Info õpetajale</button>
+                <button onClick={getTeacherText} id="gameInfoButtons">
+                    <img  src={teacherImg} alt="Info Õpetajale" /></button>
                 {teacherTexts.map((teacherText) => (
                     <div key={teacherText.id}>{teacherText.teacherText}</div>
                 ))}
