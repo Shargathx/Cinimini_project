@@ -1,6 +1,6 @@
 .image-container {
-    width: 100%;
-    max-width: clamp(300px, 80%, 650px);
+    width: clamp(300px, 80vw, 1400px);
+    max-width: 100%;
     height: clamp(300px, 50vh, 500px);
 
     overflow: hidden;
@@ -11,12 +11,12 @@
     background-color: rgb(235, 237, 239);
     border: clamp(8px, 0.5vw, 16px) solid rgb(213, 198, 237);
     border-radius: 20px;
-
+    margin: 0;
 }
 
 @media (min-width: 1800px) {
     .image-container {
-        max-width: 75%;
+        max-width: 80%;
         min-height: 80%;
     }
 }
