@@ -1,9 +1,9 @@
-* {
+* {  
     box-sizing: border-box;
 }
 
 #addGameTitle {
-    font-size: 40px;
+    font-size: clamp(2rem, 2.5vw, 2.5rem);
     text-align: center;
     
 }
@@ -11,61 +11,61 @@
 #generalContainer {
   display: flex;
   flex-direction: column;
-  width: 500px;
-  margin:  auto;
+  width: clamp(31.25rem, 31.25vw, 31.25rem);
+  margin: auto;
   align-items: center;
 }
 
 #gameNameLabel, #gameCatLabel{
-    font-size: 20px;
+    font-size: clamp(1rem, 1.25vw, 1.25rem);
 
     
 }
 
 #gameDescriptionLabel{
-    font-size: 20px;
+    font-size: clamp(1rem, 1.25vw, 1.25rem);
     
 }
 
 #gameName, #gameCat {
    
-    margin-bottom: 20px;
-    padding: 5px;
-    font-size: 16px;
-    border: 3px solid rgba(157, 157, 156, 0.7);
-    border-radius: 5px;
+    margin-bottom: clamp(1.25rem, 1.25vw, 1.25rem);
+    padding: clamp(0.3125rem, 0.3125vw, 0.3125rem);
+    font-size: clamp(1rem, 1vw, 1rem);
+    border: clamp(0.1875rem, 0.1875vw, 0.1875rem) solid rgba(157, 157, 156, 0.7);
+    border-radius: clamp(0.3125rem, 0.3125vw, 0.3125rem);
     background-color: rgba(255, 248, 248, 0.90)
 }
 
 #gameName:focus, #gameCat:focus {
    
-    margin-bottom: 20px;
-    padding: 5px;
-    font-size: 16px;
-    border: 3px solid rgba(157, 157, 156, 1);
-    border-radius: 5px;
+    margin-bottom: clamp(1.25rem, 1.25vw, 1.25rem);
+    padding: clamp(0.3125rem, 0.3125vw, 0.3125rem);
+    font-size: clamp(1rem, 1vw, 1rem);
+    border: clamp(0.1875rem, 0.1875vw, 0.1875rem) solid rgba(157, 157, 156, 1);
+    border-radius: clamp(0.3125rem, 0.3125vw, 0.3125rem);
     background-color: rgba(255, 248, 248, 0.90);
     outline:none;
 }
 
- #gameDescriptionBox {
+#gameDescriptionBox {
   
-    margin-bottom: 0px;
-    padding: 5px;
-    font-size: 16px;
-    border: 3px solid rgba(157, 157, 156, 0.7);
-    border-radius: 5px;
+    margin-bottom: clamp(0rem, 0vw, 0rem);
+    padding: clamp(0.3125rem, 0.3125vw, 0.3125rem);
+    font-size: clamp(1rem, 1vw, 1rem);
+    border: clamp(0.1875rem, 0.1875vw, 0.1875rem) solid rgba(157, 157, 156, 0.7);
+    border-radius: clamp(0.3125rem, 0.3125vw, 0.3125rem);
     background-color: rgba(255, 248, 248, 0.90);
     
 }
 
- #gameDescriptionBox:focus {
+#gameDescriptionBox:focus {
   
-    margin-bottom: 0px;
-    padding: 5px;
-    font-size: 16px;
-    border: 3px solid  rgba(157, 157, 156, 1);
-    border-radius: 5px;
+    margin-bottom: clamp(0rem, 0vw, 0rem);
+    padding: clamp(0.3125rem, 0.3125vw, 0.3125rem);
+    font-size: clamp(1rem, 1vw, 1rem);
+    border: clamp(0.1875rem, 0.1875vw, 0.1875rem) solid rgba(157, 157, 156, 1);
+    border-radius: clamp(0.3125rem, 0.3125vw, 0.3125rem);
     background-color: rgba(255, 248, 248, 0.90);
     outline:none;
     
@@ -75,35 +75,35 @@
   display: flex;
   justify-content: center; 
   flex-wrap: wrap;
-  gap: 40px;               
-  margin-top: 50px;
+  gap: clamp(2.5rem, 2.5vw, 2.5rem);               
+  margin-top: clamp(3.125rem, 3.125vw, 3.125rem);
 }
 
 #singleStep{
-border: 3px solid  rgba(157, 157, 156, 0.725);
-border-radius: 5px;
+border: clamp(0.1875rem, 0.1875vw, 0.1875rem) solid rgba(157, 157, 156, 0.725);
+border-radius: clamp(0.3125rem, 0.3125vw, 0.3125rem);
 padding: 2vw;
 }
 
 #uploadImageTitle, #addQuestionTitle, #addDiscussionTitle, #addTeacherTextTitle {
-    font-size: 18px;
-    margin-left: 20px;
+    font-size: clamp(1.125rem, 1.125vw, 1.125rem);
+    margin-left: clamp(1.25rem, 1.25vw, 1.25rem);
 }
 
 input[type="file"] {
-    font-size: 16px;
+    font-size: clamp(1rem, 1vw, 1rem);
     font-family: 'Segoe UI';
     font-weight: 400;
 }
 
 input[type="file"]::file-selector-button {
     
-    margin: 10px 20px;
-    padding: 5px 10px;
-    border: 3px solid rgb(145, 242, 190, 1);
-    border-radius: 30px;
+    margin: clamp(0.625rem, 0.625vw, 0.625rem) clamp(1.25rem, 1.25vw, 1.25rem);
+    padding: clamp(0.3125rem, 0.3125vw, 0.3125rem) clamp(0.625rem, 0.625vw, 0.625rem);
+    border: clamp(0.1875rem, 0.1875vw, 0.1875rem) solid rgb(145, 242, 190, 1);
+    border-radius: clamp(1.875rem, 1.875vw, 1.875rem);
     font-family: 'Segoe UI';
-    font-size: 16px;
+    font-size: clamp(1rem, 1vw, 1rem);
     font-weight: 400;
 
     background: #c2f2d7;
@@ -122,88 +122,97 @@ input[type="file"]::file-selector-button:active {
 }
 
 #addQuestion, #addDiscussion, #addTeachText {
-    margin-left: 20px;
-    margin-bottom: 10px;
-    padding: 5px;
-    font-size: 16px;
-    border: 3px solid rgb(145, 242, 190, 1);
-    border-radius: 5px;
+    margin-left: clamp(1.25rem, 1.25vw, 1.25rem);
+    margin-bottom: clamp(0.625rem, 0.625vw, 0.625rem);
+    padding: clamp(0.3125rem, 0.3125vw, 0.3125rem);
+    font-size: clamp(1rem, 1vw, 1rem);
+    border: clamp(0.1875rem, 0.1875vw, 0.1875rem) solid rgb(145, 242, 190, 1);
+    border-radius: clamp(0.3125rem, 0.3125vw, 0.3125rem);
     background-color: rgba(255, 248, 248, 0.90);
     
 }
 #addQuestion:focus, #addDiscussion:focus, #addTeachText:focus {
-    border: 3px solid rgb(134, 220, 174);
+    border: clamp(0.1875rem, 0.1875vw, 0.1875rem) solid rgb(134, 220, 174);
     outline:none;
     
 }
 
 #eraseBtn{
-    margin-left: 20px;
-    padding: 5px 10px;
-    font-size: 14px;
+    margin-left: clamp(1.25rem, 1.25vw, 1.25rem);
+    padding: clamp(0.3125rem, 0.3125vw, 0.3125rem) clamp(0.625rem, 0.625vw, 0.625rem);
+    font-size: clamp(0.875rem, 0.875vw, 0.875rem);
     background-color: rgba(200, 220, 209, 0.5);
     color: black;
-    border: 3px solid rgba(157, 157, 156, 0.5);;
-    border-radius: 30px;
+    border: clamp(0.1875rem, 0.1875vw, 0.1875rem) solid rgba(157, 157, 156, 0.5);
+    border-radius: clamp(1.875rem, 1.875vw, 1.875rem);
     cursor: pointer;
 }
 
 #eraseBtn:hover{
-    margin-left: 20px;
-    padding: 5px 10px;
+    margin-left: clamp(1.25rem, 1.25vw, 1.25rem);
+    padding: clamp(0.3125rem, 0.3125vw, 0.3125rem) clamp(0.625rem, 0.625vw, 0.625rem);
     transform: scale(1.05);
     background-color: rgba(200, 220, 209, 0.7);
     color: black;
-    border: 3px solid rgba(157, 157, 156, 0.7);;
-    border-radius: 30px;
+    border: clamp(0.1875rem, 0.1875vw, 0.1875rem) solid rgba(157, 157, 156, 0.7);
+    border-radius: clamp(1.875rem, 1.875vw, 1.875rem);
     cursor: pointer;
 }
 
-#addQuestionBtn, #addDiscussionBtn, #addTeachTextBtn{
-    margin-left: 20px;
-    padding: 5px 10px;
+#addQuestionBtn, #addDiscussionBtn, #addTeachTextBtn, #eraseStepBtn{
+    margin-left: clamp(1.25rem, 1.25vw, 1.25rem);
+    padding: clamp(0.3125rem, 0.3125vw, 0.3125rem) clamp(0.625rem, 0.625vw, 0.625rem);
     background-color: #c2f2d7;
     color: black;
-    border: 3px solid rgb(145, 242, 190, 1);
-    border-radius: 30px;
+    border: clamp(0.1875rem, 0.1875vw, 0.1875rem) solid rgb(145, 242, 190, 1);
+    border-radius: clamp(1.875rem, 1.875vw, 1.875rem);
     cursor: pointer;
 }
 
-#addQuestionBtn:hover, #addDiscussionBtn:hover, #addTeachTextBtn:hover{
-    margin-left: 20px;
-    padding: 5px 10px;
+#addQuestionBtn:hover, #addDiscussionBtn:hover, #addTeachTextBtn:hover, #eraseStepBtn:hover{
+    margin-left: clamp(1.25rem, 1.25vw, 1.25rem);
+    padding: clamp(0.3125rem, 0.3125vw, 0.3125rem) clamp(0.625rem, 0.625vw, 0.625rem);
     transform: scale(1.05);
-    background-color: rgb(145, 242, 190, 1);;
-    border: 3px solid rgb(145, 242, 190, 1);
-    border-radius: 30px;
+    background-color: rgb(145, 242, 190, 1);
+    border: clamp(0.1875rem, 0.1875vw, 0.1875rem) solid rgb(145, 242, 190, 1);
+    border-radius: clamp(1.875rem, 1.875vw, 1.875rem);
     cursor: pointer;
 }
 
 #questionsList, #discussionPointsList, #teacherTextList {
-    margin-left: 20px;
-    margin-bottom: 20px;
+    margin-left: clamp(1.25rem, 1.25vw, 1.25rem);
+    margin-bottom: clamp(1.25rem, 1.25vw, 1.25rem);
+}
+
+#singleStep > div:not(:has(button)) {
+    margin-left: 1.5rem;
+}
+
+#singleStep > div:has(button)::before {
+    content: "*";
+    margin-right: 0.5rem;
 }
 
 #deleteQuestionBtn, #deleteDiscussionBtn {
-    margin-left: 10px;
-    padding: 5px 10px;
-    font-size: 14px;
+    margin-left: clamp(0.625rem, 0.625vw, 0.625rem);
+    padding: clamp(0.3125rem, 0.3125vw, 0.3125rem) clamp(0.625rem, 0.625vw, 0.625rem);
+    font-size: clamp(0.875rem, 0.875vw, 0.875rem);
     background-color: #c4c4c4af;
     color: black;
     border: none;
-    border-radius: 5px;
+    border-radius: clamp(0.3125rem, 0.3125vw, 0.3125rem);
     cursor: pointer;
 }
 
 #saveGameBtn, #stepBtn {
     display: block;
-    margin: 10px auto 20px auto;
-    padding: 10px 20px;
-    font-size: 18px;
+    margin: clamp(0.625rem, 0.625vw, 0.625rem) auto clamp(1.25rem, 1.25vw, 1.25rem) auto;
+    padding: clamp(0.625rem, 0.625vw, 0.625rem) clamp(1.25rem, 1.25vw, 1.25rem);
+    font-size: clamp(1.125rem, 1.125vw, 1.125rem);
     background-color: rgb(128, 240, 180);
     
     border: none;
-    border-radius: 30px;
+    border-radius: clamp(1.875rem, 1.875vw, 1.875rem);
     cursor: pointer;
 }
 
