@@ -201,8 +201,10 @@ public class GameService {
                 .collect(Collectors.toMap(GameStep::getId, step -> step));
 
         for (GameStepRequest stepRequest : updateRequest.getSteps()) {
-            if (!validateMediaForCategory(updateRequest.getCategoryId(), stepRequest.getMedia())) {
-                throw new RuntimeException("Invalid media content");
+            if (stepRequest.getMedia() != null && !stepRequest.getMedia().isEmpty()) {
+                if (!validateMediaForCategory(updateRequest.getCategoryId(), stepRequest.getMedia())) {
+                    throw new RuntimeException("Invalid media content");
+                }
             }
             GameStep existingStep = existingStepsMap.get(stepRequest.getStepRequestId());
             if (existingStep != null) {
