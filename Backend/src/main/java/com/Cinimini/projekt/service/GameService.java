@@ -3,9 +3,7 @@ package com.Cinimini.projekt.service;
 import com.Cinimini.projekt.dto.GameStepDto;
 import com.Cinimini.projekt.dto.*;
 import com.Cinimini.projekt.entity.*;
-import com.Cinimini.projekt.repository.CategoryRepository;
-import com.Cinimini.projekt.repository.GameRepository;
-import com.Cinimini.projekt.repository.GameStepRepository;
+import com.Cinimini.projekt.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,9 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -28,6 +24,9 @@ public class GameService {
     private final GameRepository gameRepository;
     private final CategoryRepository categoryRepository;
     private final GameStepService gameStepService;
+    private final TeacherTextRepository teacherTextRepository;
+    private final QuestionRepository questionRepository;
+    private final DiscussionPointRepository discussionPointRepository;
 
     public List<Game> getAllActiveGames() {
         return gameRepository.findAllByActiveTrue();
@@ -217,48 +216,110 @@ public class GameService {
         gameRepository.save(existingGame);
     }
 
-    private void syncDiscussions(GameStep existingStep, List<DiscussionDto> discussionDtos) {
-        Map<Long, DiscussionPoint> existingDiscussions = existingStep.getDiscussionPoints().stream()
+    private void syncDiscussions(GameStep existingStep, List<DiscussionDto> dtos) {
+        Set<Long> incomingIds = dtos.stream()
+                .map(DiscussionDto::getId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        existingStep.getDiscussionPoints().removeIf(existing -> {
+            if (!incomingIds.contains(existing.getId())) {
+                discussionPointRepository.delete(existing);
+                return true;
+            }
+            return false;
+        });
+
+        int maxOrder = existingStep.getDiscussionPoints().stream()
+                .mapToInt(DiscussionPoint::getDiscussionOrder)
+                .max().orElse(0);
+
+        Map<Long, DiscussionPoint> existingMap = existingStep.getDiscussionPoints().stream()
                 .collect(Collectors.toMap(DiscussionPoint::getId, t -> t));
-        for (DiscussionDto discussionDto : discussionDtos) {
-            DiscussionPoint existingDiscussion = existingDiscussions.get(discussionDto.getId());
-            if (existingDiscussion != null) {
-                existingDiscussion.setDiscussionText(discussionDto.getDiscussionText());
+
+        for (DiscussionDto dto : dtos) {
+            if (dto.getId() != null && existingMap.containsKey(dto.getId())) {
+                existingMap.get(dto.getId()).setDiscussionText(dto.getDiscussionText());
             } else {
-                existingDiscussion = new DiscussionPoint();
-                existingDiscussion.setDiscussionText(discussionDto.getDiscussionText());
-                existingStep.getDiscussionPoints().add(existingDiscussion);
+                DiscussionPoint newDiscussion = new DiscussionPoint();
+                newDiscussion.setDiscussionText(dto.getDiscussionText());
+                newDiscussion.setGameStep(existingStep);
+                newDiscussion.setIsActive(true);
+                newDiscussion.setDiscussionOrder(++maxOrder);
+                existingStep.getDiscussionPoints().add(newDiscussion);
             }
         }
     }
 
-    private void syncQuestions(GameStep existingStep, List<QuestionDto> questionDtos) {
-        Map<Long, Question> existingQuestions = existingStep.getQuestions().stream()
-                .collect(Collectors.toMap(Question::getId, t -> t));
-        for (QuestionDto questionDto : questionDtos) {
-            Question existingQuestion = existingQuestions.get(questionDto.getId());
-            if (existingQuestion != null) {
-                existingQuestion.setQuestionText(questionDto.getQuestionText());
+    private void syncQuestions(GameStep existingStep, List<QuestionDto> dtos) {
+        Set<Long> incomingIds = dtos.stream()
+                .map(QuestionDto::getId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        existingStep.getQuestions().removeIf(existing -> {
+            if (!incomingIds.contains(existing.getId())) {
+                questionRepository.delete(existing);
+                return true;
+            }
+            return false;
+        });
+
+        int maxOrder = existingStep.getQuestions().stream()
+                .mapToInt(Question::getQuestionOrder)
+                .max().orElse(0);
+
+        Map<Long, Question> existingMap = existingStep.getQuestions().stream()
+                .collect(Collectors.toMap(Question::getId, q -> q));
+
+        for (QuestionDto dto : dtos) {
+            if (dto.getId() != null && existingMap.containsKey(dto.getId())) {
+                existingMap.get(dto.getId()).setQuestionText(dto.getQuestionText());
             } else {
-                Question newQuestion = new Question();
-                newQuestion.setQuestionText(questionDto.getQuestionText());
-                existingStep.getQuestions().add(newQuestion);
+                Question newQ = new Question();
+                newQ.setQuestionText(dto.getQuestionText());
+                newQ.setGameStep(existingStep);
+                newQ.setIsActive(true);
+                newQ.setQuestionOrder(++maxOrder);
+                existingStep.getQuestions().add(newQ);
             }
         }
     }
 
     private void syncTeacherTexts(GameStep existingStep, List<TeacherTextDto> dtos) {
-        Map<Long, TeacherText> existingTexts = existingStep.getTeacherText().stream()
+        Set<Long> incomingIds = dtos.stream()
+                .map(TeacherTextDto::getId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        existingStep.getTeacherText().removeIf(existing -> {
+            if (!incomingIds.contains(existing.getId())) {
+                teacherTextRepository.delete(existing);
+                return true;
+            }
+            return false;
+        });
+
+        int maxOrder = existingStep.getTeacherText().stream()
+                .mapToInt(TeacherText::getTextOrder)
+                .max()
+                .orElse(0);
+
+        Map<Long, TeacherText> existingMap = existingStep.getTeacherText().stream()
                 .collect(Collectors.toMap(TeacherText::getId, t -> t));
 
-        for (TeacherTextDto teacherTextdto : dtos) {
-            TeacherText existing = existingTexts.get(teacherTextdto.getId());
-            if (existing != null) {
-                existing.setTeacherText(teacherTextdto.getTeacherText());
+        for (TeacherTextDto dto : dtos) {
+            if (dto.getId() != null && existingMap.containsKey(dto.getId())) {
+                // Update
+                TeacherText existing = existingMap.get(dto.getId());
+                existing.setTeacherText(dto.getTeacherText());
             } else {
                 TeacherText newText = new TeacherText();
-                newText.setTeacherText(teacherTextdto.getTeacherText());
+                newText.setTeacherText(dto.getTeacherText());
                 newText.setGameStep(existingStep);
+                newText.setIsActive(true);
+                newText.setTextOrder(++maxOrder);
+
                 existingStep.getTeacherText().add(newText);
             }
         }

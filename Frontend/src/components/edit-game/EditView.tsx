@@ -12,6 +12,7 @@ function EditView() {
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const [category, setCategory] = useState("");
+
     const { data } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/games/${localStorage.getItem("catid")}/${localStorage.getItem("id")}`, []);
     //Game questions
     // const [newQuestion, setNewQuestion] = useState("")
@@ -24,14 +25,13 @@ function EditView() {
     const [teacherTextCounter, setTeacherTextCounter] = useState(0);
 
     const game = data;
-    const currId = localStorage.getItem("id")
-
+    const currId = localStorage.getItem("id") ?? "";
 
     const [steps, setSteps] = useState<CreateGameStep[]>([createEmptyStep()])
 
     function createEmptyStep(): CreateGameStep {
         return {
-            id: "", // siia tuleb suvaline stepId number testimiseks
+            id: undefined, // siia tuleb suvaline stepId number testimiseks
             images: [],
             questions: [],
             discussionPoints: [],
@@ -90,194 +90,6 @@ function EditView() {
 
     function addStep() {
         setSteps(prev => [...prev, createEmptyStep()]);
-    }
-
-
-    function deleteStep(stepIndex: number) {
-        setSteps(prev =>
-            prev.filter((_, index) => index !== stepIndex)
-        );
-    }
-
-    function updateQuestionInput(
-        stepIndex: number,
-        value: string
-    ) {
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? { ...step, questionInput: value }
-                    : step
-            )
-        );
-    }
-
-    function addQuestion(stepIndex: number) {
-        const questionText =
-            steps[stepIndex].questionInput.trim();
-
-        if (!questionText) return;
-
-        const newId = questionCounter + 1;
-        setQuestionCounter(newId);
-
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? {
-                        ...step,
-                        questionInput: "",
-                        questions: [
-                            ...step.questions,
-                            {
-                                id: newId,
-                                questionText
-                            }
-                        ]
-                    }
-                    : step
-            )
-        );
-    }
-
-    function deleteQuestion(
-        stepIndex: number,
-        questionId: number
-    ) {
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? {
-                        ...step,
-                        questions: step.questions.filter(
-                            q => q.id !== questionId
-                        )
-                    }
-                    : step
-            )
-        );
-    }
-
-    function updateTeacherTextInput(
-        stepIndex: number,
-        value: string
-    ) {
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? {
-                        ...step,
-                        teacherTextInput: value
-                    }
-                    : step
-            )
-        );
-    }
-
-    function addTeacherText(stepIndex: number) {
-        const text =
-            steps[stepIndex].teacherTextInput.trim();
-
-        if (!text) return;
-
-        const newId = teacherTextCounter + 1;
-        setTeacherTextCounter(newId);
-
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? {
-                        ...step,
-                        teacherTextInput: "",
-
-                        teacherTexts: [
-                            ...step.teacherTexts,
-                            {
-                                id: newId,
-                                teacherText: text
-                            }
-                        ]
-                    }
-                    : step
-            )
-        );
-    }
-
-    function deleteTeacherText(
-        stepIndex: number,
-        teacherTextId: number
-    ) {
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex ? {
-                    ...step, teacherTexts: step.teacherTexts.filter(
-                        t => t.id !== teacherTextId
-                    )
-                }
-                    : step
-            )
-        );
-    }
-
-    function updateDiscussionInput(
-        stepIndex: number,
-        value: string
-    ) {
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? { ...step, discussionInput: value }
-                    : step
-            )
-        );
-    }
-
-    function addDiscussionPoint(
-        stepIndex: number
-    ) {
-        const discussionText =
-            steps[stepIndex].discussionInput.trim();
-
-        if (!discussionText) return;
-
-        const newId = discussionPointsCounter + 1;
-        setDiscussionPointsCounter(newId);
-
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? {
-                        ...step,
-                        discussionInput: "",
-                        discussionPoints: [
-                            ...step.discussionPoints,
-                            {
-                                id: newId,
-                                discussionText
-                            }
-                        ]
-                    }
-                    : step
-            )
-        );
-    }
-
-    function deletePoint(
-        stepIndex: number,
-        pointId: number
-    ) {
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? {
-                        ...step,
-                        discussionPoints: step.discussionPoints.filter(
-                            p => p.id !== pointId
-                        )
-                    }
-                    : step
-            )
-        );
     }
 
     function updateQuestionText(
@@ -342,7 +154,191 @@ function EditView() {
             )
         );
     }
+    function deleteStep(stepIndex: number) {
+        setSteps(prev =>
+            prev.filter((_, index) => index !== stepIndex)
+        );
+    }
 
+    function updateQuestionInput(
+        stepIndex: number,
+        value: string
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? { ...step, questionInput: value }
+                    : step
+            )
+        );
+    }
+
+    function updateDiscussionInput(
+        stepIndex: number,
+        value: string
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? { ...step, discussionInput: value }
+                    : step
+            )
+        );
+    }
+
+    function addQuestion(stepIndex: number) {
+        const questionText =
+            steps[stepIndex].questionInput.trim();
+
+        if (!questionText) return;
+
+        const newId = questionCounter + 1;
+        setQuestionCounter(newId);
+
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        questionInput: "",
+                        questions: [
+                            ...step.questions,
+                            {
+                                id: newId,
+                                questionText
+                            }
+                        ]
+                    }
+                    : step
+            )
+        );
+    }
+    function updateTeacherTextInput(
+        stepIndex: number,
+        value: string
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        teacherTextInput: value
+                    }
+                    : step
+            )
+        );
+    }
+
+    function addTeacherText(stepIndex: number) {
+        const text =
+            steps[stepIndex].teacherTextInput.trim();
+
+        if (!text) return;
+
+        const newId = teacherTextCounter + 1;
+        setTeacherTextCounter(newId);
+
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        teacherTextInput: "",
+
+                        teacherTexts: [
+                            ...step.teacherTexts,
+                            {
+                                id: newId,
+                                teacherText: text
+                            }
+                        ]
+                    }
+                    : step
+            )
+        );
+    }
+
+    function deleteTeacherText(
+        stepIndex: number,
+        teacherTextId: number
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex ? {
+                    ...step, teacherTexts: step.teacherTexts.filter(
+                        t => t.id !== teacherTextId
+                    )
+                }
+                    : step
+            )
+        );
+    }
+
+    function deleteQuestion(
+        stepIndex: number,
+        questionId: number
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        questions: step.questions.filter(
+                            q => q.id !== questionId
+                        )
+                    }
+                    : step
+            )
+        );
+    }
+
+    function addDiscussionPoint(
+        stepIndex: number
+    ) {
+        const discussionText =
+            steps[stepIndex].discussionInput.trim();
+
+        if (!discussionText) return;
+
+        const newId = discussionPointsCounter + 1;
+        setDiscussionPointsCounter(newId);
+
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        discussionInput: "",
+                        discussionPoints: [
+                            ...step.discussionPoints,
+                            {
+                                id: newId,
+                                discussionText
+                            }
+                        ]
+                    }
+                    : step
+            )
+        );
+    }
+
+    function deletePoint(
+        stepIndex: number,
+        pointId: number
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        discussionPoints: step.discussionPoints.filter(
+                            p => p.id !== pointId
+                        )
+                    }
+                    : step
+            )
+        );
+    }
 
     const handleSubmit = async () => {
         EditGame(currId, name, category, description, steps)
@@ -432,6 +428,24 @@ function EditView() {
 
                     <h3 id="addQuestionTitle">Lisa küsimus</h3>
 
+                    <input
+                        value={step.questionInput}
+                        onChange={(e) =>
+                            updateQuestionInput(
+                                stepIndex,
+                                e.target.value
+                            )
+                        } id="addQuestion"
+                    />
+
+                    <button
+                        type="button"
+                        id="addQuestionBtn"
+                        onClick={() => addQuestion(stepIndex)}
+                    >
+                        Lisa küsimus
+                    </button>
+
                     <div>Küsimused:</div>
                     {step.questions.map(question => (
                         <div key={question.id}>
@@ -445,10 +459,41 @@ function EditView() {
                                     )
                                 }
                             />
+                            <button
+                                type="button"
+                                id="eraseBtn"
+                                onClick={() =>
+                                    deleteQuestion(
+                                        stepIndex,
+                                        question.id
+                                    )
+                                }
+                            >
+                                Kustuta
+                            </button>
                         </div>
                     ))}
 
                     <h3 id="addDiscussionTitle">Arutelupunktid</h3>
+
+                    <input
+                        value={step.discussionInput}
+                        onChange={(e) =>
+                            updateDiscussionInput(
+                                stepIndex,
+                                e.target.value
+                            )
+                        } id="addDiscussion"
+                    />
+
+                    <button id="addDiscussionBtn"
+                        type="button"
+                        onClick={() =>
+                            addDiscussionPoint(stepIndex)
+                        }
+                    >
+                        Lisa arutelupunkt
+                    </button>
 
 
                     <div>Arutelu punktid:</div>
@@ -464,10 +509,40 @@ function EditView() {
                                     )
                                 }
                             />
+                            <button
+                                type="button"
+                                id="eraseBtn"
+                                onClick={() =>
+                                    deletePoint(
+                                        stepIndex,
+                                        point.id
+                                    )
+                                }
+                            >
+                                Kustuta
+                            </button>
                         </div>
                     ))}
 
                     <h3 id="addTeacherTextTitle">Õpetaja tekst</h3>
+
+                    <input
+                        type="text"
+                        value={step.teacherTextInput}
+                        onChange={(e) =>
+                            updateTeacherTextInput(
+                                stepIndex,
+                                e.target.value
+                            )
+                        } id="addTeachText"
+                    />
+
+                    <button id="addTeachTextBtn"
+                        type="button"
+                        onClick={() => addTeacherText(stepIndex)}
+                    >
+                        Lisa õpetaja tekst
+                    </button>
 
 
                     <div>Õpetaja tekstid:</div>
@@ -484,6 +559,18 @@ function EditView() {
                                     )
                                 }
                             />
+                            <button
+                                type="button"
+                                id="eraseBtn"
+                                onClick={() =>
+                                    deleteTeacherText(
+                                        stepIndex,
+                                        text.id
+                                    )
+                                }
+                            >
+                                Kustuta
+                            </button>
                         </div>
                     ))}
                 </div>

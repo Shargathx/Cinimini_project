@@ -14,7 +14,7 @@ interface TeacherText {
 }
 
 interface Step {
-    id?: number; // <-- Defined as stepRequestId
+    id?: number;
     questions: Question[];
     discussionPoints: DiscussionPoint[];
     teacherTexts: TeacherText[];
@@ -22,7 +22,7 @@ interface Step {
 }
 
 async function EditGame(
-    gameId: number,
+    gameId: string,
     name: string,
     category: string,
     description: string,
@@ -35,7 +35,7 @@ async function EditGame(
         categoryId: Number(category),
         description,
         steps: (steps || []).map(step => ({
-            stepRequestId: step.id, // <-- Fixed: Use stepRequestId instead of step.id
+            stepRequestId: step.id ?? undefined,
 
             questions: (step.questions || []).map(q => ({
                 id: q.id, // Preserves Question ID
