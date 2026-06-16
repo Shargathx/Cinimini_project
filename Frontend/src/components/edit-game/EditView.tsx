@@ -15,23 +15,15 @@ function EditView() {
     const { data } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/games/${localStorage.getItem("catid")}/${localStorage.getItem("id")}`, []);
     //Game questions
     // const [newQuestion, setNewQuestion] = useState("")
-    const [questionCounter, setQuestionCounter] = useState(0)
-    //Discussion points
-    // const [newPoint, setNewpoint] = useState("")
-    const [discussionPointsCounter, setDiscussionPointsCounter] = useState(0)
-    //Teacher text
-    // const [teacherText, setTeacherText] = useState("")
-    const [teacherTextCounter, setTeacherTextCounter] = useState(0);
 
     const game = data;
-    const currId = localStorage.getItem("id")
-
+    const currId = localStorage.getItem("id") ?? "";
 
     const [steps, setSteps] = useState<CreateGameStep[]>([createEmptyStep()])
 
     function createEmptyStep(): CreateGameStep {
         return {
-            id: "", // siia tuleb suvaline stepId number testimiseks
+            id: undefined, // siia tuleb suvaline stepId number testimiseks
             images: [],
             questions: [],
             discussionPoints: [],
@@ -90,194 +82,6 @@ function EditView() {
 
     function addStep() {
         setSteps(prev => [...prev, createEmptyStep()]);
-    }
-
-
-    function deleteStep(stepIndex: number) {
-        setSteps(prev =>
-            prev.filter((_, index) => index !== stepIndex)
-        );
-    }
-
-    function updateQuestionInput(
-        stepIndex: number,
-        value: string
-    ) {
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? { ...step, questionInput: value }
-                    : step
-            )
-        );
-    }
-
-    function addQuestion(stepIndex: number) {
-        const questionText =
-            steps[stepIndex].questionInput.trim();
-
-        if (!questionText) return;
-
-        const newId = questionCounter + 1;
-        setQuestionCounter(newId);
-
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? {
-                        ...step,
-                        questionInput: "",
-                        questions: [
-                            ...step.questions,
-                            {
-                                id: newId,
-                                questionText
-                            }
-                        ]
-                    }
-                    : step
-            )
-        );
-    }
-
-    function deleteQuestion(
-        stepIndex: number,
-        questionId: number
-    ) {
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? {
-                        ...step,
-                        questions: step.questions.filter(
-                            q => q.id !== questionId
-                        )
-                    }
-                    : step
-            )
-        );
-    }
-
-    function updateTeacherTextInput(
-        stepIndex: number,
-        value: string
-    ) {
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? {
-                        ...step,
-                        teacherTextInput: value
-                    }
-                    : step
-            )
-        );
-    }
-
-    function addTeacherText(stepIndex: number) {
-        const text =
-            steps[stepIndex].teacherTextInput.trim();
-
-        if (!text) return;
-
-        const newId = teacherTextCounter + 1;
-        setTeacherTextCounter(newId);
-
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? {
-                        ...step,
-                        teacherTextInput: "",
-
-                        teacherTexts: [
-                            ...step.teacherTexts,
-                            {
-                                id: newId,
-                                teacherText: text
-                            }
-                        ]
-                    }
-                    : step
-            )
-        );
-    }
-
-    function deleteTeacherText(
-        stepIndex: number,
-        teacherTextId: number
-    ) {
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex ? {
-                    ...step, teacherTexts: step.teacherTexts.filter(
-                        t => t.id !== teacherTextId
-                    )
-                }
-                    : step
-            )
-        );
-    }
-
-    function updateDiscussionInput(
-        stepIndex: number,
-        value: string
-    ) {
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? { ...step, discussionInput: value }
-                    : step
-            )
-        );
-    }
-
-    function addDiscussionPoint(
-        stepIndex: number
-    ) {
-        const discussionText =
-            steps[stepIndex].discussionInput.trim();
-
-        if (!discussionText) return;
-
-        const newId = discussionPointsCounter + 1;
-        setDiscussionPointsCounter(newId);
-
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? {
-                        ...step,
-                        discussionInput: "",
-                        discussionPoints: [
-                            ...step.discussionPoints,
-                            {
-                                id: newId,
-                                discussionText
-                            }
-                        ]
-                    }
-                    : step
-            )
-        );
-    }
-
-    function deletePoint(
-        stepIndex: number,
-        pointId: number
-    ) {
-        setSteps(prev =>
-            prev.map((step, index) =>
-                index === stepIndex
-                    ? {
-                        ...step,
-                        discussionPoints: step.discussionPoints.filter(
-                            p => p.id !== pointId
-                        )
-                    }
-                    : step
-            )
-        );
     }
 
     function updateQuestionText(

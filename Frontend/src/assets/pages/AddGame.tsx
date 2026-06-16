@@ -30,7 +30,7 @@ function AddGame() {
 
   function createEmptyStep(): CreateGameStep {
     return {
-      id: Math.random().toString(36).substring(2, 9), // siia tuleb suvaline stepId number testimiseks
+      id: undefined,
       images: [],
       questions: [],
       discussionPoints: [],

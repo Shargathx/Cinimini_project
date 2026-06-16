@@ -21,15 +21,14 @@ function CategoryGame() {
     function deleteGame(gameId: number) {
         fetch(import.meta.env.VITE_BACK_URL + `/games/${gameId}`, {
             method: "DELETE"
-        }).then(()=>{window.location.reload()})
+        }).then(() => { window.location.reload() })
     }
 
     return (
         <div className="games-container">
-            {gamesList.map(game => (
-                <>
+            {gamesList.map((game) => (
+                <div className="game-item" key={game.id}>
                     <Link
-                        key={game.id}
                         to={`/categories/${catid}/${game.id}`}
                         className={
                             "game-card" +
@@ -45,12 +44,28 @@ function CategoryGame() {
                         </div>
                     </Link>
 
-                    <button onClick={() => { deleteGame(Number(game.id)) }}>Delete game</button>
-                    <Link to={`/update-game/${game.id}`}><button onClick={()=>{ localStorage.setItem("mode", "edit");
-                                                                                localStorage.setItem("id", String(game.id)),
-                                                                                localStorage.setItem("catid", String(catid))}}>Edit</button></Link>
-                </>
+                    <div className="gameButtons">
+                        <button
+                            className="deleteBtn"
+                            onClick={() => deleteGame(Number(game.id))}
+                        >
+                            DELETE
+                        </button>
 
+                        <Link to={`/update-game/${game.id}`}>
+                            <button
+                                className="editBtn"
+                                onClick={() => {
+                                    localStorage.setItem("mode", "edit");
+                                    localStorage.setItem("id", game.id);
+                                    localStorage.setItem("catid", catid);
+                                }}
+                            >
+                                EDIT
+                            </button>
+                        </Link>
+                    </div>
+                </div>
             ))}
         </div>
     );
