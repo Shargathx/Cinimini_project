@@ -1,6 +1,6 @@
 .image-container {
-    width: 100%;
-    max-width: clamp(300px, 38vw, 650px); 
+    width: clamp(300px, 60vw, 1100px);
+    height: clamp(250px, 45vh, 450px);
     height: clamp(250px, 45vh, 450px);
 
     overflow: hidden;

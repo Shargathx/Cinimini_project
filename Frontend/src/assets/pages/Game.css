@@ -74,46 +74,45 @@
 }
 
 .steps-and-media{
-    display: flex;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
+    display: inline-flex;
     align-items: center;
+    gap: clamp(8px, 1vw, 20px);
+
     justify-content: center;
-    gap: clamp(15px, 2.5vw, 35px);
-    width: 100%;
-    min-width: 0;
+
+
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto; 
 }
 
 .previous-step,
 .next-step {
-    position: static !important; 
-    transform: none !important;
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-
-    /* Sizing */
-    width: clamp(40px, 5vh, 80px);
-    height: clamp(40px, 5vh, 80px);
-
-    /* Content alignment */
     display: flex;
     align-items: center;
     justify-content: center;
 
+    width: clamp(30px, 4vw, 70px);
+    height: clamp(30px, 4vw, 70px);
+
+    aspect-ratio: 1;
     background: transparent;
     border: none;
     cursor: pointer;
-
-    font-size: clamp(24px, 3.5vh, 45px);
-    flex-shrink: 0; /* Ensures the buttons never warp or shrink */
 }
 
-.previous-step:disabled,
-.next-step:disabled {
-    opacity: 0.25;
-    cursor: not-allowed;
+.previous-step img,
+.next-step img {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
 }
+
+.previous-step img:hover,
+.next-step img:hover {
+    transform: scale(1.15);
+}
+
 
 .game-info-buttons{
     grid-column: 1 / 2;
