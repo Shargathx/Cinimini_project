@@ -9,20 +9,14 @@
 }
 
 .game-content {
-    grid-column: 1 / 2;
-    grid-row: 3 / 4;
-    width: 100%;
     min-height: 0;
-    height: auto;
-    overflow: hidden;
     min-width: 0;
-    overflow: hidden;
-    padding: clamp(0.5rem, 2vw, 2rem);
-    padding-bottom: 2vh;
-    box-sizing: border-box;
+    flex-shrink: 1;            /* Allows the image container to scale down smoothly if screen gets tight */
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    padding: 0;
 }
 
 .game-function{
@@ -65,24 +59,44 @@
     grid-row: 3 / 4;
 }
 
-.step-and-media{
-    position: relative;
-    display: inline-flex;
+.counter-and-media{
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
     display: flex;
-    justify-content: center;
+    flex-direction: column; 
     align-items: center;
+    justify-content: center;
+    gap: 10px; 
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    width: 100%;
+}
+
+.steps-and-media{
+    display: flex;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(15px, 2.5vw, 35px);
+    width: 100%;
+    min-width: 0;
 }
 
 .previous-step,
 .next-step {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
+    position: static !important; 
+    transform: none !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
 
+    /* Sizing */
     width: clamp(40px, 5vh, 80px);
     height: clamp(40px, 5vh, 80px);
 
+    /* Content alignment */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -91,15 +105,14 @@
     border: none;
     cursor: pointer;
 
-    font-size: clamp(20px, 3vh, 40px);
+    font-size: clamp(24px, 3.5vh, 45px);
+    flex-shrink: 0; /* Ensures the buttons never warp or shrink */
 }
 
-.previous-step {
-    left: 0;
-}
-
-.next-step {
-    right: 0;
+.previous-step:disabled,
+.next-step:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
 }
 
 .game-info-buttons{
@@ -118,6 +131,7 @@
 
 #gameInfoButtons{
     border-radius:50px;
+    scale: 0.5;
     background-color: rgba(0, 0, 0, 0);
     border-color: rgba(0, 0, 0, 0);
 }

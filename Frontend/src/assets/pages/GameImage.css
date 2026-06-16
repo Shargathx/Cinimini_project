@@ -1,7 +1,7 @@
 .image-container {
     width: 100%;
-    max-width: clamp(300px, 80%, 650px);
-    height: clamp(200px, 50vh, 500px);
+    max-width: clamp(300px, 38vw, 650px); 
+    height: clamp(250px, 45vh, 450px);
 
     overflow: hidden;
     display: flex;
@@ -11,7 +11,6 @@
     background-color: rgb(235, 237, 239);
     border: clamp(8px, 0.5vw, 16px) solid rgb(213, 198, 237);
     border-radius: 20px;
-
 }
 
 @media (min-width: 1800px) {
@@ -19,13 +18,15 @@
         max-width: 75%;
         height: 50vh;
         max-height: 90%;
-        min-height: 80%;
+        min-height: 10%;
     }
 }
 
 .image-container img {
-    width: 100%;
-    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
     object-fit: contain;
     display: block;
     transform-origin: center center !important;

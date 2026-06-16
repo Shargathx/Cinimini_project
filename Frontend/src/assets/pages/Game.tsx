@@ -125,31 +125,31 @@ function Game() {
         <div className="game-grid-container">
 
             <div className="step-and-media">
-
-                <button
-                    className="previous-step"
-                    onClick={previousStep}
-                    disabled={currentStep === 0}
-                >
-                    ⟨
-                </button>
-
                 <span>
                     {currentStep + 1}/{mediaCount}
                 </span>
 
-                <div className="game-content">
-                    {renderMediaComponent()}
+                <div className="steps-and-image">
+                    <button
+                        className="previous-step"
+                        onClick={previousStep}
+                        disabled={currentStep === 0}
+                        >
+                            ⟨
+                    </button>
+
+                    <div className="game-content">
+                        {renderMediaComponent()}
+                    </div>
+
+                    <button
+                        className="next-step"
+                        onClick={nextStep}
+                        disabled={currentStep >= mediaCount - 1}
+                        >
+                            ⟩
+                    </button>
                 </div>
-
-                <button
-                    className="next-step"
-                    onClick={nextStep}
-                    disabled={currentStep >= mediaCount - 1}
-                >
-                    ⟩
-                </button>
-
             </div>
             
             <div className="game-function">
