@@ -243,59 +243,57 @@ function AddGame() {
   }
 
   const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
 
-    if (localStorage.getItem("mode") == "add") {
-      try {
-        const formData = new FormData();
+      // 1. Convert your state to the exact structure the backend expects
+      const gameData = {
+        name,
+        categoryId: Number(category),
+        description,
 
-        // 1. Convert your state to the exact structure the backend expects
-        const gameData = {
-          name,
-          categoryId: Number(category),
-          description,
+        steps: steps.map((step) => ({
+          questions: step.questions.map(q => ({
+            questionText: q.questionText
+          })),
 
-          steps: steps.map((step) => ({
-            questions: step.questions.map(q => ({
-              questionText: q.questionText
-            })),
+          discussionPoints: step.discussionPoints.map(dp => ({
+            discussionText: dp.discussionText
+          })),
 
-            discussionPoints: step.discussionPoints.map(dp => ({
-              discussionText: dp.discussionText
-            })),
-
-            teacherTexts: step.teacherTexts.map(tt => ({
-              teacherText: tt.teacherText
-            }))
+          teacherTexts: step.teacherTexts.map(tt => ({
+            teacherText: tt.teacherText
           }))
-        };
+        }))
+      };
 
-        // 2. Append the JSON string
-        formData.append("gameRequest", JSON.stringify(gameData));
+      // 2. Append the JSON string
+      formData.append("gameRequest", JSON.stringify(gameData));
 
-        // 3. Append the files using the expected index keys
-        steps.forEach((step, stepIndex) => {
-          step.images?.forEach((file) => {
-            formData.append(
-              `steps[${stepIndex}].image`,
-              file
-            );
-          });
+      // 3. Append the files using the expected index keys
+      steps.forEach((step, stepIndex) => {
+        step.images?.forEach((file) => {
+          formData.append(
+            `steps[${stepIndex}].image`,
+            file
+          );
         });
-        for (const [key, value] of formData.entries()) {
-          console.log(key, value);
-        }
-
-        // 4. Send
-        const response = await fetch(`${import.meta.env.VITE_BACK_URL}/games/add-game`, {
-          method: "POST",
-          body: formData
-        });
-
-        if (!response.ok) throw new Error("Failed to save game");
-        alert("Game saved!");
-      } catch (err) {
-        console.error(err);
+      });
+      for (const [key, value] of formData.entries()) {
+        console.log(key, value);
       }
+
+      // 4. Send
+      const response = await fetch(`${import.meta.env.VITE_BACK_URL}/games/add-game`, {
+        method: "POST",
+        body: formData
+      });
+
+      if (!response.ok) throw new Error("Failed to save game");
+      alert("Game saved!");
+    } catch (err) {
+      console.error(err);
+
     };
   }
 
