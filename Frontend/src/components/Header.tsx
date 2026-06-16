@@ -1,5 +1,5 @@
 import './Header.css';
-import  '../index.css';
+import '../index.css';
 import ReactMarkdown from "react-markdown";
 import CloseBtn from "../assets/icons/closePopup.svg";
 import { useState } from 'react';
@@ -15,7 +15,7 @@ function Header() {
         path === "/categories" ||
         path === "/add-game" ||
         path.startsWith("/categories/");
-    const showCategories = 
+    const showCategories =
         path === "/add-game" ||
         path.startsWith("/categories/");
     const showPageInfo = ["/"].includes(path);
@@ -26,11 +26,11 @@ function Header() {
     const [showPopup, setShowPopup] = useState(false);
     const [popupType, setPopupType] = useState("");
 
-    const openPopup = async (file: string, type:string) => {
+    const openPopup = async (file: string, type: string) => {
         console.log("open popup clicked:", file);
         const response = await fetch(file);
         const data = await response.text();
-        
+
         setText(data);
         setPopupType(type);
         setShowPopup(true);
@@ -39,6 +39,13 @@ function Header() {
     return (
         <header className="header">
             <nav className="nav">
+                <a href="/register" className="home-page-link">
+                    Register
+                </a>
+
+                <a href="/login" className="home-page-link">
+                    Login
+                </a>
 
                 {showHomePage && (
                     <a href="/" className="home-page-link">
@@ -47,7 +54,7 @@ function Header() {
                 )}
 
                 {showAddGame && (
-                    <a onClick={()=>{localStorage.setItem("mode", "add")}} href="/add-game" className="home-page-link">
+                    <a onClick={() => { localStorage.setItem("mode", "add") }} href="/add-game" className="home-page-link">
                         LISA MÄNG
                     </a>
                 )}
@@ -74,36 +81,37 @@ function Header() {
                     <button className="categories-info-button" onClick={() => openPopup('/texts/categories-info.txt', 'categories-info')}>
                         TUTVU KATEGOORIATEGA
                     </button>
-                )} 
-                </nav>
+                )}
+            </nav>
 
-                 {showPopup && (
-                    <div className='popup-overlay'
-                        onClick={(e) => {
-                            if (e.target === e.currentTarget) {
+            {showPopup && (
+                <div className='popup-overlay'
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) {
+                            setShowPopup(false);
+                        }
+                    }}>
+
+                    <div className={`popup-container popup-${popupType}`}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button
+                            className="popup-close-button"
+                            onClick={() => {
                                 setShowPopup(false);
-                            }
-                        }}>
-                    
-                        <div className={`popup-container popup-${popupType}`}
-                            onClick={(e)=> e.stopPropagation()} 
-                            >
-                            <button 
-                                className="popup-close-button" 
-                                onClick={() => { setShowPopup(false);
                             }}
                         >
-                            <img  src={CloseBtn} alt="Close" />
-                            </button>
-                                <div className="popup-text-container">
-                                <ReactMarkdown>{text}</ReactMarkdown>
+                            <img src={CloseBtn} alt="Close" />
+                        </button>
+                        <div className="popup-text-container">
+                            <ReactMarkdown>{text}</ReactMarkdown>
                         </div>
                     </div>
                 </div>
-                )}
-           
+            )}
+
         </header>
-        
+
     );
 
 }

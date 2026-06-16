@@ -45,25 +45,28 @@ public class GameController {
     public GameDto getActiveGameSteps(@PathVariable Long gameId) {
         return gameService.getActiveGameSteps(gameId);
     }
-/*
-    // COMMENT THIS IN IF NEEDED, THE BELOW METHOD WORKS WITH POSTMAN, THIS ONE DOESNT
-    @PostMapping(value = "/games/add-game", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void addGame(
-            @RequestPart("game") CreateGameRequest gameRequest
-    )
-            throws IOException {
-        gameService.addNewGame(gameRequest);
-    }
- */
-/*
-    @PostMapping(value = "/games/add-game", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> addGame(
-            @ModelAttribute CreateGameRequest gameRequest) throws IOException {
-        gameService.addNewGame(gameRequest);
-        return ResponseEntity.ok("Game added successfully");
-    }
 
- */
+    @PatchMapping(value = "/games/edit-game/{gameId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateGame(
+            @PathVariable Long gameId,
+            @RequestPart("updateGameRequest") String updateGameRequestJson,
+            MultipartRequest multipartRequest) throws IOException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        CreateGameRequest updateRequest = objectMapper.readValue(updateGameRequestJson, CreateGameRequest.class);
+
+        if (updateRequest.getSteps() != null) {
+            for (int i = 0; i < updateRequest.getSteps().size(); i++) {
+                MultipartFile file = multipartRequest.getFile("steps[" + i + "].image");
+                if (file != null && !file.isEmpty()) {
+                    updateRequest.getSteps().get(i).setMedia(file);
+                }
+            }
+        }
+
+        gameService.updateGame(gameId, updateRequest);
+        return ResponseEntity.ok("Game changed successfully");
+    }
 
     @PostMapping(value = "/games/add-game", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> addGame(
@@ -80,7 +83,7 @@ public class GameController {
             for (int i = 0; i < gameRequest.getSteps().size(); i++) {
                 MultipartFile file = multipartRequest.getFile("steps[" + i + "].image");
                 if (file != null && !file.isEmpty()) {
-                    gameRequest.getSteps().get(i).setImage(file);
+                    gameRequest.getSteps().get(i).setMedia(file);
                 }
             }
         }
@@ -89,29 +92,6 @@ public class GameController {
         gameService.addNewGame(gameRequest);
         return ResponseEntity.ok("Game added successfully");
     }
-/*
-    @PatchMapping(value = "/games/edit-game/{gameId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> editGame(
-            @PathVariable Long gameId,
-            @RequestPart("gameRequest") CreateGameRequest gameRequest,
-            MultipartRequest multipartRequest) throws IOException {
-
-        if (gameRequest.getSteps() != null) {
-            for (int i = 0; i < gameRequest.getSteps().size(); i++) {
-                // This matches the key "steps[0].image" in Postman
-                MultipartFile file = multipartRequest.getFile("steps[" + i + "].image");
-                System.out.println("Processing Step " + i + ": Found file? " + (file != null ? file.getOriginalFilename() : "NONE"));
-                if (file != null && !file.isEmpty()) {
-                    gameRequest.getSteps().get(i).setImage(file);
-                }
-            }
-        }
-
-        gameService.editGameData(gameId, gameRequest);
-        return ResponseEntity.ok("Game updated successfully");
-    }
-
- */
 
     @DeleteMapping("/games/{gameId}")
     public ResponseEntity<String> deleteGame(@PathVariable Long gameId) {
@@ -134,6 +114,4 @@ public class GameController {
         gameRepository.deleteById(gameId);
         return ResponseEntity.ok("Mäng ja kõik sellega seotud andmed kustutatud.");
     }
-
-
 }

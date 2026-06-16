@@ -59,6 +59,7 @@ export default function ImageGame({
                     alt="Game Visual"
                     style={filterStyles}
                 />
+                {/* Single button tied to the correct state */}
                 <button className="fullscreen-btn" onClick={() => setFullscreen(true)}>
                     <img src={fullscreenIcon} alt="Fullscreen" width="32" height="32" />
                 </button>
@@ -70,7 +71,7 @@ export default function ImageGame({
                         <img
                             src={`data:image/png;base64,${media}`}
                             className="fullscreen-image"
-                            style={{ ...filterStyles, transformOrigin: undefined }}
+                            style={{ ...filterStyles, transform: `scale(${zoom / 100})` }}
                             alt="Fullscreen Game Visual"
                         />
                         <button className="close-btn" onClick={() => setFullscreen(false)}>✕</button>
