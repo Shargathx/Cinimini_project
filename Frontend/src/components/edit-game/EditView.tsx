@@ -12,9 +12,17 @@ function EditView() {
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const [category, setCategory] = useState("");
+
     const { data } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/games/${localStorage.getItem("catid")}/${localStorage.getItem("id")}`, []);
     //Game questions
     // const [newQuestion, setNewQuestion] = useState("")
+    const [questionCounter, setQuestionCounter] = useState(0)
+    //Discussion points
+    // const [newPoint, setNewpoint] = useState("")
+    const [discussionPointsCounter, setDiscussionPointsCounter] = useState(0)
+    //Teacher text
+    // const [teacherText, setTeacherText] = useState("")
+    const [teacherTextCounter, setTeacherTextCounter] = useState(0);
 
     const game = data;
     const currId = localStorage.getItem("id") ?? "";
@@ -146,7 +154,191 @@ function EditView() {
             )
         );
     }
+    function deleteStep(stepIndex: number) {
+        setSteps(prev =>
+            prev.filter((_, index) => index !== stepIndex)
+        );
+    }
 
+    function updateQuestionInput(
+        stepIndex: number,
+        value: string
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? { ...step, questionInput: value }
+                    : step
+            )
+        );
+    }
+
+    function updateDiscussionInput(
+        stepIndex: number,
+        value: string
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? { ...step, discussionInput: value }
+                    : step
+            )
+        );
+    }
+
+    function addQuestion(stepIndex: number) {
+        const questionText =
+            steps[stepIndex].questionInput.trim();
+
+        if (!questionText) return;
+
+        const newId = questionCounter + 1;
+        setQuestionCounter(newId);
+
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        questionInput: "",
+                        questions: [
+                            ...step.questions,
+                            {
+                                id: newId,
+                                questionText
+                            }
+                        ]
+                    }
+                    : step
+            )
+        );
+    }
+    function updateTeacherTextInput(
+        stepIndex: number,
+        value: string
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        teacherTextInput: value
+                    }
+                    : step
+            )
+        );
+    }
+
+    function addTeacherText(stepIndex: number) {
+        const text =
+            steps[stepIndex].teacherTextInput.trim();
+
+        if (!text) return;
+
+        const newId = teacherTextCounter + 1;
+        setTeacherTextCounter(newId);
+
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        teacherTextInput: "",
+
+                        teacherTexts: [
+                            ...step.teacherTexts,
+                            {
+                                id: newId,
+                                teacherText: text
+                            }
+                        ]
+                    }
+                    : step
+            )
+        );
+    }
+
+    function deleteTeacherText(
+        stepIndex: number,
+        teacherTextId: number
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex ? {
+                    ...step, teacherTexts: step.teacherTexts.filter(
+                        t => t.id !== teacherTextId
+                    )
+                }
+                    : step
+            )
+        );
+    }
+
+    function deleteQuestion(
+        stepIndex: number,
+        questionId: number
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        questions: step.questions.filter(
+                            q => q.id !== questionId
+                        )
+                    }
+                    : step
+            )
+        );
+    }
+
+    function addDiscussionPoint(
+        stepIndex: number
+    ) {
+        const discussionText =
+            steps[stepIndex].discussionInput.trim();
+
+        if (!discussionText) return;
+
+        const newId = discussionPointsCounter + 1;
+        setDiscussionPointsCounter(newId);
+
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        discussionInput: "",
+                        discussionPoints: [
+                            ...step.discussionPoints,
+                            {
+                                id: newId,
+                                discussionText
+                            }
+                        ]
+                    }
+                    : step
+            )
+        );
+    }
+
+    function deletePoint(
+        stepIndex: number,
+        pointId: number
+    ) {
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        discussionPoints: step.discussionPoints.filter(
+                            p => p.id !== pointId
+                        )
+                    }
+                    : step
+            )
+        );
+    }
 
     const handleSubmit = async () => {
         EditGame(currId, name, category, description, steps)
@@ -267,6 +459,18 @@ function EditView() {
                                     )
                                 }
                             />
+                            <button
+                                type="button"
+                                id="eraseBtn"
+                                onClick={() =>
+                                    deleteQuestion(
+                                        stepIndex,
+                                        question.id
+                                    )
+                                }
+                            >
+                                Kustuta
+                            </button>
                         </div>
                     ))}
 
@@ -305,6 +509,18 @@ function EditView() {
                                     )
                                 }
                             />
+                            <button
+                                type="button"
+                                id="eraseBtn"
+                                onClick={() =>
+                                    deletePoint(
+                                        stepIndex,
+                                        point.id
+                                    )
+                                }
+                            >
+                                Kustuta
+                            </button>
                         </div>
                     ))}
 
@@ -343,6 +559,18 @@ function EditView() {
                                     )
                                 }
                             />
+                            <button
+                                type="button"
+                                id="eraseBtn"
+                                onClick={() =>
+                                    deleteTeacherText(
+                                        stepIndex,
+                                        text.id
+                                    )
+                                }
+                            >
+                                Kustuta
+                            </button>
                         </div>
                     ))}
                 </div>
