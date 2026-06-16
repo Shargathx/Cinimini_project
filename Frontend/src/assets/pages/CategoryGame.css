@@ -1,6 +1,6 @@
-.games-container{
+.games-container {
   display: flex;
-  justify-content: left; 
+  justify-content: left;
   flex-wrap: wrap;
   gap: clamp(40px, 2.5vw, 60px);
   margin-top: clamp(50px, 3vw, 80px);
@@ -8,7 +8,13 @@
   margin-right: clamp(30px, 2vw, 50px);
 }
 
-.game-card{
+.game-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-card {
   width: clamp(221px, 15vw, 300px);
   height: clamp(242px, 16vw, 330px);
   background: #FAFAFA;
@@ -17,10 +23,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  
-  position: relative;
-  justify-content: flex-end;
-  padding-bottom: clamp(40px, 2.5vw, 60px);
+  justify-content: center;
+
+  padding: clamp(16px, 1.5vw, 28px);
+  box-sizing: border-box;
+  text-decoration: none;
 }
 
 .game-card.heli {
@@ -39,35 +46,70 @@
   transform: scale(1.05);
 }
 
-.game-name {
-  position: absolute;
-  top: clamp(140px, 9vw, 190px);
+.game-icon {
+  width: clamp(90px, 7vw, 140px);
+  height: clamp(90px, 7vw, 140px);
+  margin-bottom: clamp(14px, 1vw, 24px);
+}
 
-  margin: clamp(20px, 1.25vw, 30px);
-  width: 85%;
-  margin-top: clamp(20px, 1.25vw, 30px);
-  margin-left: auto;
-  margin-right: auto;
-  word-wrap: break-word;
+.game-name {
+  width: 90%;
+  margin-top: 5vh;
 
   color: var(--text);
   text-transform: uppercase;
   font-family: var(--font-heading);
   font-weight: bold;
-  font-size: clamp(20px, 1.5vw, 30px);
-  text-align: center;
-
+  word-break: break-word;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.game-icon {
-  position: absolute;
-  top: clamp(20px, 1.25vw, 30px);
-  width: clamp(100px, 7vw, 140px);
-  height: clamp(100px, 7vw, 140px);
-  margin-top: clamp(20px, 1.25vw, 30px);
+a.game-card .game-name {
+  font-size: clamp(26px, 0.8vw, 36px);
+  line-height: 1;
+  text-align: center;
+}
+
+.game-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gameButtons {
+  display: flex;
+  justify-content: center;
+  gap: clamp(10px, 1vw, 20px);
+  margin-top: clamp(12px, 1vw, 20px);
+}
+
+.editBtn,
+.deleteBtn {
+  margin-left: 0; 
+  background-color: rgb(236, 236, 236);
+  border: clamp(3px, 0.2vw, 5px) solid rgba(157, 157, 156, 0.5);
+}
+
+.editBtn {
+    padding: clamp(10px, 0.5vw, 10px) clamp(20px, 1vw, 20px);
+    font-family: var(--font-heading);
+    font-weight: bold;
+    font-size: clamp(14px, 0.9vw, 24px);
+    color: black;
+    border-radius: clamp(30px, 2vw, 50px);
+    cursor: pointer;
+}
+
+.deleteBtn {
+    padding: clamp(10px, 0.5vw, 10px) clamp(20px, 1vw, 20px);
+    font-family: var(--font-heading);
+    font-weight: bold;
+    font-size: clamp(14px, 0.9vw, 24px);
+    color: black;
+    border-radius: clamp(30px, 2vw, 50px);
+    cursor: pointer;
 }
