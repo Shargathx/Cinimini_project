@@ -119,9 +119,10 @@ function Game() {
     return (
         <div className="game-grid-container">
 
-            <div className="step-navigation">
+            <div className="step-and-media">
 
                 <button
+                    className="previous-step"
                     onClick={previousStep}
                     disabled={currentStep === 0}
                 >
@@ -132,7 +133,12 @@ function Game() {
                     {currentStep + 1}/{mediaCount}
                 </span>
 
+                <div className="game-content">
+                    {renderMediaComponent()}
+                </div>
+
                 <button
+                    className="next-step"
                     onClick={nextStep}
                     disabled={currentStep >= mediaCount - 1}
                 >
@@ -140,9 +146,7 @@ function Game() {
                 </button>
 
             </div>
-            <div className="game-content">
-                {renderMediaComponent()}
-            </div>
+            
             <div className="game-function">
                 {fileFormat.startsWith("image/") && (
                     <div className="image-function">
