@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import './Game.css';
 import './GameImage.css';
+import './GameFullscreen.css';
 import { useFetch } from '../../components/hooks/useFetch';
 import type { Game } from '../models/Game';
 import type { Question } from '../models/Question';
@@ -12,11 +13,11 @@ import discussionImg from "../icons/discussion.svg";
 import questionImg from "../icons/question.svg";
 import teacherImg from "../icons/teacherTextImg.svg";
 
-/*
+
 import ImageGame from '../../components/game-media/ImageGame';
-*/
-// import AudioGame from '../../components/game-media/AudioGame';
-// import VideoGame from '../../components/game-media/VideoGame';
+
+import AudioGame from '../../components/game-media/AudioGame';
+import VideoGame from '../../components/game-media/VideoGame';
 import ImageSaturation from '../../components/ImageSaturation';
 import ImageContrast from '../../components/ImageContrast';
 import ImageExposure from '../../components/ImageExposure';
@@ -94,23 +95,17 @@ function Game() {
             case "image/png":
             case "image/jpeg":
                 return (
-                    media && (
-                        <div className="image-container">
-                            <img
-                                src={`data:image/png;base64,${media}`}
-                                alt="Game"
-                                style={{
-                                    filter: `
-                            saturate(${saturation}%)
-                            contrast(${contrast}%)
-                            brightness(${exposure}%)
-                        `,
-                                    transform: `scale(${zoom / 100})`,
-                                    transformOrigin: "center"
-                                }}
-                            />
-                        </div>
-                    )
+                    <ImageGame
+                        media={media}
+                        saturation={saturation}
+                        setSaturation={setSaturation}
+                        contrast={contrast}
+                        setContrast={setContrast}
+                        exposure={exposure}
+                        setExposure={setExposure}
+                        zoom={zoom}
+                        setZoom={setZoom}
+                    />
                 );
             case "audio/mpeg":
             case "audio/mp3": {
@@ -341,7 +336,7 @@ function Game() {
                 )}
             </div>
 
-            <h3 className="game-name">Mängu nimi: {data?.name}</h3>
+            <h3 className="game-name">{data?.name}</h3>
             <h3 className="game-description">Kirjeldus: {data?.description}</h3>
 
             <div className="game-info-buttons">

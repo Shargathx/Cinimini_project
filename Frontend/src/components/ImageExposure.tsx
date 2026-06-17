@@ -14,7 +14,7 @@ function ImageExposure({ value, onChange }: Props) {
                     fontVariantNumeric: "tabular-nums"
                 }}
             >
-                Exposure: {value}%
+                Särisus: {value}%
             </label>
 
             <input

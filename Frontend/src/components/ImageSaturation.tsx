@@ -14,7 +14,7 @@ function ImageSaturation({ value, onChange }: Props) {
                     fontVariantNumeric: "tabular-nums"
                 }}
             >
-                Saturation: {value}%
+                Värviküllasus: {value}%
             </label>
 
             <input
