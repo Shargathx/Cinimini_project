@@ -5,6 +5,7 @@
     max-height: 100vh;
     --slider-size: clamp(30px, 3.5vh, 60px);
     text-transform: uppercase;
+    padding: clamp(0.5rem, 1vw, 2rem)
 }
 
 .game-content {
