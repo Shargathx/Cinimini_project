@@ -18,8 +18,14 @@ function CategoryGame() {
 
     const gamesList = categoryGames ?? [];
 
-    function deleteGame(gameId: number) {
+    function softDelete(gameId: number) {
         fetch(import.meta.env.VITE_BACK_URL + `/games/${gameId}`, {
+            method: "DELETE"
+        }).then(() => { window.location.reload() })
+    }
+
+    function hardDelete(gameId: number) {
+        fetch(import.meta.env.VITE_BACK_URL + `/games/delete-permanently/${gameId}`, {
             method: "DELETE"
         }).then(() => { window.location.reload() })
     }
@@ -47,9 +53,15 @@ function CategoryGame() {
                     <div className="gameButtons">
                         <button
                             className="deleteBtn"
-                            onClick={() => deleteGame(Number(game.id))}
+                            onClick={() => softDelete(Number(game.id))}
                         >
-                            DELETE
+                            SOFT DELETE
+                        </button>
+                        <button
+                            className="deleteBtn"
+                            onClick={() => hardDelete(Number(game.id))}
+                        >
+                            HARD DELETE
                         </button>
 
                         <Link to={`/update-game/${game.id}`}>
@@ -57,8 +69,8 @@ function CategoryGame() {
                                 className="editBtn"
                                 onClick={() => {
                                     localStorage.setItem("mode", "edit");
-                                    localStorage.setItem("id", game.id);
-                                    localStorage.setItem("catid", catid);
+                                    localStorage.setItem("id", String(game.id));
+                                    localStorage.setItem("catid", String(catid));
                                 }}
                             >
                                 EDIT
