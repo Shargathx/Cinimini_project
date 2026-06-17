@@ -86,6 +86,33 @@ export function useGameSteps() {
             )
         );
     }
+
+    function addQuestionEdit(stepIndex: number) {
+        const questionText =
+            steps[stepIndex].questionInput.trim();
+
+        if (!questionText) return;
+
+        const newId = questionCounter + 1;
+        setQuestionCounter(newId);
+
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        questionInput: "",
+                        questions: [
+                            ...step.questions,
+                            {
+                                questionText
+                            }
+                        ]
+                    }
+                    : step
+            )
+        );
+    }
     function updateTeacherTextInput(
         stepIndex: number,
         value: string
@@ -122,6 +149,34 @@ export function useGameSteps() {
                             ...step.teacherTexts,
                             {
                                 id: newId,
+                                teacherText: text
+                            }
+                        ]
+                    }
+                    : step
+            )
+        );
+    }
+
+    function addTeacherTextEdit(stepIndex: number) {
+        const text =
+            steps[stepIndex].teacherTextInput.trim();
+
+        if (!text) return;
+
+        const newId = teacherTextCounter + 1;
+        setTeacherTextCounter(newId);
+
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        teacherTextInput: "",
+
+                        teacherTexts: [
+                            ...step.teacherTexts,
+                            {
                                 teacherText: text
                             }
                         ]
@@ -195,6 +250,35 @@ export function useGameSteps() {
         );
     }
 
+    function addDiscussionPointEdit(
+        stepIndex: number
+    ) {
+        const discussionText =
+            steps[stepIndex].discussionInput.trim();
+
+        if (!discussionText) return;
+
+        const newId = discussionPointsCounter + 1;
+        setDiscussionPointsCounter(newId);
+
+        setSteps(prev =>
+            prev.map((step, index) =>
+                index === stepIndex
+                    ? {
+                        ...step,
+                        discussionInput: "",
+                        discussionPoints: [
+                            ...step.discussionPoints,
+                            {
+                                discussionText
+                            }
+                        ]
+                    }
+                    : step
+            )
+        );
+    }
+
     function deletePoint(
         stepIndex: number,
         pointId: number
@@ -227,13 +311,16 @@ export function useGameSteps() {
         addQuestion,
         deleteQuestion,
         updateQuestionInput,
+        addQuestionEdit,
 
         addDiscussionPoint,
         deletePoint,
         updateDiscussionInput,
+        addDiscussionPointEdit,
 
         addTeacherText,
         deleteTeacherText,
-        updateTeacherTextInput
+        updateTeacherTextInput,
+        addTeacherTextEdit
     };
 }
