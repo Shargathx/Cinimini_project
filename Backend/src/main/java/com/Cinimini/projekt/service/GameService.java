@@ -32,6 +32,14 @@ public class GameService {
         return gameRepository.findAllByActiveTrue();
     }
 
+    public List<Game> getAllInactiveGames() {
+        return gameRepository.findAllByActiveFalse();
+    }
+
+    public List<Game> getAllGames() {
+        return gameRepository.findAll();
+    }
+
     public List<Game> getAllActiveGamesByCategory(Long catId) {
         return gameRepository.getActiveGamesByCategory(catId);
     }
@@ -186,47 +194,64 @@ public class GameService {
 
     @Transactional
     public void validateAndSaveEditGameData(Long gameId, CreateGameRequest updateRequest) throws IOException {
-        Game existingGame = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
+        Game existingGame = gameRepository.findById(gameId)
+                .orElseThrow(() -> new RuntimeException("Game not found"));
 
-        if (updateRequest.getName() != null && !updateRequest.getName().equals(existingGame.getName())) {
-            existingGame.setName(updateRequest.getName());
-        }
-        if (existingGame.getDescription() != updateRequest.getDescription()) {
-            existingGame.setDescription(updateRequest.getDescription());
-        }
-
+        // 1. Load into map for easy lookup
         Map<Long, GameStep> existingStepsMap = gameStepRepository.getGameStepsByGame_Id(gameId)
                 .stream()
                 .collect(Collectors.toMap(GameStep::getId, step -> step));
 
-        for (GameStepRequest stepRequest : updateRequest.getSteps()) {
-            if (stepRequest.getMedia() != null && !stepRequest.getMedia().isEmpty()) {
-                if (!validateMediaForCategory(updateRequest.getCategoryId(), stepRequest.getMedia())) {
-                    throw new RuntimeException("Invalid media content");
-                }
+        // 2. Identify and Remove
+        Set<Long> incomingIds = updateRequest.getSteps().stream()
+                .map(GameStepRequest::getStepRequestId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        // Remove from DB and List
+        existingStepsMap.forEach((id, step) -> {
+            if (!incomingIds.contains(id)) {
+                existingGame.getGameSteps().remove(step); // Remove from parent collection
+                gameStepRepository.delete(step);          // Remove from DB
             }
-            GameStep existingStep = existingStepsMap.get(stepRequest.getStepRequestId());
-            if (existingStep != null) {
-                gameStepService.handleAndSaveMediaFiles(stepRequest, existingStep);
-                syncTeacherTexts(existingStep, stepRequest.getTeacherTexts());
-                syncQuestions(existingStep, stepRequest.getQuestions());
-                syncDiscussions(existingStep, stepRequest.getDiscussionPoints());
-            } else {
-                GameStep newStep = new GameStep();
-                newStep.setGame(existingGame);
+        });
+
+        // 3. Process list
+        List<GameStepRequest> steps = updateRequest.getSteps();
+        for (int i = 0; i < steps.size(); i++) {
+            GameStepRequest stepRequest = steps.get(i);
+
+            // A. Identify or Create
+            GameStep targetStep = (stepRequest.getStepRequestId() != null)
+                    ? existingStepsMap.get(stepRequest.getStepRequestId())
+                    : null;
+
+            if (targetStep == null) {
+                targetStep = new GameStep();
+                targetStep.setGame(existingGame);
+                // Save immediately to get ID
+                targetStep.setStepOrder(i);
+                targetStep = gameStepRepository.save(targetStep);
                 if (existingGame.getGameSteps() == null) {
                     existingGame.setGameSteps(new ArrayList<>());
                 }
-                existingGame.getGameSteps().add(newStep);
-                syncQuestions(newStep, stepRequest.getQuestions());
-                syncDiscussions(newStep, stepRequest.getDiscussionPoints());
-                syncTeacherTexts(newStep, stepRequest.getTeacherTexts());
             }
+            existingGame.getGameSteps().add(targetStep);
+            gameStepService.handleAndSaveMediaFiles(stepRequest, targetStep);
+
+            syncTeacherTexts(targetStep, stepRequest.getTeacherTexts());
+            syncQuestions(targetStep, stepRequest.getQuestions());
+            syncDiscussions(targetStep, stepRequest.getDiscussionPoints());
         }
+
+        // Final merge to handle collection reordering
         gameRepository.save(existingGame);
     }
 
     private void syncDiscussions(GameStep existingStep, List<DiscussionDto> dtos) {
+        if (existingStep.getDiscussionPoints() == null) {
+            existingStep.setDiscussionPoints(new ArrayList<>());
+        }
         Set<Long> incomingIds = dtos.stream()
                 .map(DiscussionDto::getId)
                 .filter(Objects::nonNull)
@@ -262,6 +287,9 @@ public class GameService {
     }
 
     private void syncQuestions(GameStep existingStep, List<QuestionDto> dtos) {
+        if (existingStep.getQuestions() == null) {
+            existingStep.setQuestions(new ArrayList<>());
+        }
         Set<Long> incomingIds = dtos.stream()
                 .map(QuestionDto::getId)
                 .filter(Objects::nonNull)
@@ -297,6 +325,12 @@ public class GameService {
     }
 
     private void syncTeacherTexts(GameStep existingStep, List<TeacherTextDto> dtos) {
+        // 1. CRITICAL: Initialize the collection if it is null
+        if (existingStep.getTeacherText() == null) {
+            existingStep.setTeacherText(new ArrayList<>());
+        }
+
+        // Now it is safe to perform your logic
         Set<Long> incomingIds = dtos.stream()
                 .map(TeacherTextDto::getId)
                 .filter(Objects::nonNull)
@@ -320,7 +354,6 @@ public class GameService {
 
         for (TeacherTextDto dto : dtos) {
             if (dto.getId() != null && existingMap.containsKey(dto.getId())) {
-                // Update
                 TeacherText existing = existingMap.get(dto.getId());
                 existing.setTeacherText(dto.getTeacherText());
             } else {

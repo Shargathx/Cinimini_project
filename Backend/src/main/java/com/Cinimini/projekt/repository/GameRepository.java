@@ -13,4 +13,6 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     List<Game> getActiveGamesByCategory(@Param("categoryId") Long categoryId);
 
     List<Game> findAllByActiveTrue();
+
+    List<Game> findAllByActiveFalse();
 }

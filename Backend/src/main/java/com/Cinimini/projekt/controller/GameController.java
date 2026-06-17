@@ -28,7 +28,17 @@ public class GameController {
 
     @GetMapping("category/games")
     public List<Game> getActiveGames() {
+        return gameService.getAllGames();
+    }
+
+    @GetMapping("category/active-games")
+    public List<Game> getAllGames() {
         return gameService.getAllActiveGames();
+    }
+
+    @GetMapping("category/inactive-games")
+    public List<Game> getAllInactiveGames() {
+        return gameService.getAllInactiveGames();
     }
 
     @GetMapping("category/games/{catId}")

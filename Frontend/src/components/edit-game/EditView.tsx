@@ -26,18 +26,22 @@ function EditView() {
         setSteps,
 
         addStep,
+        deleteStep,
 
-        addQuestion,
+        // addQuestion,
         deleteQuestion,
         updateQuestionInput,
+        addQuestionEdit,
 
-        addDiscussionPoint,
+        // addDiscussionPoint,
         deletePoint,
         updateDiscussionInput,
+        addDiscussionPointEdit,
 
-        addTeacherText,
+        // addTeacherText,
         deleteTeacherText,
-        updateTeacherTextInput
+        updateTeacherTextInput,
+        addTeacherTextEdit
     } = useGameSteps();
 
 
@@ -189,20 +193,21 @@ function EditView() {
             />
         </div>ˇ
         <hr></hr>
-        {<button type="button" id="stepBtn" onClick={addStep}>
+        {/*Ei taha lisada uut steppi*/}
+        {/* {<button type="button" id="stepBtn" onClick={addStep}>
             Lisa uus samm
-        </button>}
+        </button>} */}
         <div id="step-container">
             {steps.map((step, stepIndex) => (
-                <div key={step.id} id="singleStep">
+                <div key={`q-${step.id}-${stepIndex}`} id="singleStep">
                     <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
 
-                    {/* {<button
+                    {<button
                         type="button"
                         onClick={() => deleteStep(stepIndex)}
                     >
                         Kustuta samm
-                    </button>} */}
+                    </button>}
 
                     <input
                         type="file"
@@ -252,20 +257,20 @@ function EditView() {
                     <button
                         type="button"
                         id="addQuestionBtn"
-                        onClick={() => addQuestion(stepIndex)}
+                        onClick={() => addQuestionEdit(stepIndex)}
                     >
                         Lisa küsimus
                     </button>
 
                     <div>Küsimused:</div>
-                    {step.questions.map(question => (
-                        <div key={question.id}>
+                    {step.questions.map((question, index) => (
+                        <div key={`q-${question.id}-${index}`}>
                             <input
                                 value={question.questionText}
                                 onChange={(e) =>
                                     updateQuestionText(
                                         stepIndex,
-                                        question.id,
+                                        Number(question.id),
                                         e.target.value
                                     )
                                 }
@@ -276,7 +281,7 @@ function EditView() {
                                 onClick={() =>
                                     deleteQuestion(
                                         stepIndex,
-                                        question.id
+                                        Number(question.id)
                                     )
                                 }
                             >
@@ -300,7 +305,7 @@ function EditView() {
                     <button id="addDiscussionBtn"
                         type="button"
                         onClick={() =>
-                            addDiscussionPoint(stepIndex)
+                            addDiscussionPointEdit(stepIndex)
                         }
                     >
                         Lisa arutelupunkt
@@ -308,14 +313,14 @@ function EditView() {
 
 
                     <div>Arutelu punktid:</div>
-                    {step.discussionPoints.map(point => (
-                        <div key={point.id}>
+                    {step.discussionPoints.map((point, index) => (
+                        <div key={`dp-${point.id}-${index}`}>
                             <input
                                 value={point.discussionText}
                                 onChange={(e) =>
                                     updateDiscussionText(
                                         stepIndex,
-                                        point.id,
+                                        Number(point.id),
                                         e.target.value
                                     )
                                 }
@@ -326,7 +331,7 @@ function EditView() {
                                 onClick={() =>
                                     deletePoint(
                                         stepIndex,
-                                        point.id
+                                        Number(point.id)
                                     )
                                 }
                             >
@@ -350,7 +355,7 @@ function EditView() {
 
                     <button id="addTeachTextBtn"
                         type="button"
-                        onClick={() => addTeacherText(stepIndex)}
+                        onClick={() => addTeacherTextEdit(stepIndex)}
                     >
                         Lisa õpetaja tekst
                     </button>
@@ -358,14 +363,14 @@ function EditView() {
 
                     <div>Õpetaja tekstid:</div>
 
-                    {step.teacherTexts.map(text => (
-                        <div key={text.id}>
+                    {step.teacherTexts.map((text, index) => (
+                        <div key={`tt-${text.id}-${index}`}>
                             <input
                                 value={text.teacherText}
                                 onChange={(e) =>
                                     updateTeacherText(
                                         stepIndex,
-                                        text.id,
+                                        Number(text.id),
                                         e.target.value
                                     )
                                 }
@@ -376,7 +381,7 @@ function EditView() {
                                 onClick={() =>
                                     deleteTeacherText(
                                         stepIndex,
-                                        text.id
+                                        Number(text.id)
                                     )
                                 }
                             >
@@ -386,7 +391,7 @@ function EditView() {
                     ))}
                 </div>
             ))}
-        </div>
+        </div >
         <hr />
         <button id="saveGameBtn"
             type="button"

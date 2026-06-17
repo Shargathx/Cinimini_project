@@ -1,7 +1,7 @@
 type TeacherTextManagerProps = {
     value: string;
     texts: {
-        id: number;
+        id?: number;
         teacherText: string;
     }[];
     onInputChange: (value: string) => void;
@@ -37,7 +37,7 @@ export default function TeacherTextManager({
 
                     <button id="eraseBtn"
                         type="button"
-                        onClick={() => onDelete(text.id)}
+                        onClick={() => onDelete(Number(text.id))}
                     >
                         Kustuta
                     </button>

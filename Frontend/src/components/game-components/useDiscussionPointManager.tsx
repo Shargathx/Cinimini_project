@@ -1,7 +1,7 @@
 type DiscussionPointManagerProps = {
   value: string;
   points: {
-    id: number;
+    id?: number;
     discussionText: string;
   }[];
   onInputChange: (value: string) => void;
@@ -37,7 +37,7 @@ export default function DiscussionPointManager({
 
           <button
             type="button"
-            onClick={() => onDelete(point.id)}
+            onClick={() => onDelete(Number(point.id))}
           >
             Kustuta
           </button>

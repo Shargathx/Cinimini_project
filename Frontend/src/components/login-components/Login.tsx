@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import "./Login.css"
 
 function Login() {
     const [username, setUsername] = useState("")
@@ -19,17 +20,20 @@ function Login() {
 
     return (
         <>
-            <div>Log in here:</div>
-            <br />
+            <div className="login-page">
+                <div className="login-container">
+                    <div className='login-title'>Logi sisse</div>
+                    <br />
 
-            <label>Kasutajanimi:</label><br />
-            <input onChange={(e: React.ChangeEvent<HTMLInputElement>) => createUsername(e.target.value)} autoComplete="off" id="username" name="username" type="text" /><br /><br />
+                    <label className='user-title'>Kasutajanimi</label>
+                    <input className="user-input" onChange={(e: React.ChangeEvent<HTMLInputElement>) => createUsername(e.target.value)} autoComplete="off" id="username" name="username" type="text" /><br /><br />
 
-            <label>Salasõna:</label>
-            <br />
-            <input onChange={(e: React.ChangeEvent<HTMLInputElement>) => createPassword(e.target.value)} id="password" name="password" type="password" /><br /><br />
+                    <label className='password-title'>Salasõna</label>
+                    <input className="password-input" onChange={(e: React.ChangeEvent<HTMLInputElement>) => createPassword(e.target.value)} id="password" name="password" type="password" /><br /><br />
 
-            <button onClick={handleSubmit}>Login</button>
+                    <button className="login-button" onClick={handleSubmit}>Logi sisse</button>
+                </div>
+            </div>
         </>
     )
 }

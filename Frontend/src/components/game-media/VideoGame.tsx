@@ -18,9 +18,52 @@ export default function VideoGame({ media }: VideoGameProps) {
         };
     }, []);
 
+    function stopPlay() {
+        const video = videoRef.current;
+        if (!video) return;
+        if (!video.paused) {
+            video.pause()
+        }
+        else {
+            video.play()
+            progressLoop()
+        }
+    }
+
+    function progressLoop() {
+        const video = videoRef.current;
+        if (!video) return;
+        const timer = document.getElementById("timer") as HTMLElement | null;
+        if (!timer) return;
+        const progressBar = document.getElementById("progress") as HTMLProgressElement | null;
+        if (!progressBar) return;
+        setInterval(function () {
+            progressBar.value =
+                (video.currentTime / video.duration);
+            timer.innerHTML = Math.round(video.currentTime).toString();
+        });
+    }
+
+    function changePosition(e: React.MouseEvent<HTMLProgressElement>) {
+        const video = videoRef.current;
+        if (!video || !video.duration) return;
+
+        const progressBar = e.currentTarget;
+
+        const rect = progressBar.getBoundingClientRect();
+
+        const clickX = e.clientX - rect.left;
+
+        const percent = clickX / rect.width;
+
+        video.currentTime = percent * video.duration;
+
+        progressLoop();
+    }
+
     function playReverse() {
         if (reverseIntervalRef.current) clearInterval(reverseIntervalRef.current);
-        
+
         const video = videoRef.current;
         if (!video) return;
 
@@ -37,7 +80,7 @@ export default function VideoGame({ media }: VideoGameProps) {
 
     function playFast() {
         if (reverseIntervalRef.current) clearInterval(reverseIntervalRef.current);
-        
+
         const video = videoRef.current;
         if (!video) return;
 
@@ -47,14 +90,12 @@ export default function VideoGame({ media }: VideoGameProps) {
         video.play();
     }
 
-    return (
+    return (<>
         <div className="video-game-container">
-            <video ref={videoRef} width="320" height="240" controls src={videoSrc} />
+            <video ref={videoRef} width="320" height="240" src={videoSrc} />
             <div className="video-actions" style={{ marginTop: '10px' }}>
-                <button onClick={playReverse}>Reverse</button>
-                <button onClick={playFast}>Fast</button>
+                <button onClick={playReverse}>Play in Reverse</button>
             </div>
-
             <div style={{ marginTop: '15px' }}>
                 <label style={{ display: "inline-block", width: "160px", fontVariantNumeric: "tabular-nums" }}>
                     Speed amount: {speed}
@@ -72,7 +113,17 @@ export default function VideoGame({ media }: VideoGameProps) {
                         setTimeout(() => playFast(), 0);
                     }}
                 />
+                <figure>
+                    <figcaption>
+                        <button onClick={() => { stopPlay() }} id="play" aria-label="Play" role="button">►</button>
+                        <progress id="progress" value={0} max={1} onClick={changePosition}>
+                            Progress
+                        </progress>
+                        <label id="timer" role="timer">0</label>
+                    </figcaption>
+                </figure>
             </div>
         </div>
+    </>
     );
 }

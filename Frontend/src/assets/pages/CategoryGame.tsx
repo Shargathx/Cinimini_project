@@ -1,32 +1,50 @@
 import { useParams, Link } from "react-router-dom";
-import { useFetch } from "../../components/hooks/useFetch"; // Double check this path matches your folder structure!
-import type { Game } from "../models/Game";
+import { useEffect, useState } from "react";
 import defaultGameIcon from '../icons/defaultGameIcon.svg';
 import './CategoryGame.css';
+import type { Game } from "../models/Game";
+
 
 function CategoryGame() {
     const { catid } = useParams<{ catid: string }>();
-    const { data: categoryGames, loading } = useFetch<Game[]>(`${import.meta.env.VITE_BACK_URL}/category/games/${catid}`, [catid]);
+    const [activegames, setActivegames] = useState<Game[]>([])
+    const [inactivegames, setInactivegames] = useState<Game[]>([])
+    const [games, setGames] = useState<Game[]>([])
 
-    if (loading) {
-        return (
-            <div className="game-loading-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
-                <p>Laeb mänge...</p>
-            </div>
-        );
-    }
+    useEffect(() => {
+        fetch(`${import.meta.env.VITE_BACK_URL}/category/games/${catid}`, {
+            method: "GET"
+        }).then(res => res.json()).then(json => { setActivegames(json); setGames(json) })
 
-    const gamesList = categoryGames ?? [];
+    }, [catid])
 
-    function deleteGame(gameId: number) {
+
+    useEffect(() => {
+        fetch(`${import.meta.env.VITE_BACK_URL}/category/inactive-games`, {
+            method: "GET"
+        }).then(res => res.json()).then(json => setInactivegames(json))
+
+    }, [catid])
+
+
+    function softDelete(gameId: number) {
         fetch(import.meta.env.VITE_BACK_URL + `/games/${gameId}`, {
             method: "DELETE"
         }).then(() => { window.location.reload() })
     }
 
-    return (
-        <div className="games-container">
-            {gamesList.map((game) => (
+    function hardDelete(gameId: number) {
+        fetch(import.meta.env.VITE_BACK_URL + `/games/delete-permanently/${gameId}`, {
+            method: "DELETE"
+        }).then(() => { window.location.reload() })
+    }
+
+
+    return (<>
+        <button onClick={() => { setGames(activegames) }}>Active games</button>
+        <button onClick={() => { setGames(inactivegames) }}>Inactive games</button>
+        <div id="gameContainer" className="games-container">
+            {games.map((game) => (
                 <div className="game-item" key={game.id}>
                     <Link
                         to={`/categories/${catid}/${game.id}`}
@@ -47,9 +65,15 @@ function CategoryGame() {
                     <div className="gameButtons">
                         <button
                             className="deleteBtn"
-                            onClick={() => deleteGame(Number(game.id))}
+                            onClick={() => softDelete(Number(game.id))}
                         >
-                            DELETE
+                            SOFT DELETE
+                        </button>
+                        <button
+                            className="deleteBtn"
+                            onClick={() => hardDelete(Number(game.id))}
+                        >
+                            HARD DELETE
                         </button>
 
                         <Link to={`/update-game/${game.id}`}>
@@ -57,8 +81,8 @@ function CategoryGame() {
                                 className="editBtn"
                                 onClick={() => {
                                     localStorage.setItem("mode", "edit");
-                                    localStorage.setItem("id", game.id);
-                                    localStorage.setItem("catid", catid);
+                                    localStorage.setItem("id", String(game.id));
+                                    localStorage.setItem("catid", String(catid));
                                 }}
                             >
                                 EDIT
@@ -68,6 +92,7 @@ function CategoryGame() {
                 </div>
             ))}
         </div>
+    </>
     );
 }
 
