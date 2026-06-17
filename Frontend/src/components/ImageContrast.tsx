@@ -14,7 +14,7 @@ function ImageContrast({ value, onChange }: Props) {
                     fontVariantNumeric: "tabular-nums"
                 }}
             >
-                Contrast: {value}%
+                Kontrast: {value}%
             </label>
             <input
                 className="image-slider"

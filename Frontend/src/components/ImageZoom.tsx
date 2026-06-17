@@ -14,7 +14,7 @@ function ImageZoom({ value, onChange }: Props) {
                     fontVariantNumeric: "tabular-nums"
                 }}
             >
-                Zoom: {value}%
+                Suurendamine: {value}%
             </label>
 
             <input

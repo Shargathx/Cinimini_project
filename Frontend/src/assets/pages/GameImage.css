@@ -8,10 +8,11 @@
     justify-content: center;
     align-items: center;
 
-    background-color: rgb(235, 237, 239);
+    background-color: rgb(255, 248,248 ,1);
     border: clamp(8px, 0.5vw, 16px) solid rgb(213, 198, 237);
     border-radius: 20px;
     margin: 0;
+    position: relative;
 }
 
 @media (min-width: 1800px) {
@@ -38,7 +39,7 @@
 
 .image-slider-text{
     font-size: clamp(0.8rem, 1vw, 1.5rem);
-    margin-bottom: 0.5vh;
+    margin-bottom: 1vh;
     width: 100%;
     white-space: nowrap;
 }
@@ -49,39 +50,48 @@
     }
 }
 
-.image-slider{
-    height: clamp(24px, 2vh, 60px);
+.image-slider {
     appearance: none;
+    -webkit-appearance: none;
+    max-width: calc(var(--slider-size) * 10);
+    width: 100%;
     background: transparent;
-    width: 100%; 
-    max-width: clamp(150px, 45%, 450px);
-    margin-bottom: 1.5vh;
-    
-    row-gap: clamp(0.1rem, 1vh, 5rem)
+    cursor: pointer;
 }
 
-@media (min-width: 1800px) {
-    .image-slider {
-        margin-bottom: clamp(24px, 2.5vh, 60px);
-    }
-}
 
 .image-slider::-webkit-slider-runnable-track {
-    height: clamp(25px, 6vh, 5vh);
-    /*min-height: clamp(25px, 2vw, 60px);*/
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 30px;
-    border: clamp(3px, 0.25vw, 4px) solid rgba(197, 170, 241, 0.6);
+    height: var(--slider-size);
+    background: rgb(255, 248,248 ,1);
+    border-radius: 999px;
+    outline: calc(var(--slider-size) * 0.25) solid rgb(213, 198, 237);
 }
 
+.image-slider::-moz-range-track {
+    height: var(--slider-size);
+    background: rgb(255, 248,248 ,1);
+    border-radius: 999px;
+    border: calc(var(--slider-size) * 0.12) solid rgb(213, 198, 237);
+}
+
+
 .image-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
     appearance: none;
-    width: clamp(18px, 1.4vw, 62px);
-    height: clamp(18px, 1.4vw, 62px);
+
+    height: calc(var(--slider-size) / 1.2);
+    width: calc(var(--slider-size) / 1.2);
     border-radius: 50%;
-    background: rgba(197, 170, 241, 0.8);
-    margin-top: 0; 
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+
+    background: rgba(197,170,241,0.9);
+
+    margin-top: calc((var(--slider-size) - (var(--slider-size)/1.2)) / 2);
+}
+
+.image-slider::-moz-range-thumb {
+    width: calc(var(--slider-size) * 0.8);
+    height: calc(var(--slider-size) * 0.8);
+    border-radius: 50%;
+    background: rgba(197, 170, 241, 0.9);
+    border: none;
 }
