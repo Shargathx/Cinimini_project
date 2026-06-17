@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import './Game.css';
 import './GameImage.css';
+import './GameFullscreen.css';
 import { useFetch } from '../../components/hooks/useFetch';
 import type { Game } from '../models/Game';
 import type { Question } from '../models/Question';
@@ -12,9 +13,9 @@ import discussionImg from "../icons/discussion.svg";
 import questionImg from "../icons/question.svg";
 import teacherImg from "../icons/teacherTextImg.svg";
 
-/*
+
 import ImageGame from '../../components/game-media/ImageGame';
-*/
+
 import AudioGame from '../../components/game-media/AudioGame';
 import VideoGame from '../../components/game-media/VideoGame';
 import ImageSaturation from '../../components/ImageSaturation';
@@ -66,23 +67,17 @@ function Game() {
             case "image/png":
             case "image/jpeg":
                 return (
-                    media && (
-                        <div className="image-container">
-                            <img
-                                src={`data:image/png;base64,${media}`}
-                                alt="Game"
-                                style={{
-                                    filter: `
-                            saturate(${saturation}%)
-                            contrast(${contrast}%)
-                            brightness(${exposure}%)
-                        `,
-                                    transform: `scale(${zoom / 100})`,
-                                    transformOrigin: "center"
-                                }}
-                            />
-                        </div>
-                    )
+                    <ImageGame
+                        media={media}
+                        saturation={saturation}
+                        setSaturation={setSaturation}
+                        contrast={contrast}
+                        setContrast={setContrast}
+                        exposure={exposure}
+                        setExposure={setExposure}
+                        zoom={zoom}
+                        setZoom={setZoom}
+                    />
                 );
             case "audio/mpeg":
             case "audio/mp3":
@@ -137,7 +132,7 @@ function Game() {
                         className="previous-step"
                         onClick={previousStep}
                         disabled={currentStep === 0}
-                        >
+                    >
                         <img src={LessThanB} alt="less-than-sign-black" />
                     </button>
 
@@ -149,12 +144,12 @@ function Game() {
                         className="next-step"
                         onClick={nextStep}
                         disabled={currentStep >= mediaCount - 1}
-                        >
+                    >
                         <img src={GreaterThanB} alt="greater-than-sign-black" />
                     </button>
                 </div>
             </div>
-            
+
             <div className="game-function">
                 {fileFormat.startsWith("image/") && (
                     <div className="image-function">
@@ -187,19 +182,19 @@ function Game() {
 
             <div className="game-info-buttons">
                 <button onClick={getQuestions} id="gameInfoButtons">
-                    <img  src={questionImg} alt="Küsimused" /></button>
+                    <img src={questionImg} alt="Küsimused" /></button>
                 {questions.map((question) => (
                     <div key={question.id}>{question.questionText}</div>
                 ))}
 
                 <button onClick={getPoints} id="gameInfoButtons">
-                    <img  src={discussionImg} alt="Arutelupunktid" /></button>
+                    <img src={discussionImg} alt="Arutelupunktid" /></button>
                 {points.map((point) => (
                     <div key={point.id}>{point.discussionText}</div>
                 ))}
 
                 <button onClick={getTeacherText} id="gameInfoButtons">
-                    <img  src={teacherImg} alt="Info Õpetajale" /></button>
+                    <img src={teacherImg} alt="Info Õpetajale" /></button>
                 {teacherTexts.map((teacherText) => (
                     <div key={teacherText.id}>{teacherText.teacherText}</div>
                 ))}
