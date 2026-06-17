@@ -1,13 +1,18 @@
-import type { Discussion } from "./Discussion";
-import type { Question } from "./Question";
-import type { TeacherText } from "./TeacherText";
-
 export interface EditGameStep {
     id?: number;
     images: File[];
-    questions: Question[];
-    discussionPoints: Discussion[];
-    teacherTexts: TeacherText[];
+    questions: {
+        id?: number,
+        questionText: string
+    }[];
+    discussionPoints: {
+        id?: number,
+        discussionText: string
+    }[];
+    teacherTexts: {
+        id?: number,
+        teacherText: string
+    }[];
     questionInput: string;
     discussionInput: string;
     teacherTextInput: string;
