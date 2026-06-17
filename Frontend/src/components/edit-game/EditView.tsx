@@ -193,9 +193,10 @@ function EditView() {
             />
         </div>ˇ
         <hr></hr>
-        {<button type="button" id="stepBtn" onClick={addStep}>
+        {/*Ei taha lisada uut steppi*/}
+        {/* {<button type="button" id="stepBtn" onClick={addStep}>
             Lisa uus samm
-        </button>}
+        </button>} */}
         <div id="step-container">
             {steps.map((step, stepIndex) => (
                 <div key={`q-${step.id}-${stepIndex}`} id="singleStep">
@@ -263,134 +264,134 @@ function EditView() {
 
                     <div>Küsimused:</div>
                     {step.questions.map((question, index) => (
-                        <div key= {`q-${question.id}-${index}`}>
+                        <div key={`q-${question.id}-${index}`}>
+                            <input
+                                value={question.questionText}
+                                onChange={(e) =>
+                                    updateQuestionText(
+                                        stepIndex,
+                                        Number(question.id),
+                                        e.target.value
+                                    )
+                                }
+                            />
+                            <button
+                                type="button"
+                                id="eraseBtn"
+                                onClick={() =>
+                                    deleteQuestion(
+                                        stepIndex,
+                                        Number(question.id)
+                                    )
+                                }
+                            >
+                                Kustuta
+                            </button>
+                        </div>
+                    ))}
+
+                    <h3 id="addDiscussionTitle">Arutelupunktid</h3>
+
                     <input
-                        value={question.questionText}
+                        value={step.discussionInput}
                         onChange={(e) =>
-                            updateQuestionText(
+                            updateDiscussionInput(
                                 stepIndex,
-                                question.id,
                                 e.target.value
                             )
-                        }
+                        } id="addDiscussion"
                     />
-                    <button
+
+                    <button id="addDiscussionBtn"
                         type="button"
-                        id="eraseBtn"
                         onClick={() =>
-                            deleteQuestion(
-                                stepIndex,
-                                question.id
-                            )
+                            addDiscussionPointEdit(stepIndex)
                         }
                     >
-                        Kustuta
+                        Lisa arutelupunkt
                     </button>
-                </div>
-            ))}
-
-            <h3 id="addDiscussionTitle">Arutelupunktid</h3>
-
-            <input
-                value={step.discussionInput}
-                onChange={(e) =>
-                    updateDiscussionInput(
-                        stepIndex,
-                        e.target.value
-                    )
-                } id="addDiscussion"
-            />
-
-            <button id="addDiscussionBtn"
-                type="button"
-                onClick={() =>
-                    addDiscussionPointEdit(stepIndex)
-                }
-            >
-                Lisa arutelupunkt
-            </button>
 
 
-            <div>Arutelu punktid:</div>
-            {step.discussionPoints.map((point, index) => (
-                <div key={`dp-${point.id}-${index}`}>
+                    <div>Arutelu punktid:</div>
+                    {step.discussionPoints.map((point, index) => (
+                        <div key={`dp-${point.id}-${index}`}>
+                            <input
+                                value={point.discussionText}
+                                onChange={(e) =>
+                                    updateDiscussionText(
+                                        stepIndex,
+                                        Number(point.id),
+                                        e.target.value
+                                    )
+                                }
+                            />
+                            <button
+                                type="button"
+                                id="eraseBtn"
+                                onClick={() =>
+                                    deletePoint(
+                                        stepIndex,
+                                        Number(point.id)
+                                    )
+                                }
+                            >
+                                Kustuta
+                            </button>
+                        </div>
+                    ))}
+
+                    <h3 id="addTeacherTextTitle">Õpetaja tekst</h3>
+
                     <input
-                        value={point.discussionText}
+                        type="text"
+                        value={step.teacherTextInput}
                         onChange={(e) =>
-                            updateDiscussionText(
+                            updateTeacherTextInput(
                                 stepIndex,
-                                point.id,
                                 e.target.value
                             )
-                        }
+                        } id="addTeachText"
                     />
-                    <button
+
+                    <button id="addTeachTextBtn"
                         type="button"
-                        id="eraseBtn"
-                        onClick={() =>
-                            deletePoint(
-                                stepIndex,
-                                point.id
-                            )
-                        }
+                        onClick={() => addTeacherTextEdit(stepIndex)}
                     >
-                        Kustuta
+                        Lisa õpetaja tekst
                     </button>
+
+
+                    <div>Õpetaja tekstid:</div>
+
+                    {step.teacherTexts.map((text, index) => (
+                        <div key={`tt-${text.id}-${index}`}>
+                            <input
+                                value={text.teacherText}
+                                onChange={(e) =>
+                                    updateTeacherText(
+                                        stepIndex,
+                                        Number(text.id),
+                                        e.target.value
+                                    )
+                                }
+                            />
+                            <button
+                                type="button"
+                                id="eraseBtn"
+                                onClick={() =>
+                                    deleteTeacherText(
+                                        stepIndex,
+                                        Number(text.id)
+                                    )
+                                }
+                            >
+                                Kustuta
+                            </button>
+                        </div>
+                    ))}
                 </div>
             ))}
-
-            <h3 id="addTeacherTextTitle">Õpetaja tekst</h3>
-
-            <input
-                type="text"
-                value={step.teacherTextInput}
-                onChange={(e) =>
-                    updateTeacherTextInput(
-                        stepIndex,
-                        e.target.value
-                    )
-                } id="addTeachText"
-            />
-
-            <button id="addTeachTextBtn"
-                type="button"
-                onClick={() => addTeacherTextEdit(stepIndex)}
-            >
-                Lisa õpetaja tekst
-            </button>
-
-
-            <div>Õpetaja tekstid:</div>
-
-            {step.teacherTexts.map((text, index) => (
-                <div key={`tt-${text.id}-${index}`}>
-                    <input
-                        value={text.teacherText}
-                        onChange={(e) =>
-                            updateTeacherText(
-                                stepIndex,
-                                text.id,
-                                e.target.value
-                            )
-                        }
-                    />
-                    <button
-                        type="button"
-                        id="eraseBtn"
-                        onClick={() =>
-                            deleteTeacherText(
-                                stepIndex,
-                                text.id
-                            )
-                        }
-                    >
-                        Kustuta
-                    </button>
-                </div>
-            ))}
-        </div>
-            ))}
-    </div >
+        </div >
         <hr />
         <button id="saveGameBtn"
             type="button"

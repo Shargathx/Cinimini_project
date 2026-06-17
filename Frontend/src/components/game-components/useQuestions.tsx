@@ -1,7 +1,7 @@
 type QuestionManagerProps = {
     value: string;
     questions: {
-        id: number;
+        id?: number;
         questionText: string;
     }[];
     onInputChange: (value: string) => void;
@@ -38,7 +38,7 @@ export default function QuestionManager({
 
                     <button
                         type="button"
-                        onClick={() => onDelete(question.id)}
+                        onClick={() => onDelete(Number(question.id))}
                     >
                         Kustuta
                     </button>

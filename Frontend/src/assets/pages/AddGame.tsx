@@ -95,7 +95,7 @@ function AddGame() {
       const response = await fetch(`${import.meta.env.VITE_BACK_URL}/games/add-game`, {
         method: "POST",
         body: formData
-      });
+      })
 
       if (!response.ok) throw new Error("Failed to save game");
       alert("Game saved!");
