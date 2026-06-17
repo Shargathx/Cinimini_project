@@ -26,6 +26,7 @@ function EditView() {
         setSteps,
 
         addStep,
+        deleteStep,
 
         // addQuestion,
         deleteQuestion,
@@ -200,12 +201,12 @@ function EditView() {
                 <div key={`q-${step.id}-${stepIndex}`} id="singleStep">
                     <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
 
-                    {/* {<button
+                    {<button
                         type="button"
                         onClick={() => deleteStep(stepIndex)}
                     >
                         Kustuta samm
-                    </button>} */}
+                    </button>}
 
                     <input
                         type="file"
