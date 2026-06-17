@@ -1,12 +1,12 @@
 import { useState } from "react";
-import type { CreateGameStep } from "../../assets/models/CreateGameStep";
+import type { EditGameStep } from "../../assets/models/EditGameStep";
 
 export function useGameSteps() {
     const [questionCounter, setQuestionCounter] = useState(0);
     const [discussionPointsCounter, setDiscussionPointsCounter] = useState(0);
     const [teacherTextCounter, setTeacherTextCounter] = useState(0);
 
-    function createEmptyStep(): CreateGameStep {
+    function createEmptyStep(): EditGameStep {
         return {
             id: undefined,
             images: [],
@@ -18,7 +18,7 @@ export function useGameSteps() {
             teacherTextInput: ""
         };
     }
-    const [steps, setSteps] = useState<CreateGameStep[]>([
+    const [steps, setSteps] = useState<EditGameStep[]>([
         createEmptyStep()
     ]);
 
