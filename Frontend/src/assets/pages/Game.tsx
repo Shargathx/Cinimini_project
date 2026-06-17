@@ -377,7 +377,7 @@ function Game() {
                         className="close-popup"
                         onClick={() => setActivePopup(null)}
                     >
-                        ×
+                        x
                     </button>
 
                     {activePopup === "questions" && (
