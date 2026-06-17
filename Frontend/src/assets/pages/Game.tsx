@@ -119,6 +119,7 @@ function Game() {
             case "video/mp4": {
                 const videoSrc = `data:video/mp4;base64,${media}`;
                 return (media && (<video
+                    controls
                     ref={videoRef}
                     width="320"
                     height="240"
