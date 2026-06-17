@@ -10,17 +10,23 @@ function Header() {
     const location = useLocation();
     const path = location.pathname;
 
-    const showAddGame = ["/categories"].includes(path);
+    const showAddGame = path === "/categories" || 
+        path.startsWith("/categories/");
     const showHomePage =
         path === "/categories" ||
         path === "/add-game" ||
+        path === "/register" ||
+        path === "/login" ||
         path.startsWith("/categories/");
     const showCategories =
         path === "/add-game" ||
         path.startsWith("/categories/");
-    const showPageInfo = ["/"].includes(path);
-    const showAbout = ["/"].includes(path);
-    const showCategoriesInfo = ["/categories"].includes(path);
+    const showPageInfo = path === "/";
+    const showAbout = path === "/";
+    const showCategoriesInfo = path === "/categories";
+    const showLoginAndRegister = path === "/" ||
+        path === "/register" || 
+        path === "/login";
 
     const [text, setText] = useState("");
     const [showPopup, setShowPopup] = useState(false);
@@ -39,22 +45,27 @@ function Header() {
     return (
         <header className="header">
             <nav className="nav">
-                <a href="/register" className="home-page-link">
-                    Register
-                </a>
+                {showLoginAndRegister && (
+                    <>
+                        <a href="/register" className="register-link">
+                            REGISTREERI
+                        </a>
 
-                <a href="/login" className="home-page-link">
-                    Login
-                </a>
+                        <a href="/login" className="login-link">
+                            LOGI SISSE
+                        </a>
+                    </>
+                )}
 
                 {showHomePage && (
                     <a href="/" className="home-page-link">
                         AVALEHT
                     </a>
+
                 )}
 
                 {showAddGame && (
-                    <a onClick={() => { localStorage.setItem("mode", "add") }} href="/add-game" className="home-page-link">
+                    <a onClick={() => { localStorage.setItem("mode", "add") }} href="/add-game" className="add-game-link">
                         LISA MÄNG
                     </a>
                 )}

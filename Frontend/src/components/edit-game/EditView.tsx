@@ -25,7 +25,7 @@ function EditView() {
         steps,
         setSteps,
 
-        addStep,
+        // addStep,
         deleteStep,
 
         // addQuestion,

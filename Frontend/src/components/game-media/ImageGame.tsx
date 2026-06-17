@@ -52,28 +52,29 @@ export default function ImageGame({
 
     return (
         <>
-            <div className="image-wrapper">
+            <div className="image-container">
                 <img
-                    className="image-container"
                     src={`data:image/png;base64,${media}`}
                     alt="Game Visual"
                     style={filterStyles}
                 />
                 {/* Single button tied to the correct state */}
                 <button className="fullscreen-btn" onClick={() => setFullscreen(true)}>
-                    <img src={fullscreenIcon} alt="Fullscreen" width="32" height="32" />
+                    <img src={fullscreenIcon} alt="Fullscreen" />
                 </button>
             </div>
 
             {fullscreen && (
                 <div className="fullscreen-overlay" onClick={() => setFullscreen(false)}>
                     <div className="fullscreen-content" onClick={(e) => e.stopPropagation()}>
-                        <img
-                            src={`data:image/png;base64,${media}`}
-                            className="fullscreen-image"
-                            style={{ ...filterStyles, transform: `scale(${zoom / 100})` }}
-                            alt="Fullscreen Game Visual"
-                        />
+                        <div className="fullscreen-image-wrapper">
+                            <img
+                                src={`data:image/png;base64,${media}`}
+                                className="fullscreen-image"
+                                style={{ ...filterStyles, transform: `scale(${zoom / 100})` }}
+                                alt="Fullscreen Game Visual"
+                            />
+                        </div>
                         <button className="close-btn" onClick={() => setFullscreen(false)}>✕</button>
                         <div className="fullscreen-controls">
                             {controls}
