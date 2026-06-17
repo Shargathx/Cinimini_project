@@ -24,7 +24,7 @@ import { useAudioController } from '../../components/hooks/useAudioController';
 import LessThanB from '../icons/LessThanB.svg';
 import GreaterThanB from '../icons/GreaterThanB.svg';
 
-function Game() {
+function GamePage() {
     const { id } = useParams<{ id: string }>();
     const { data, loading } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/category/games/${id}/steps`, [id]);
     // const [data, setData] = useState<Game | null>(null);
@@ -358,4 +358,4 @@ function Game() {
     );
 }
 
-export default Game;
+export default GamePage;
