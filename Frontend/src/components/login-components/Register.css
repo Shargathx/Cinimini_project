@@ -1,11 +1,11 @@
-.login-page {
+.register-page {
     min-height: calc(100vh - 15vh - clamp(40px, 4vw, 64px));
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.login-container {
+.register-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,7 +13,7 @@
     width: clamp(300px, 25vw, 500px);
     padding: clamp(20px, 2vw, 40px) clamp(50px, 2vw, 60px);
 
-    background: rgb(255, 248,248 ,1);
+    background: rgb(255, 248, 248, 1);
     border: 0.5vw solid rgb(145, 242, 190, 0.5);
 
     border-radius: clamp(30px, 2vw, 50px);
@@ -23,15 +23,15 @@
     text-transform: uppercase;
 }
 
-.login-title {
+.register-title {
     font-size: clamp(18px, 1.8vw, 28px);
     font-weight: bold;
     padding: 1vw;
 }
 
-
-.user-input,
-.password-input {
+.register-user-input,
+.register-password-input,
+.retype-password {
     width: 100%;
     max-width: 300px;
 
@@ -43,11 +43,10 @@
     border-radius: 0.4vw;
     background-color: rgba(255, 248, 248, 0.90);
 
-
     text-align: center;
 }
 
-.login-button {
+.submit-button {
     margin-top: clamp(10px, 1vw, 20px);
     background-color: rgb(145, 242, 190, 0.5);
 
@@ -58,13 +57,14 @@
     text-align: center;
     text-transform: uppercase;
 
-    
-
     border-radius: 1vw;
     border: 0.2vw solid rgb(145, 242, 190, 1);
     padding: clamp(8px, 0.4vw, 16px);
+
+    width: fit-content !important;
+    align-self: center;
 }
 
-.login-button:hover{
+.submitBtn:hover {
     transform: scale(1.05);
 }

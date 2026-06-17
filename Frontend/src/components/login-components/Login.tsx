@@ -25,11 +25,10 @@ function Login() {
                     <div className='login-title'>Logi sisse</div>
                     <br />
 
-                    <label className='user-title'>Kasutajanimi</label><br />
+                    <label className='user-title'>Kasutajanimi</label>
                     <input className="user-input" onChange={(e: React.ChangeEvent<HTMLInputElement>) => createUsername(e.target.value)} autoComplete="off" id="username" name="username" type="text" /><br /><br />
 
                     <label className='password-title'>Salasõna</label>
-                    <br />
                     <input className="password-input" onChange={(e: React.ChangeEvent<HTMLInputElement>) => createPassword(e.target.value)} id="password" name="password" type="password" /><br /><br />
 
                     <button className="login-button" onClick={handleSubmit}>Logi sisse</button>
