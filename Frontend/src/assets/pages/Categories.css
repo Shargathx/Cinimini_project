@@ -1,6 +1,12 @@
+.categories-page {
+  min-height: calc(100vh - 15vh - clamp(40px, 4vw, 64px));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .categories-container {
   z-index: 1;
-  min-height: 75vh;
   display: flex;
   justify-content: center;
   align-items: center;
