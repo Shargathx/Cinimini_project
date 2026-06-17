@@ -54,7 +54,7 @@ async function EditGame(
         })),
     };
 
-console.log("PAYLOAD BEING SENT:", JSON.stringify(gameRequest, null, 2));
+    console.log("PAYLOAD BEING SENT:", JSON.stringify(gameRequest, null, 2));
 
     formData.append(
         "updateGameRequest",
@@ -79,6 +79,9 @@ console.log("PAYLOAD BEING SENT:", JSON.stringify(gameRequest, null, 2));
 
     if (!response.ok) {
         throw new Error("Failed to update game");
+    }
+    else {
+        window.location.reload()
     }
 
     alert("Game updated!");

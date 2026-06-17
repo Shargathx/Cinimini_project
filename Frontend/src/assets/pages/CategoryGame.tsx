@@ -28,18 +28,16 @@ function CategoryGame() {
 
 
     function softDelete(gameId: number) {
-        fetch(import.meta.env.VITE_BACK_URL + `/ games / ${gameId}`, {
+        fetch(import.meta.env.VITE_BACK_URL + `/games/${gameId}`, {
             method: "DELETE"
         }).then(() => { window.location.reload() })
     }
 
     function hardDelete(gameId: number) {
-        fetch(import.meta.env.VITE_BACK_URL + `/ games / delete -permanently / ${gameId}`, {
+        fetch(import.meta.env.VITE_BACK_URL + `/games/delete-permanently/${gameId}`, {
             method: "DELETE"
         }).then(() => { window.location.reload() })
     }
-
-
 
 
     return (<>
