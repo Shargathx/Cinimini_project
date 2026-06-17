@@ -11,6 +11,7 @@
     padding: clamp(10px, 1vw, 14px) ;
 }
 
+
 .nav {
     width: 100%;
     height: clamp(46px, 3.75vw, 92px);
@@ -21,7 +22,7 @@
 
 }
 
-.home-page-link, .categories-link, .add-game-button, .page-info-button, .about-button, .categories-info-button {
+.home-page-link, .categories-link, .add-game-button, .page-info-button, .about-button, .categories-info-button, .register-link, .login-link, .add-game-link {
     background-color: rgb(145, 242, 190, 0.5);
     color: var(--text-h);
     font-family: 'Sono', sans-serif;
@@ -34,19 +35,17 @@
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
-
 }
 
-.home-page-link:hover, .categories-link:hover, .add-game-button:hover, .page-info-button:hover, .about-button:hover, .categories-info-button:hover {
+.home-page-link:hover, .categories-link:hover, .add-game-button:hover, .page-info-button:hover, .about-button:hover, .categories-info-button:hover, .register-link:hover, .login-link:hover, .add-game-link:hover {
     transform: scale(1.05);
     color:black;
 }
 
-.home-page-link:active, .categories-link:active, .add-game-button:active, .page-info-button:active, .about-button:active, .categories-info-button:active {
+.home-page-link:active, .categories-link:active, .add-game-button:active, .page-info-button:active, .about-button:active, .categories-info-button:active, .register-link:active, .login-link:active, .add-game-link:active {
     transform: scale(1.05);
     color:white;
 }
-
 
 .popup {
   position: fixed;
