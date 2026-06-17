@@ -34,6 +34,7 @@ function Game() {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [points, setPoints] = useState<Discussion[]>([]);
     const [teacherTexts, setTeacherText] = useState<TeacherText[]>([]);
+    const [activePopup, setActivePopup] = useState<"questions" | "points" | "teacher" | null>(null);
 
 
     const [saturation, setSaturation] = useState(100);
@@ -109,8 +110,7 @@ function Game() {
                 );
             case "audio/mpeg":
             case "audio/mp3": {
-                if(!audioSrc)
-                    {setAudioSrc(`data:audio/mpeg;base64,${media}`)}
+                if (!audioSrc) { setAudioSrc(`data:audio/mpeg;base64,${media}`) }
                 return (media && (<audio
                     controls
                     src={audioSrc}
@@ -340,24 +340,87 @@ function Game() {
             <h3 className="game-description">Kirjeldus: {data?.description}</h3>
 
             <div className="game-info-buttons">
-                <button onClick={getQuestions} id="gameInfoButtons">
-                    <img src={questionImg} alt="Küsimused" /></button>
-                {questions.map((question) => (
-                    <div key={question.id}>{question.questionText}</div>
-                ))}
+                <button
+                    onClick={() => {
+                        getQuestions();
+                        setActivePopup("questions");
+                    }}
+                    id="gameInfoButtons"
+                >
+                    <img src={questionImg} alt="Küsimused" />
+                </button>
 
-                <button onClick={getPoints} id="gameInfoButtons">
-                    <img src={discussionImg} alt="Arutelupunktid" /></button>
-                {points.map((point) => (
-                    <div key={point.id}>{point.discussionText}</div>
-                ))}
+                <button
+                    onClick={() => {
+                        getPoints();
+                        setActivePopup("points");
+                    }}
+                    id="gameInfoButtons"
+                >
+                    <img src={discussionImg} alt="Arutelupunktid" />
+                </button>
 
-                <button onClick={getTeacherText} id="gameInfoButtons">
-                    <img src={teacherImg} alt="Info Õpetajale" /></button>
-                {teacherTexts.map((teacherText) => (
-                    <div key={teacherText.id}>{teacherText.teacherText}</div>
-                ))}
+                <button
+                    onClick={() => {
+                        getTeacherText();
+                        setActivePopup("teacher");
+                    }}
+                    id="gameInfoButtons"
+                >
+                    <img src={teacherImg} alt="Info Õpetajale" />
+                </button>
             </div>
+
+            {activePopup && (
+                <div className="side-popup">
+                    <button
+                        className="close-popup"
+                        onClick={() => setActivePopup(null)}
+                    >
+                        ×
+                    </button>
+
+                    {activePopup === "questions" && (
+                        <>
+                            <h2>Küsimused</h2>
+                            <div className="side-popup-content">
+                                <ul>
+                                    {questions.map((question) => (
+                                        <li key={question.id}>{question.questionText}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </>
+                    )}
+
+                    {activePopup === "points" && (
+                        <>
+                            <h2>Arutelupunktid</h2>
+                            <div className="side-popup-content">
+                                <ul>
+                                    {points.map((point) => (
+                                        <li key={point.id}>{point.discussionText}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </>
+                    )}
+
+                    {activePopup === "teacher" && (
+                        <>
+                            <h2>Info õpetajale</h2>
+                            <div className="side-popup-content">
+                                <ul>
+                                    {teacherTexts.map((teacherText) => (
+                                        <li key={teacherText.id}>{teacherText.teacherText}</li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                        </>
+                    )}
+                </div>
+            )}
         </div>
     );
 }
