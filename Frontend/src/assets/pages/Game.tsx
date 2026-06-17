@@ -13,11 +13,8 @@ import discussionImg from "../icons/discussion.svg";
 import questionImg from "../icons/question.svg";
 import teacherImg from "../icons/teacherTextImg.svg";
 
-
 import ImageGame from '../../components/game-media/ImageGame';
 
-import AudioGame from '../../components/game-media/AudioGame';
-import VideoGame from '../../components/game-media/VideoGame';
 import ImageSaturation from '../../components/ImageSaturation';
 import ImageContrast from '../../components/ImageContrast';
 import ImageExposure from '../../components/ImageExposure';
@@ -109,8 +106,7 @@ function Game() {
                 );
             case "audio/mpeg":
             case "audio/mp3": {
-                if(!audioSrc)
-                    {setAudioSrc(`data:audio/mpeg;base64,${media}`)}
+                if (!audioSrc) { setAudioSrc(`data:audio/mpeg;base64,${media}`) }
                 return (media && (<audio
                     controls
                     src={audioSrc}
