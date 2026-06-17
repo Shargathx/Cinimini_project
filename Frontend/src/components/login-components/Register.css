@@ -1,0 +1,70 @@
+.register-page {
+    min-height: calc(100vh - 15vh - clamp(40px, 4vw, 64px));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: clamp(300px, 25vw, 500px);
+    padding: clamp(20px, 2vw, 40px) clamp(50px, 2vw, 60px);
+
+    background: rgb(255, 248, 248, 1);
+    border: 0.5vw solid rgb(145, 242, 190, 0.5);
+
+    border-radius: clamp(30px, 2vw, 50px);
+
+    text-align: center;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.register-title {
+    font-size: clamp(18px, 1.8vw, 28px);
+    font-weight: bold;
+    padding: 1vw;
+}
+
+.register-user-input,
+.register-password-input,
+.retype-password {
+    width: 100%;
+    max-width: 300px;
+
+    padding: clamp(8px, 0.8vw, 14px);
+    margin-top: clamp(8px, 1vw, 16px);
+
+    font-size: 16px;
+    border: 3px solid rgba(157, 157, 156, 0.7);
+    border-radius: 0.4vw;
+    background-color: rgba(255, 248, 248, 0.90);
+
+    text-align: center;
+}
+
+.submit-button {
+    margin-top: clamp(10px, 1vw, 20px);
+    background-color: rgb(145, 242, 190, 0.5);
+
+    color: var(--text-h);
+    font-family: 'Sono', sans-serif;
+    font-weight: bold;
+    font-size: clamp(14px, 1.25vw, 30px);
+    text-align: center;
+    text-transform: uppercase;
+
+    border-radius: 1vw;
+    border: 0.2vw solid rgb(145, 242, 190, 1);
+    padding: clamp(8px, 0.4vw, 16px);
+
+    width: fit-content !important;
+    align-self: center;
+}
+
+.submitBtn:hover {
+    transform: scale(1.05);
+}
