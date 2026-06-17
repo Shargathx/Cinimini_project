@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './Game.css';
 import './GameImage.css';
 import './GameFullscreen.css';
@@ -22,7 +22,8 @@ import ImageSaturation from '../../components/ImageSaturation';
 import ImageContrast from '../../components/ImageContrast';
 import ImageExposure from '../../components/ImageExposure';
 import ImageZoom from '../../components/ImageZoom';
-
+import { useVideoController } from '../../components/hooks/useVideoController';
+import { useAudioController } from '../../components/hooks/useAudioController';
 import LessThanB from '../icons/LessThanB.svg';
 import GreaterThanB from '../icons/GreaterThanB.svg';
 
@@ -40,6 +41,33 @@ function Game() {
     const [exposure, setExposure] = useState(100);
     const [zoom, setZoom] = useState(100);
     const [currentStep, setCurrentStep] = useState(0);
+
+    //Video variables
+    const [speed, setSpeed] = useState<number>(1);
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const reverseIntervalRef = useRef<number | null>(null);
+
+    //Audio variables
+    const [reverb, setReverb] = useState<number>(0);
+    const [audioSrc, setAudioSrc] = useState<string>("")
+
+    const {
+        stopPlay,
+        changePosition,
+        playReverse,
+        playFast,
+    } = useVideoController({
+        videoRef,
+        reverseIntervalRef,
+        speed,
+    });
+
+    const {
+        playReversed,
+        playWithReverb,
+    } = useAudioController({
+        reverb,
+    });
 
     const step = data?.gameSteps?.[currentStep];
     const media = step?.mediaElements?.[0]?.fileData ?? "";
@@ -80,10 +108,23 @@ function Game() {
                     />
                 );
             case "audio/mpeg":
-            case "audio/mp3":
-                return <AudioGame media={media} />;
-            case "video/mp4":
-                return <VideoGame media={media} />;
+            case "audio/mp3": {
+                if(!audioSrc)
+                    {setAudioSrc(`data:audio/mpeg;base64,${media}`)}
+                return (media && (<audio
+                    controls
+                    src={audioSrc}
+                />))
+            }
+            case "video/mp4": {
+                const videoSrc = `data:video/mp4;base64,${media}`;
+                return (media && (<video
+                    ref={videoRef}
+                    width="320"
+                    height="240"
+                    src={videoSrc}
+                />))
+            }
             default:
                 return <p>Unsupported format: {fileFormat}</p>;
         }
@@ -172,6 +213,124 @@ function Game() {
                             value={zoom}
                             onChange={setZoom}
                         />
+                    </div>
+                )}
+                {fileFormat.startsWith("video/") && (
+                    <div className="image-function">
+                        <div
+                            className="video-actions"
+                            style={{ marginTop: '10px' }}
+                        >
+                            <button onClick={playReverse}>
+                                Play in Reverse
+                            </button>
+                        </div>
+
+                        <div style={{ marginTop: '15px' }}>
+                            <label
+                                style={{
+                                    display: 'inline-block',
+                                    width: '160px',
+                                    fontVariantNumeric: 'tabular-nums',
+                                }}
+                            >
+                                Speed amount: {speed}
+                            </label>
+
+                            <input
+                                type="range"
+                                min="1"
+                                max="2"
+                                step="0.1"
+                                value={speed}
+                                onChange={(e) => {
+                                    const newSpeed = Number(e.target.value);
+                                    setSpeed(newSpeed);
+
+                                    setTimeout(() => playFast(), 0);
+                                }}
+                            />
+
+                            <figure>
+                                <figcaption>
+                                    <button
+                                        onClick={stopPlay}
+                                        id="play"
+                                        aria-label="Play"
+                                        role="button"
+                                    >
+                                        ►
+                                    </button>
+
+                                    <progress
+                                        id="progress"
+                                        value={0}
+                                        max={1}
+                                        onClick={changePosition}
+                                    >
+                                        Progress
+                                    </progress>
+
+                                    <label
+                                        id="timer"
+                                        role="timer"
+                                    >
+                                        0
+                                    </label>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+                )}
+
+                {fileFormat.startsWith("audio/") && (
+                    <div className="image-function">
+                        <div
+                            className="audio-controls"
+                            style={{ marginTop: '10px' }}
+                        >
+                            <button
+                                onClick={() =>
+                                    playReversed(audioSrc)
+                                }
+                            >
+                                Reverse
+                            </button>
+
+                            <button
+                                onClick={() =>
+                                    playWithReverb(audioSrc)
+                                }
+                            >
+                                Reverb
+                            </button>
+                        </div>
+
+                        <div style={{ marginTop: '15px' }}>
+                            <label
+                                style={{
+                                    display: "inline-block",
+                                    width: "160px",
+                                    fontVariantNumeric:
+                                        "tabular-nums"
+                                }}
+                            >
+                                Reverb amount: {reverb}%
+                            </label>
+
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={reverb}
+                                onChange={(e) =>
+                                    setReverb(
+                                        Number(e.target.value)
+                                    )
+                                }
+                            />
+                        </div>
                     </div>
 
                 )}
