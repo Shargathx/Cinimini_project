@@ -177,7 +177,7 @@ function Game() {
                 )}
             </div>
 
-            <h3 className="game-name">Mängu nimi: {data?.name}</h3>
+            <h3 className="game-name">{data?.name}</h3>
             <h3 className="game-description">Kirjeldus: {data?.description}</h3>
 
             <div className="game-info-buttons">
