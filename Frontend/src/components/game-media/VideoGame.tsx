@@ -92,7 +92,7 @@ export default function VideoGame({ media }: VideoGameProps) {
 
     return (<>
         <div className="video-game-container">
-            <video ref={videoRef} width="320" height="240" controls src={videoSrc} />
+            <video ref={videoRef} width="320" height="240" src={videoSrc} />
             <div className="video-actions" style={{ marginTop: '10px' }}>
                 <button onClick={playReverse}>Play in Reverse</button>
             </div>
