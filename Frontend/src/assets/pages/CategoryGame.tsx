@@ -2,12 +2,14 @@ import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import defaultGameIcon from '../icons/defaultGameIcon.svg';
 import './CategoryGame.css';
+import type { Game } from "../models/Game";
+
 
 function CategoryGame() {
     const { catid } = useParams<{ catid: string }>();
-    const [activegames, setActivegames] = useState([])
-    const [inactivegames, setInactivegames] = useState([])
-    const [games, setGames] = useState([])
+    const [activegames, setActivegames] = useState<Game[]>([])
+    const [inactivegames, setInactivegames] = useState<Game[]>([])
+    const [games, setGames] = useState<Game[]>([])
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_BACK_URL}/category/games/${catid}`, {
