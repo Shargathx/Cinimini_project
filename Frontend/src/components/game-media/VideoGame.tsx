@@ -44,6 +44,23 @@ export default function VideoGame({ media }: VideoGameProps) {
         });
     }
 
+    function changePosition(e: React.MouseEvent<HTMLProgressElement>) {
+        const video = videoRef.current;
+        if (!video || !video.duration) return;
+
+        const progressBar = e.currentTarget;
+
+        const rect = progressBar.getBoundingClientRect();
+
+        const clickX = e.clientX - rect.left;
+
+        const percent = clickX / rect.width;
+
+        video.currentTime = percent * video.duration;
+
+        progressLoop();
+    }
+
     function playReverse() {
         if (reverseIntervalRef.current) clearInterval(reverseIntervalRef.current);
 
@@ -75,10 +92,9 @@ export default function VideoGame({ media }: VideoGameProps) {
 
     return (<>
         <div className="video-game-container">
-            <video ref={videoRef} width="320" height="240" src={videoSrc} />
+            <video ref={videoRef} width="320" height="240" controls src={videoSrc} />
             <div className="video-actions" style={{ marginTop: '10px' }}>
-                <button onClick={playReverse}>Reverse</button>
-                <button onClick={playFast}>Fast</button>
+                <button onClick={playReverse}>Play in Reverse</button>
             </div>
             <div style={{ marginTop: '15px' }}>
                 <label style={{ display: "inline-block", width: "160px", fontVariantNumeric: "tabular-nums" }}>
@@ -100,7 +116,9 @@ export default function VideoGame({ media }: VideoGameProps) {
                 <figure>
                     <figcaption>
                         <button onClick={() => { stopPlay() }} id="play" aria-label="Play" role="button">►</button>
-                        <progress  id="progress" value="0">Progress</progress>
+                        <progress id="progress" value={0} max={1} onClick={changePosition}>
+                            Progress
+                        </progress>
                         <label id="timer" role="timer">0</label>
                     </figcaption>
                 </figure>
