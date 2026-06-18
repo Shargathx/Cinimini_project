@@ -1,9 +1,5 @@
-* {
-  box-sizing: border-box;
-}
-
 .footer {
-  height: 10vh;
+  min-height: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;

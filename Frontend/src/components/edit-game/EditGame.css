@@ -1,6 +1,4 @@
-* {
-    box-sizing: border-box;
-}
+
 
 #addGameTitle {
     font-size: clamp(40px, 3vw, 56px);

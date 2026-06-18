@@ -1,3 +1,7 @@
+.category-game-page {
+  height: 100%;
+}
+
 .games-container {
   display: flex;
   justify-content: left;

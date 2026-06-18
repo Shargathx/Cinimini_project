@@ -3,16 +3,22 @@
 
 
 .app-layout {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 }
 
-.app-main {
+.header {
+  height: clamp(30px, 12vh, 160px);
+  flex-shrink: 0;
+}
+
+.main-container {
   flex: 1;
-  padding: 20px;
+  min-height: 0;
 }
 
 .footer {
+  height: clamp(30px, 10vh, 90px);
   flex-shrink: 0;
 }

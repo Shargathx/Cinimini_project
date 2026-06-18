@@ -1,9 +1,5 @@
-* {
-    box-sizing: border-box;
-}
-
 .header {
-    height: 15vh;
+    min-height: 0;
     background-color: rgb(217, 217, 217, 0.2);
     border-bottom-left-radius: 0.5vw;
     border-bottom-right-radius: 1vw;

@@ -42,56 +42,58 @@ function CategoryGame() {
     }
 
     return (<>
-        <button onClick={() => { setGames(activegames) }}>Active games</button>
-        <button onClick={() => { setGames(inactivegames) }}>Inactive games</button>
-        <div id="gameContainer" className="games-container">
-            {games.map((game) => (
-                <div className="game-item" key={game.id}>
-                    <Link
-                        to={`/categories/${catid}/${game.id}`}
-                        className={
-                            "game-card" +
-                            (catid === "1" ? " heli" : "") +
-                            (catid === "2" ? " video" : "") +
-                            (catid === "3" ? " pilt" : "")
-                        }
-                    >
-                        <img src={defaultGameIcon} alt="DefaultIcon" className="game-icon" />
-
-                        <div className="game-name">
-                            {game.name}
-                        </div>
-                    </Link>
-
-                    <div className="gameButtons">
-                        <button
-                            className="archiveBtn"
-                            onClick={() => softDelete(Number(game.id))}
+        <div className="category-game-page">
+            <button onClick={() => { setGames(activegames) }}>Active games</button>
+            <button onClick={() => { setGames(inactivegames) }}>Inactive games</button>
+            <div id="gameContainer" className="games-container">
+                {games.map((game) => (
+                    <div className="game-item" key={game.id}>
+                        <Link
+                            to={`/categories/${catid}/${game.id}`}
+                            className={
+                                "game-card" +
+                                (catid === "1" ? " heli" : "") +
+                                (catid === "2" ? " video" : "") +
+                                (catid === "3" ? " pilt" : "")
+                            }
                         >
-                            <img src={archiveIcon} alt="Archive" />
-                        </button>
-                        <button
-                            className="deleteBtn"
-                            onClick={() => hardDelete(Number(game.id))}
-                        >
-                            <img src={deleteIcon} alt="Delete" />
-                        </button>
+                            <img src={defaultGameIcon} alt="DefaultIcon" className="game-icon" />
 
-                        <Link to={`/update-game/${game.id}`}>
-                            <button
-                                className="editBtn"
-                                onClick={() => {
-                                    localStorage.setItem("mode", "edit");
-                                    localStorage.setItem("id", String(game.id));
-                                    localStorage.setItem("catid", String(catid));
-                                }}
-                            >
-                                <img src={editIcon} alt="Edit" />
-                            </button>
+                            <div className="game-name">
+                                {game.name}
+                            </div>
                         </Link>
+
+                        <div className="gameButtons">
+                            <button
+                                className="archiveBtn"
+                                onClick={() => softDelete(Number(game.id))}
+                            >
+                                <img src={archiveIcon} alt="Archive" />
+                            </button>
+                            <button
+                                className="deleteBtn"
+                                onClick={() => hardDelete(Number(game.id))}
+                            >
+                                <img src={deleteIcon} alt="Delete" />
+                            </button>
+
+                            <Link to={`/update-game/${game.id}`}>
+                                <button
+                                    className="editBtn"
+                                    onClick={() => {
+                                        localStorage.setItem("mode", "edit");
+                                        localStorage.setItem("id", String(game.id));
+                                        localStorage.setItem("catid", String(catid));
+                                    }}
+                                >
+                                    <img src={editIcon} alt="Edit" />
+                                </button>
+                            </Link>
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
     </>
     );

@@ -1,5 +1,5 @@
 .home-page {
-    height: calc(100vh - 15vh - 10vh);
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
