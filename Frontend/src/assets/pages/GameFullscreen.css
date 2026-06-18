@@ -19,7 +19,6 @@
     height: 90%;
     padding: clamp(20px, 4vw, 90px) 0 clamp(10px, 2vw, 20px);
     box-sizing: border-box;
-    overflow:hidden;
 }
 
 .fullscreen-image-wrapper {
@@ -48,10 +47,8 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-
+    gap: clamp(20px, 2vw, 30px);
     height: calc(100% - 65vh); 
-    /*padding: clamp(10px, 2vw, 30px);*/
-    margin: clamp(10px, 2vw, 30px);
     box-sizing: border-box;
     color: aliceblue;
     z-index: 10;

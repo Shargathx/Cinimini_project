@@ -131,193 +131,195 @@ function GamePage() {
     }
 
     return (
-        <div className="game-grid-container">
+        <div>
+            <div className="game-grid-container">
 
-            <div className="counter-and-media">
-                <span className="media-count">
-                    {currentStep + 1}/{mediaCount}
-                </span>
+                <div className="counter-and-media">
+                    <span className="media-count">
+                        {currentStep + 1}/{mediaCount}
+                    </span>
 
-                <div className="steps-and-media">
-                    <button
-                        className="previous-step"
-                        onClick={previousStep}
-                        disabled={currentStep === 0}
-                    >
-                        <img src={LessThanB} alt="less-than-sign-black" />
-                    </button>
-
-                    <div className="game-content">
-                        {renderMediaComponent()}
-                    </div>
-
-                    <button
-                        className="next-step"
-                        onClick={nextStep}
-                        disabled={currentStep >= mediaCount - 1}
-                    >
-                        <img src={GreaterThanB} alt="greater-than-sign-black" />
-                    </button>
-                </div>
-            </div>
-
-            <div className="game-function">
-                {fileFormat.startsWith("image/") && (
-                    <div className="image-function">
-                        <ImageSaturation
-                            value={saturation}
-                            onChange={setSaturation}
-                        />
-
-                        <ImageContrast
-                            value={contrast}
-                            onChange={setContrast}
-                        />
-
-                        <ImageExposure
-                            value={exposure}
-                            onChange={setExposure}
-                        />
-
-                        <ImageZoom
-                            value={zoom}
-                            onChange={setZoom}
-                        />
-                    </div>
-                )}
-                {fileFormat.startsWith("video/") && (
-                    <div className="video-function">
-                        <div
-                            className="video-actions"
-                            style={{ marginTop: '10px' }}
+                    <div className="steps-and-media">
+                        <button
+                            className="previous-step"
+                            onClick={previousStep}
+                            disabled={currentStep === 0}
                         >
-                            <button
-                                className="video-reverse-button"
-                                onClick={playReverse}>
-                                Play in Reverse
-                            </button>
+                            <img src={LessThanB} alt="less-than-sign-black" />
+                        </button>
+
+                        <div className="game-content">
+                            {renderMediaComponent()}
                         </div>
 
-                        <div>
-                            <div className="text-and-slider">
-                                <label
-                                    className="video-speed-amount"
+                        <button
+                            className="next-step"
+                            onClick={nextStep}
+                            disabled={currentStep >= mediaCount - 1}
+                        >
+                            <img src={GreaterThanB} alt="greater-than-sign-black" />
+                        </button>
+                    </div>
+                </div>
+
+                <div className="game-function">
+                    {fileFormat.startsWith("image/") && (
+                        <div className="image-function">
+                            <ImageSaturation
+                                value={saturation}
+                                onChange={setSaturation}
+                            />
+
+                            <ImageContrast
+                                value={contrast}
+                                onChange={setContrast}
+                            />
+
+                            <ImageExposure
+                                value={exposure}
+                                onChange={setExposure}
+                            />
+
+                            <ImageZoom
+                                value={zoom}
+                                onChange={setZoom}
+                            />
+                        </div>
+                    )}
+                    {fileFormat.startsWith("video/") && (
+                        <div className="video-function">
+                            <div
+                                className="video-actions"
+                                style={{ marginTop: '10px' }}
+                            >
+                                <button
+                                    className="video-reverse-button"
+                                    onClick={playReverse}>
+                                    Play in Reverse
+                                </button>
+                            </div>
+
+                            <div>
+                                <div className="text-and-slider">
+                                    <label
+                                        className="video-speed-amount"
+                                    >
+                                        Speed amount: {speed}
+                                    </label>
+
+                                    <input
+                                        className="video-slider"
+                                        type="range"
+                                        min="1"
+                                        max="2"
+                                        step="0.1"
+                                        value={speed}
+                                        onChange={(e) => {
+                                            const newSpeed = Number(e.target.value);
+                                            setSpeed(newSpeed);
+
+                                            setTimeout(() => playFast(), 0);
+                                        }}
+                                    />
+                                    <div className="video-speed-options">
+                                        <p>1x</p>
+                                        <p>1.5x</p>
+                                        <p>2x</p>
+                                    </div>
+                                </div>
+
+                                <figure>
+                                    <figcaption>
+                                        <button
+                                            className="video-play"
+                                            onClick={stopPlay}
+                                            id="play"
+                                            aria-label="Play"
+                                            role="button"
+                                        >
+                                            ►
+                                        </button>
+
+                                        <progress
+                                            className="video-progress-bar"
+                                            id="progress"
+                                            value={0}
+                                            max={1}
+                                            onClick={changePosition}
+                                        >
+                                            Progress
+                                        </progress>
+
+                                        <label
+                                            className="video-timer"
+                                            id="timer"
+                                            role="timer"
+                                        >
+                                            0
+                                        </label>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+
+                    )}
+
+                    {fileFormat.startsWith("audio/") && (
+                        <div className="image-function">
+                            <div
+                                className="audio-controls"
+                                style={{ marginTop: '10px' }}
+                            >
+                                <button
+                                    onClick={() =>
+                                        playReversed(audioSrc)
+                                    }
                                 >
-                                    Speed amount: {speed}
+                                    Reverse
+                                </button>
+
+                                <button
+                                    onClick={() =>
+                                        playWithReverb(audioSrc)
+                                    }
+                                >
+                                    Reverb
+                                </button>
+                            </div>
+
+                            <div style={{ marginTop: '15px' }}>
+                                <label
+                                    style={{
+                                        display: "inline-block",
+                                        width: "160px",
+                                        fontVariantNumeric:
+                                            "tabular-nums"
+                                    }}
+                                >
+                                    Reverb amount: {reverb}%
                                 </label>
 
                                 <input
-                                    className="video-slider"
                                     type="range"
-                                    min="1"
-                                    max="2"
-                                    step="0.1"
-                                    value={speed}
-                                    onChange={(e) => {
-                                        const newSpeed = Number(e.target.value);
-                                        setSpeed(newSpeed);
-
-                                        setTimeout(() => playFast(), 0);
-                                    }}
+                                    min="0"
+                                    max="100"
+                                    value={reverb}
+                                    onChange={(e) =>
+                                        setReverb(
+                                            Number(e.target.value)
+                                        )
+                                    }
                                 />
-                                <div className="video-speed-options">
-                                    <p>1x</p>
-                                    <p>1.5x</p>
-                                    <p>2x</p>
-                                </div>
                             </div>
-
-                            <figure>
-                                <figcaption>
-                                    <button
-                                        className="video-play"
-                                        onClick={stopPlay}
-                                        id="play"
-                                        aria-label="Play"
-                                        role="button"
-                                    >
-                                        ►
-                                    </button>
-
-                                    <progress
-                                        className="video-progress-bar"
-                                        id="progress"
-                                        value={0}
-                                        max={1}
-                                        onClick={changePosition}
-                                    >
-                                        Progress
-                                    </progress>
-
-                                    <label
-                                        className="video-timer"
-                                        id="timer"
-                                        role="timer"
-                                    >
-                                        0
-                                    </label>
-                                </figcaption>
-                            </figure>
-                        </div>
-                    </div>
-
-                )}
-
-                {fileFormat.startsWith("audio/") && (
-                    <div className="image-function">
-                        <div
-                            className="audio-controls"
-                            style={{ marginTop: '10px' }}
-                        >
-                            <button
-                                onClick={() =>
-                                    playReversed(audioSrc)
-                                }
-                            >
-                                Reverse
-                            </button>
-
-                            <button
-                                onClick={() =>
-                                    playWithReverb(audioSrc)
-                                }
-                            >
-                                Reverb
-                            </button>
                         </div>
 
-                        <div style={{ marginTop: '15px' }}>
-                            <label
-                                style={{
-                                    display: "inline-block",
-                                    width: "160px",
-                                    fontVariantNumeric:
-                                        "tabular-nums"
-                                }}
-                            >
-                                Reverb amount: {reverb}%
-                            </label>
+                    )}
+                </div>
+                <h3 className="game-name">{data?.name}</h3>
+                <h3 className="game-description">KIRJELDUS: {data?.description}</h3>
 
-                            <input
-                                type="range"
-                                min="0"
-                                max="100"
-                                value={reverb}
-                                onChange={(e) =>
-                                    setReverb(
-                                        Number(e.target.value)
-                                    )
-                                }
-                            />
-                        </div>
-                    </div>
-
-                )}
+                <InfoPanels step={step} />
             </div>
-            <h3 className="game-name">{data?.name}</h3>
-            <h3 className="game-description">KIRJELDUS: {data?.description}</h3>
-
-            <InfoPanels step={step} />
         </div>
     );
 }
