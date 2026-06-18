@@ -25,7 +25,7 @@ function EditView() {
         steps,
         setSteps,
 
-        // addStep,
+        addStep,
         deleteStep,
 
         // addQuestion,
@@ -162,7 +162,6 @@ function EditView() {
     return (<>
         <div id="generalContainer">
             <h1 id="addGameTitle">Uuenda mängu</h1>
-            <button onClick={() => { console.log(game) }}>Get editable</button>
             <label id="gameNameLabel">Mängu nimi: </label>
             <input id="gameName" value={name} onChange={(e) => { setName(e.target.value) }}></input><br></br>
             <label id="gameCatLabel">Kategooria: </label>
@@ -194,9 +193,9 @@ function EditView() {
         </div>ˇ
         <hr></hr>
         {/*Ei taha lisada uut steppi*/}
-        {/* {<button type="button" id="stepBtn" onClick={addStep}>
+        {<button type="button" id="stepBtn" onClick={addStep}>
             Lisa uus samm
-        </button>} */}
+        </button>}
         <div id="step-container">
             {steps.map((step, stepIndex) => (
                 <div key={`q-${step.id}-${stepIndex}`} id="singleStep">
@@ -231,7 +230,6 @@ function EditView() {
                                 })
                             );
 
-                            // allow selecting same files again
                             e.target.value = "";
                         }}
                     />
