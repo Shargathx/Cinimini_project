@@ -25,6 +25,12 @@ pgAdmin - Ver. 9.15
 
 ZONE - Ver.????
 
+TypeScript - Ver. 5.9.3
+
+React - Ver. 19.2.4
+
+Java - Ver. Oracle OpenJDK 21.0.4
+
 ## Autorid
 Veebilehe koostajad on Martin Saareväli, Roland Piperal, Õnne Elisabeth Maripu, Anette Aruorg ja Carolina Treu. Projekti loomine andis meile kogemusi ka edaspidi suuremate projektidega tegelemiseks. 
 
@@ -33,7 +39,7 @@ Frontend:
 
 Tuleb rakenduse failid alla laadida, ning frontendi on võimalik jooksutada VsCodeis. Vaja on alla laadia Node, React ja Vite. 
 
-Nende allalaadimiseks on vaja terminalis jooksutada "npm install" mis automaatselt laeb alla kõik vajalikud "package"-id
+Nende allalaadimiseks on vaja terminalis jooksutada ["npm install"}(https://docs.npmjs.com/cli/v11/commands/npm-install) mis automaatselt laeb alla kõik vajalikud "package"-id
 
 ○ selgeid paigaldusjuhiseid ja arenduskeskkonna ülesseadmise juhised, et kes iganes saaks selle
 		vajadusel käima (näiteks andmebaasi tabelid jm info peaks olema teksti kujul, et saaks kopeerida, aga
