@@ -22,6 +22,8 @@ VsCode - Ver. 1.124.2
 IntelliJ IDEA ULTIMATE - Ver. 25.0.2+1-b329.117
 
 pgAdmin - Ver. 9.15
+
+ZONE - Ver.
 ## Autorid
 Veebilehe koostajad on Martin Saareväli, Roland Piperal, Õnne Elisabeth Maripu, Anette Aruorg ja Carolina Treu. Projekti loomine andis meile kogemusi ka edaspidi suuremate projektidega tegelemiseks. 
 
