@@ -17,13 +17,13 @@
 .game-card {
   width: clamp(221px, 15vw, 300px);
   height: clamp(242px, 16vw, 330px);
-  background: #FAFAFA;
   border-radius: clamp(62px, 4vw, 90px);
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background:#fbf7f5 ;
 
   padding: clamp(16px, 1.5vw, 28px);
   box-sizing: border-box;
@@ -36,6 +36,7 @@
 
 .game-card.pilt {
   border: clamp(10px, 0.75vw, 16px) solid rgba(220, 205, 244, 0.8);
+ 
 }
 
 .game-card.video {
@@ -80,36 +81,46 @@ a.game-card .game-name {
   align-items: center;
 }
 
+.editBtn,
+.deleteBtn,
+.archiveBtn {
+  margin-left: 0;
+  border: none;
+  background: none;
+  padding: clamp(3px, 0.1vw, 6px);
+  font-family: var(--font-heading);
+  font-weight: bold;
+  font-size: clamp(14px, 0.9vw, 24px);
+  border-radius: clamp(30px, 2vw, 50px);
+  cursor: pointer;
+}
+
 .gameButtons {
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: clamp(10px, 1vw, 20px);
-  margin-top: clamp(12px, 1vw, 20px);
+  gap: 10px;
 }
 
-.editBtn,
-.deleteBtn {
-  margin-left: 0;
-  background-color: rgb(236, 236, 236);
-  border: clamp(3px, 0.2vw, 5px) solid rgba(157, 157, 156, 0.5);
+.gameButtons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border: none;
+  background: none;
 }
 
-.editBtn {
-  padding: clamp(10px, 0.5vw, 10px) clamp(20px, 1vw, 20px);
-  font-family: var(--font-heading);
-  font-weight: bold;
-  font-size: clamp(14px, 0.9vw, 24px);
-  color: black;
-  border-radius: clamp(30px, 2vw, 50px);
-  cursor: pointer;
+.gameButtons img {
+  width: 32px;
+  height: 32px;
+  display: block;
 }
 
-.deleteBtn {
-  padding: clamp(10px, 0.5vw, 10px) clamp(20px, 1vw, 20px);
-  font-family: var(--font-heading);
-  font-weight: bold;
-  font-size: clamp(14px, 0.9vw, 24px);
-  color: black;
-  border-radius: clamp(30px, 2vw, 50px);
-  cursor: pointer;
+.editBtn:hover,
+.archiveBtn:hover,
+.deleteBtn:hover {
+  transform: scale(1.05);
 }

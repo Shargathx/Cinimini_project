@@ -85,7 +85,7 @@
 
     max-height: 85.5vh;
     padding: clamp(20px, 2vw, 40px);
-    background-color: rgb(255, 248, 248, 1);
+    background-color: #fbf7f5;
     border: 0.5vw solid rgb(145, 242, 190, 0.5);
     border-radius: clamp(48px, 3vw, 72px);
 }

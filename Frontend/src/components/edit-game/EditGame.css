@@ -72,7 +72,7 @@
 #singleStep {
     position: relative;
     width: clamp(450px, 50vw, 600px);
-    background: rgb(255, 248, 248, 1);
+    background: #fbf7f5;
     border: clamp(2px, 0.5vw, 6px) solid rgb(145, 242, 190, 0.5);
     border-radius: 30px;
     padding: clamp(15px, 2vw, 25px);
