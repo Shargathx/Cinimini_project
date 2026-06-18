@@ -3,8 +3,6 @@
 
 
 
-
-
 | Avaleht  									| 	Kategooriad 							| Mäng 									   |
 | ----------------------------------------- | ----------------------------------------- | ------------- 						   |
 | <img src="./media/img1.PNG" width="300">  | <img src="./media/img2.PNG" width="400">  | <img src="./media/img3.PNG" width="500"> |
@@ -15,7 +13,6 @@ Minikino eesmärk on anda õpetajatele valmis ning lihtsasti kohandatav õppekes
 
 Minikino veebileht on loodud Tallinna Ülikooli informaatika üliõpilaste poolt esimesel kursusel tarkvaraarenduse praktika raames koostöös meediaharidus OÜ-ga.
 
-○ kasutatud tehnoloogiad ja nende versioonid(!);
 ## Kasutatud Tehnoloogiad
 VsCode - Ver. 1.124.2
 
@@ -35,7 +32,7 @@ Java - Ver. Oracle OpenJDK 21.0.4
 Veebilehe koostajad on Martin Saareväli, Roland Piperal, Õnne Elisabeth Maripu, Anette Aruorg ja Carolina Treu. Projekti loomine andis meile kogemusi ka edaspidi suuremate projektidega tegelemiseks. 
 
 ## Paigaldamine
-Frontend:
+### Frontend:
 
 Tuleb rakenduse failid alla laadida, ning frontendi on võimalik jooksutada VsCodeis. Vaja on alla laadia Node, React ja Vite. 
 
@@ -43,9 +40,9 @@ Nende allalaadimiseks on vaja terminalis jooksutada ["npm install"](https://docs
 
 (Veendu, et "directory"/kataloog kus olete on kindlasti "frontend"!!)
 
-Backend:
+### Backend:
 
-
+Veel on pooleli
 
 ○ selgeid paigaldusjuhiseid ja arenduskeskkonna ülesseadmise juhised, et kes iganes saaks selle
 		vajadusel käima (näiteks andmebaasi tabelid jm info peaks olema teksti kujul, et saaks kopeerida, aga
@@ -54,4 +51,4 @@ Backend:
 		
 ## Litsents		
 
-kasutatav litsents on creative commons.
+kasutatav litsents on [creative commons](https://creativecommons.org/cc-licenses/).
