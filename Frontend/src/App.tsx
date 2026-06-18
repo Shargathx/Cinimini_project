@@ -19,9 +19,10 @@ function App() {
         flexDirection: "column",
         minHeight: "100vh" // makes the container full viewport height
       }}>
+        <div className="app-layout">
         <Header />
 
-        <main style={{ flex: 1, padding: "20px" }}>
+        <main className="app-main">
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/register' element={<Register />} />
@@ -35,6 +36,7 @@ function App() {
         </main>
 
         <Footer />
+        </div>
       </div>
     </BrowserRouter>
   )

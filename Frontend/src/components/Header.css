@@ -3,7 +3,7 @@
 }
 
 .header {
-    max-height: 15vh;
+    height: 15vh;
     background-color: rgb(217, 217, 217, 0.2);
     border-bottom-left-radius: 0.5vw;
     border-bottom-right-radius: 1vw;

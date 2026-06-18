@@ -9,7 +9,6 @@
   --accent-bg: rgba(170, 59, 255, 0.1);
   --accent-border: rgba(250, 244, 255, 0.5);
   --shadow: rgba(0,0,0,0.1) 0 10px 15px -3px, rgba(0,0,0,0.05) 0 4px 6px -2px;
-
   --font-sans: 'Sono', system-ui, 'Segoe UI', Roboto, sans-serif;
   --font-heading: 'Sono', system-ui, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'Sono', SF Mono, Consolas, 'Liberation Mono', Menlo, Courier, monospace;
@@ -23,22 +22,27 @@ html, body {
   background: url('/assets/background.svg') no-repeat center center fixed;
   background-size: cover;
   color: var(--text);
-  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 html,
 body,
 #root {
-  min-height: 100vh;
   margin: 0;
   padding: 0;
 }
 
-body {
-  font-family: var(--font-sans);
-  background: url('/assets/background.svg') no-repeat center center fixed;
-  background-size: cover;
-  color: var(--text);
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  padding: 20px;
 }
 
 #root {

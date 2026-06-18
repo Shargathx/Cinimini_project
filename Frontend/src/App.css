@@ -2,14 +2,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Sono:wght@200;300;400;500;600;700;800&display=swap');
 
 
-.app {
-  min-height: 100vh;
+.app-layout {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
-main {
+.app-main {
   flex: 1;
+  padding: 20px;
 }
 
 .footer {
