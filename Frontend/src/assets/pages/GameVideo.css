@@ -1,0 +1,124 @@
+.video-container {
+    width: clamp(300px, 80vw, 1400px);
+    max-width: 100%;
+    height: clamp(300px, 50vh, 500px);
+
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgb(255, 248,248 ,1);
+    border: clamp(8px, 0.5vw, 16px) solid rgb(213, 198, 237);
+    border-radius: 20px;
+    margin: 0;
+    position: relative;
+}
+
+@media (min-width: 1800px) {
+    .video-container {
+        max-width: 80%;
+        min-height: 80%;
+    }
+}
+
+.video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transform-origin: center center !important;
+    backface-visibility: hidden;
+}
+
+.video-function{
+    display: flex;
+    flex-direction: column;
+    row-gap: clamp(0.5rem, 3vh, 5rem);
+}
+
+.video-progress-bar{
+
+}
+
+.video-timer{
+
+}
+
+.video-play{
+
+}
+
+.video-reverse-button{
+
+}
+
+.video-speed-options{
+    font-size: clamp(0.8rem, 1vw, 1.5rem);
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    text-transform: lowercase;
+}
+
+
+.video-speed-amount{
+    font-size: clamp(0.8rem, 1vw, 1.5rem);
+    margin-bottom: 1vh;
+    width: 100%;
+    white-space: nowrap;
+}
+
+
+@media (min-width: 1800px) {
+    .video-slider-text {
+        margin-bottom: 1.5vh;
+    }
+}
+
+.video-slider {
+    appearance: none;
+    -webkit-appearance: none;
+    max-width: calc(var(--slider-size) * 10);
+    width: 100%;
+    background: transparent;
+    cursor: pointer;
+}
+
+
+.video-slider::-webkit-slider-runnable-track {
+    height: var(--slider-size);
+    background: rgb(255, 248,248 ,1);
+    border-radius: 999px;
+    outline: calc(var(--slider-size) * 0.25) solid rgb(213, 198, 237);
+}
+
+.video-slider::-moz-range-track {
+    height: var(--slider-size);
+    background: rgb(255, 248,248 ,1);
+    border-radius: 999px;
+    border: calc(var(--slider-size) * 0.12) solid rgb(213, 198, 237);
+}
+
+
+.video-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+
+    height: calc(var(--slider-size) / 1.2);
+    width: calc(var(--slider-size) / 1.2);
+    border-radius: 50%;
+
+    background: rgba(197,170,241,0.9);
+
+    margin-top: calc((var(--slider-size) - (var(--slider-size)/1.2)) / 2);
+}
+
+.video-slider::-moz-range-thumb {
+    width: calc(var(--slider-size) * 0.8);
+    height: calc(var(--slider-size) * 0.8);
+    border-radius: 50%;
+    background: rgba(197, 170, 241, 0.9);
+    border: none;
+}

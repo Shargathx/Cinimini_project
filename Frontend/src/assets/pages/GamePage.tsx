@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import './Game.css';
 import './GameImage.css';
+import './GameVideo.css';
 import './GameFullscreen.css';
 import { useFetch } from '../../components/hooks/useFetch';
 import type { Game } from '../models/Game';
@@ -114,12 +115,16 @@ function GamePage() {
             }
             case "video/mp4": {
                 const videoSrc = `data:video/mp4;base64,${media}`;
-                return (media && (<video
-                    ref={videoRef}
-                    width="320"
-                    height="240"
-                    src={videoSrc}
-                />))
+                return (media && (
+                    <div className="video-container">
+                        <video
+                            ref={videoRef}
+                            width="320"
+                            height="240"
+                            src={videoSrc}
+                        />
+                    </div>
+                ))
             }
             default:
                 return <p>Unsupported format: {fileFormat}</p>;
@@ -212,44 +217,51 @@ function GamePage() {
                     </div>
                 )}
                 {fileFormat.startsWith("video/") && (
-                    <div className="image-function">
+                    <div className="video-function">
                         <div
                             className="video-actions"
                             style={{ marginTop: '10px' }}
                         >
-                            <button onClick={playReverse}>
+                            <button
+                                className="video-reverse-button"
+                                onClick={playReverse}>
                                 Play in Reverse
                             </button>
                         </div>
 
-                        <div style={{ marginTop: '15px' }}>
-                            <label
-                                style={{
-                                    display: 'inline-block',
-                                    width: '160px',
-                                    fontVariantNumeric: 'tabular-nums',
-                                }}
-                            >
-                                Speed amount: {speed}
-                            </label>
+                        <div>
+                            <div className="text-and-slider">
+                                <label
+                                    className="video-speed-amount"
+                                >
+                                    Speed amount: {speed}
+                                </label>
 
-                            <input
-                                type="range"
-                                min="1"
-                                max="2"
-                                step="0.1"
-                                value={speed}
-                                onChange={(e) => {
-                                    const newSpeed = Number(e.target.value);
-                                    setSpeed(newSpeed);
+                                <input
+                                    className="video-slider"
+                                    type="range"
+                                    min="1"
+                                    max="2"
+                                    step="0.1"
+                                    value={speed}
+                                    onChange={(e) => {
+                                        const newSpeed = Number(e.target.value);
+                                        setSpeed(newSpeed);
 
-                                    setTimeout(() => playFast(), 0);
-                                }}
-                            />
+                                        setTimeout(() => playFast(), 0);
+                                    }}
+                                />
+                                <div className= "video-speed-options">
+                                    <p>1x</p>
+                                    <p>1.5x</p>
+                                    <p>2x</p>
+                                </div>
+                            </div>
 
                             <figure>
                                 <figcaption>
                                     <button
+                                        className="video-play"
                                         onClick={stopPlay}
                                         id="play"
                                         aria-label="Play"
@@ -259,6 +271,7 @@ function GamePage() {
                                     </button>
 
                                     <progress
+                                        className="video-progress-bar"
                                         id="progress"
                                         value={0}
                                         max={1}
@@ -268,6 +281,7 @@ function GamePage() {
                                     </progress>
 
                                     <label
+                                        className="video-timer"
                                         id="timer"
                                         role="timer"
                                     >

@@ -4,8 +4,9 @@
     grid-template-rows: auto auto minmax(0, 1fr) minmax(0, max-content);
     max-height: 100vh;
     --slider-size: clamp(30px, 3.5vh, 60px);
+    padding: 0 clamp(0.5rem, 1vw, 2rem);
+    padding-top:0;
     text-transform: uppercase;
-    padding: clamp(0.5rem, 1vw, 2rem)
 }
 
 .game-content {
@@ -194,6 +195,7 @@
     font-weight: bold;
     margin: 0;
     padding: clamp(0.2rem, 1vh, 0.5rem);
+    padding-bottom: o;
     margin-left:2%;
     white-space: normal;
     overflow-wrap: break-word;
@@ -209,6 +211,7 @@
     font-size: clamp(0.5rem, 1vw + 1vh, 1rem);
     margin: 0;
     padding: clamp(0.2rem, 1vh, 0.5rem);
+    padding-bottom: 0;
     min-width: 0;
     min-height: 0;
 }
@@ -216,5 +219,6 @@
 .text-and-slider{
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: calc(var(--slider-size) * 10);
+    max-width: 100%;
 }
