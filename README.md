@@ -1,11 +1,12 @@
-projekti või lahenduse (toote/teenuse) nime; 
-	Minikino veebileht
+
+# Minikino veebileht
+![](readme-media/img.png)
 ○ ekraanipilti või eraldi loodud pilti lahendusest – ekraanipilt peab olema samas repos, et nad üks hetk ära ei
 kaoks (ära tee väga suuri pilte!);
 	(avaekraani pilt, kat menüü, män menüü,män
 ○ eesmärki ja lühikirjeldust (3-4 lauset, mis probleemi rakendus lahendab);
 
-	Minikino eesmärk on anda õpetajatele valmis ning lihtsasti kohandatav õppekeskkond, mille alusel saab õpetada lastele meediaelementide olemust ning, kuidas nende mõjutamisel muutub edastatav sõnum. Õppekeskkonna fookuses on kasutajasõbralik disain, mis on kasutatav ka õpetajatele ja huvijuhtidele, kellel on vähesem digipädevus. Mänge saab kasutada nii erinevate õppeainete teemade raames kui ka vahetunni tegevusena, mis on lastele huvitav ja õpetlik.
+Minikino eesmärk on anda õpetajatele valmis ning lihtsasti kohandatav õppekeskkond, mille alusel saab õpetada lastele meediaelementide olemust ning, kuidas nende mõjutamisel muutub edastatav sõnum. Õppekeskkonna fookuses on kasutajasõbralik disain, mis on kasutatav ka õpetajatele ja huvijuhtidele, kellel on vähesem digipädevus. Mänge saab kasutada nii erinevate õppeainete teemade raames kui ka vahetunni tegevusena, mis on lastele huvitav ja õpetlik.
 ○ viidet instituudile ja paar sõna sellest, mille raames projekt loodud (tehtud selle ja selle raames….);
 	Minikino veebileht on loodud Tallinna Ülikooli informaatika üliõpilaste poolt esimesel kursusel tarkvaraarenduse praktika raames koostöös meediaharidus OÜ-ga.
 
