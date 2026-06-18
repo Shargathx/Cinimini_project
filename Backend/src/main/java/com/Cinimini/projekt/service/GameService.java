@@ -197,6 +197,13 @@ public class GameService {
         Game existingGame = gameRepository.findById(gameId)
                 .orElseThrow(() -> new RuntimeException("Game not found"));
 
+        if (!existingGame.getName().equals(updateRequest.getName())) {
+            existingGame.setName(updateRequest.getName());
+        }
+        if (!existingGame.getDescription().equals(updateRequest.getDescription())) {
+            existingGame.setDescription(updateRequest.getDescription());
+        }
+
         // 1. Load into map for easy lookup
         Map<Long, GameStep> existingStepsMap = gameStepRepository.getGameStepsByGame_Id(gameId)
                 .stream()

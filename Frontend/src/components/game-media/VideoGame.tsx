@@ -14,7 +14,7 @@ export default function VideoGame({ media }: VideoGameProps) {
 
     const videoSrc = `data:video/mp4;base64,${media}`;
 
-    const {stopPlay,changePosition, playReverse,playFast,} = useVideoController({videoRef,reverseIntervalRef,speed,});
+    const { stopPlay, changePosition, playReverse, playFast, } = useVideoController({ videoRef, reverseIntervalRef, speed, });
 
     useEffect(() => {
         return () => {

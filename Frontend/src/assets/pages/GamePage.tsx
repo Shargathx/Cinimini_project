@@ -13,11 +13,8 @@ import discussionImg from "../icons/discussion.svg";
 import questionImg from "../icons/question.svg";
 import teacherImg from "../icons/teacherTextImg.svg";
 
-
 import ImageGame from '../../components/game-media/ImageGame';
 
-import AudioGame from '../../components/game-media/AudioGame';
-import VideoGame from '../../components/game-media/VideoGame';
 import ImageSaturation from '../../components/ImageSaturation';
 import ImageContrast from '../../components/ImageContrast';
 import ImageExposure from '../../components/ImageExposure';
@@ -27,10 +24,9 @@ import { useAudioController } from '../../components/hooks/useAudioController';
 import LessThanB from '../icons/LessThanB.svg';
 import GreaterThanB from '../icons/GreaterThanB.svg';
 
-function Game() {
+function GamePage() {
     const { id } = useParams<{ id: string }>();
     const { data, loading } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/category/games/${id}/steps`, [id]);
-    // const [data, setData] = useState<Game | null>(null);
     const [questions, setQuestions] = useState<Question[]>([]);
     const [points, setPoints] = useState<Discussion[]>([]);
     const [teacherTexts, setTeacherText] = useState<TeacherText[]>([]);
@@ -119,6 +115,7 @@ function Game() {
             case "video/mp4": {
                 const videoSrc = `data:video/mp4;base64,${media}`;
                 return (media && (<video
+                    controls
                     ref={videoRef}
                     width="320"
                     height="240"
@@ -425,4 +422,4 @@ function Game() {
     );
 }
 
-export default Game;
+export default GamePage;
