@@ -3,25 +3,24 @@ import '../index.css';
 import ReactMarkdown from "react-markdown";
 import CloseBtn from "../assets/icons/closePopup.svg";
 import { useState } from 'react';
-// menüüriba (avalehe element (igal pool, viib tagasi avalehele), infonupp (kas headerisse või eraldi elemendina)
 import { useLocation } from 'react-router-dom';
 
 function Header() {
     const location = useLocation();
     const path = location.pathname;
 
-    const showAddGame = path === "/categories" || 
+    const showAddGame = path === "/categories" ||
         path.startsWith("/categories/");
     const showHomePage =
         path === "/categories" ||
         path === "/add-game" ||
-        path.startsWith("/update-game/")||
+        path.startsWith("/update-game/") ||
         path === "/register" ||
         path === "/login" ||
         path.startsWith("/categories/");
     const showCategories =
         path === "/add-game" ||
-         path.startsWith("/update-game/") ||
+        path.startsWith("/update-game/") ||
         path.startsWith("/categories/");
     const showPageInfo = path === "/";
     const showAbout = path === "/";
@@ -48,26 +47,26 @@ function Header() {
     return (
         <header className="header">
             <nav className="nav">
-               
+
 
                 {showHomePage && (
                     <a href="/" className="home-page-link">
                         AVALEHT
                     </a>
 
-                )} 
-                
+                )}
+
                 {showLogin && (
-                        <a href="/login" className="login-link">
-                            LOGI SISSE
-                        </a>
+                    <a href="/login" className="login-link">
+                        LOGI SISSE
+                    </a>
 
                 )}
 
                 {showRegister && (
                     <a href="/register" className="register-link">
-                            REGISTREERI
-                        </a>
+                        REGISTREERI
+                    </a>
 
                 )}
 
@@ -131,9 +130,7 @@ function Header() {
             )}
 
         </header>
-
     );
-
 }
 
 export default Header;

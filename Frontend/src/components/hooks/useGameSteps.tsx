@@ -114,6 +114,7 @@ export function useGameSteps() {
             )
         );
     }
+
     function updateTeacherTextInput(
         stepIndex: number,
         value: string
@@ -299,10 +300,6 @@ export function useGameSteps() {
             )
         );
     }
-
-
-
-    // move all your other functions here...
 
     return {
         steps,

@@ -18,14 +18,12 @@ function CategoryGame() {
 
     }, [catid])
 
-
     useEffect(() => {
         fetch(`${import.meta.env.VITE_BACK_URL}/category/inactive-games`, {
             method: "GET"
         }).then(res => res.json()).then(json => setInactivegames(json))
 
     }, [catid])
-
 
     function softDelete(gameId: number) {
         fetch(import.meta.env.VITE_BACK_URL + `/games/${gameId}`, {
@@ -38,7 +36,6 @@ function CategoryGame() {
             method: "DELETE"
         }).then(() => { window.location.reload() })
     }
-
 
     return (<>
         <button onClick={() => { setGames(activegames) }}>Active games</button>

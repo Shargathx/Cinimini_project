@@ -4,7 +4,6 @@ export function useFetch<T>(url: string, dependencies: unknown[] = []) {
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<unknown | null>(null);
-
     const depsString = JSON.stringify(dependencies);
 
     useEffect(() => {
@@ -37,6 +36,5 @@ export function useFetch<T>(url: string, dependencies: unknown[] = []) {
         };
 
     }, [url, depsString]);
-
     return { data, loading, error };
 }

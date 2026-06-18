@@ -1,0 +1,108 @@
+.audio-slider-text {
+    font-size: clamp(0.8rem, 1vw, 1.5rem);
+    margin-bottom: 1vh;
+    width: 100%;
+    white-space: nowrap;
+}
+
+@media (min-width: 1800px) {
+    .audio-slider-text {
+        margin-bottom: 1.5vh;
+    }
+}
+
+.audio-slider {
+    margin: clamp(10px, 1.5vh, 30px);
+    appearance: none;
+    -webkit-appearance: none;
+    max-width: calc(var(--slider-size) * 10);
+    width: 100%;
+    background: transparent;
+    cursor: pointer;
+}
+
+.reverb-silder-title {
+    font-size: clamp(0.8rem, 1vw, 1.5rem);
+
+    width: 100%;
+    white-space: nowrap;
+}
+
+
+.audio-slider::-webkit-slider-runnable-track {
+    height: var(--slider-size);
+    background: rgb(255, 248, 248, 1);
+    border-radius: 999px;
+    outline: calc(var(--slider-size) * 0.25) solid rgba(124, 234, 255, 0.6);
+}
+
+.audio-slider::-moz-range-track {
+    padding: 1vh;
+    height: var(--slider-size);
+    background: rgb(255, 248, 248, 1);
+    border-radius: 999px;
+    border: calc(var(--slider-size) * 0.12) solid rgba(124, 234, 255, 0.6);
+}
+
+.audio-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+
+    height: calc(var(--slider-size) / 1.2);
+    width: calc(var(--slider-size) / 1.2);
+    border-radius: 50%;
+
+    background: rgba(124, 234, 255);
+
+    margin-top: calc((var(--slider-size) - (var(--slider-size)/1.2)) / 2);
+}
+
+.audio-slider::-moz-range-thumb {
+    width: calc(var(--slider-size) * 0.8);
+    height: calc(var(--slider-size) * 0.8);
+    border-radius: 50%;
+    background: rgba(124, 234, 255);
+    border: none;
+}
+
+.audio-controls {
+    max-width: calc(var(--slider-size) * 10);
+    display: flex;
+    justify-content: center;
+    gap: clamp(10px, 1vw, 20px);
+    margin-bottom: clamp(10px, 1vw, 20px);
+}
+
+audio::-webkit-media-controls-panel {
+    background-color: rgb(255, 248, 248, 1);
+}
+
+audio::-webkit-media-controls-enclosure {
+    border: 4px solid #B7F3FF;
+    border-radius: 30px;
+}
+
+.controlBtnS {
+    background-color: #e8faff;
+    color: var(--text-h);
+    font-family: 'Sono', sans-serif;
+    font-weight: bold;
+    font-size: clamp(14px, 1.25vw, 30px);
+    text-align: center;
+    text-transform: uppercase;
+    border-radius: 6vw;
+    border: 0.4vw solid rgba(124, 234, 255, 0.6);
+    padding: clamp(6px, 1vw, 12px) clamp(10px, 1.2vw, 20px);
+    cursor: pointer;
+}
+
+.controlBtnS:hover {
+    transform: scale(1.05);
+}
+
+.audio-container {
+    padding: clamp(20px, 6vh, 40px) clamp(30px, 5vh, 60px);
+    background-color: #e8faff;
+    border: 1vh solid rgba(124, 234, 255, 0.6);
+    border-radius: 6vh;
+}

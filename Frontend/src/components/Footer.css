@@ -23,11 +23,25 @@
   gap: clamp(4px, 0.5vw, 8px);
 }
 
-.footer-name:nth-child(1) { grid-area: n1; }
-.footer-name:nth-child(2) { grid-area: n3; }
-.footer-name:nth-child(3) { grid-area: n2; }
-.footer-name:nth-child(4) { grid-area: n4; }
-.footer-name:nth-child(5) { grid-area: n5; }
+.footer-name:nth-child(1) {
+  grid-area: n1;
+}
+
+.footer-name:nth-child(2) {
+  grid-area: n3;
+}
+
+.footer-name:nth-child(3) {
+  grid-area: n2;
+}
+
+.footer-name:nth-child(4) {
+  grid-area: n4;
+}
+
+.footer-name:nth-child(5) {
+  grid-area: n5;
+}
 
 .footer-name {
   display: flex;

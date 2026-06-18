@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useState, useRef } from 'react';
+import './GameSound.css';
 import './Game.css';
 import './GameImage.css';
 import './GameVideo.css';
@@ -22,6 +23,7 @@ function GamePage() {
     const { id } = useParams<{ id: string }>();
     const { data, loading } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/category/games/${id}/steps`, [id]);
 
+    // Image variables
     const [saturation, setSaturation] = useState(100);
     const [contrast, setContrast] = useState(100);
     const [exposure, setExposure] = useState(100);
@@ -84,10 +86,14 @@ function GamePage() {
             case "audio/mpeg":
             case "audio/mp3": {
                 if (!audioSrc) { setAudioSrc(`data:audio/mpeg;base64,${media}`) }
-                return (media && (<audio
-                    controls
-                    src={audioSrc}
-                />))
+                return (media && (
+                    <div className='audio-container'>
+                        <audio
+                            controls
+                            src={audioSrc}
+                        />
+                    </div>
+                ))
             }
             case "video/mp4": {
                 const videoSrc = `data:video/mp4;base64,${media}`;
@@ -262,42 +268,37 @@ function GamePage() {
 
                     )}
 
-                    {fileFormat.startsWith("audio/") && (
-                        <div className="image-function">
-                            <div
-                                className="audio-controls"
-                                style={{ marginTop: '10px' }}
+                {fileFormat.startsWith("audio/") && (
+                    <div className="audio-function">
+                        <div
+                            className="audio-controls"
+                            style={{ marginTop: '10px' }}
+                        >
+                            <button className='controlBtnS'
+                                onClick={() =>
+                                    playReversed(audioSrc)
+                                }
                             >
-                                <button
-                                    onClick={() =>
-                                        playReversed(audioSrc)
-                                    }
-                                >
-                                    Reverse
-                                </button>
+                                Reverse
+                            </button>
 
-                                <button
-                                    onClick={() =>
-                                        playWithReverb(audioSrc)
-                                    }
-                                >
-                                    Reverb
-                                </button>
-                            </div>
+                            <button className='controlBtnS'
+                                onClick={() =>
+                                    playWithReverb(audioSrc)
+                                }
+                            >
+                                Reverb
+                            </button>
+                        </div>
 
-                            <div style={{ marginTop: '15px' }}>
-                                <label
-                                    style={{
-                                        display: "inline-block",
-                                        width: "160px",
-                                        fontVariantNumeric:
-                                            "tabular-nums"
-                                    }}
-                                >
-                                    Reverb amount: {reverb}%
-                                </label>
+                        <div className='text-and-slider' style={{ marginTop: '15px' }}>
+                            <label className='reverb-slider-title'
 
-                                <input
+                            >
+                                Reverb amount: {reverb}%
+                            </label>
+                            <div className="slider-shell">
+                                <input className='audio-slider'
                                     type="range"
                                     min="0"
                                     max="100"
@@ -307,9 +308,11 @@ function GamePage() {
                                             Number(e.target.value)
                                         )
                                     }
+
                                 />
                             </div>
                         </div>
+                    </div>
 
                     )}
                 </div>

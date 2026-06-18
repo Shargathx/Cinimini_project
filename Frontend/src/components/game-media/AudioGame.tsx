@@ -9,12 +9,9 @@ interface AudioGameProps {
 export default function AudioGame({
     media,
 }: AudioGameProps) {
-
     const [reverb, setReverb] = useState<number>(0);
-
     const audioSrc = `data:audio/mpeg;base64,${media}`;
-
-    const {playReversed,playWithReverb,} = useAudioController({reverb});
+    const { playReversed, playWithReverb, } = useAudioController({ reverb });
 
     return (
         <div className="audio-game-container">

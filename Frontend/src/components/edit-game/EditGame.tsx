@@ -29,27 +29,24 @@ async function EditGame(
     steps: Step[]
 ): Promise<void> {
     const formData = new FormData();
-
     const gameRequest = {
         name,
         categoryId: Number(category),
         description,
         steps: (steps || []).map(step => ({
-            //For some reason this fixed it
-            // stepRequestId: step.id ?? null,
-
+            
             questions: (step.questions || []).map(q => ({
-                id: q.id, // Preserves Question ID
+                id: q.id,
                 questionText: q.questionText,
             })),
 
             discussionPoints: (step.discussionPoints || []).map(dp => ({
-                id: dp.id, // Preserves DiscussionPoint ID
+                id: dp.id,
                 discussionText: dp.discussionText,
             })),
 
             teacherTexts: (step.teacherTexts || []).map(tt => ({
-                id: tt.id, // Preserves TeacherText ID
+                id: tt.id,
                 teacherText: tt.teacherText,
             })),
         })),
