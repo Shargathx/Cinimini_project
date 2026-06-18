@@ -39,7 +39,7 @@ export default function TeacherTextManager({
                         type="button"
                         onClick={() => onDelete(Number(text.id))}
                     >
-                        Kustuta
+                        x
                     </button>
                 </div>
             ))}

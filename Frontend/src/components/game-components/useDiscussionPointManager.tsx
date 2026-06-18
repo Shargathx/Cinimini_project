@@ -36,10 +36,11 @@ export default function DiscussionPointManager({
           {point.discussionText}
 
           <button
+            id="eraseBtn"
             type="button"
             onClick={() => onDelete(Number(point.id))}
           >
-            Kustuta
+              x
           </button>
         </div>
       ))}
