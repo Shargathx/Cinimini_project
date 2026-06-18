@@ -5,16 +5,9 @@ import './GameImage.css';
 import './GameFullscreen.css';
 import { useFetch } from '../../components/hooks/useFetch';
 import type { Game } from '../models/Game';
-import type { Question } from '../models/Question';
-import type { Discussion } from '../models/Discussion';
-import type { TeacherText } from '../models/TeacherText';
-
-import discussionImg from "../icons/discussion.svg";
-import questionImg from "../icons/question.svg";
-import teacherImg from "../icons/teacherTextImg.svg";
 
 import ImageGame from '../../components/game-media/ImageGame';
-
+import InfoPanels from '../../components/game-components/InfoPanels';
 import ImageSaturation from '../../components/ImageSaturation';
 import ImageContrast from '../../components/ImageContrast';
 import ImageExposure from '../../components/ImageExposure';
@@ -27,11 +20,6 @@ import GreaterThanB from '../icons/GreaterThanB.svg';
 function GamePage() {
     const { id } = useParams<{ id: string }>();
     const { data, loading } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/category/games/${id}/steps`, [id]);
-    const [questions, setQuestions] = useState<Question[]>([]);
-    const [points, setPoints] = useState<Discussion[]>([]);
-    const [teacherTexts, setTeacherText] = useState<TeacherText[]>([]);
-    const [activePopup, setActivePopup] = useState<"questions" | "points" | "teacher" | null>(null);
-
 
     const [saturation, setSaturation] = useState(100);
     const [contrast, setContrast] = useState(100);
@@ -72,18 +60,6 @@ function GamePage() {
 
     // 1. Calculate media count on the fly during render
     const mediaCount = data?.gameSteps?.length ?? 0;
-
-    function getQuestions() {
-        setQuestions(step?.questions ?? []);
-    }
-
-    function getPoints() {
-        setPoints(step?.discussionPoints ?? []);
-    }
-
-    function getTeacherText() {
-        setTeacherText(step?.teacherTexts ?? []);
-    }
 
     function renderMediaComponent() {
         if (!media) return null;
@@ -141,20 +117,12 @@ function GamePage() {
         setCurrentStep(prev =>
             Math.min(prev + 1, data.gameSteps.length - 1)
         );
-
-        setQuestions([]);
-        setPoints([]);
-        setTeacherText([]);
     }
 
     function previousStep() {
         setCurrentStep(prev =>
             Math.max(prev - 1, 0)
         );
-
-        setQuestions([]);
-        setPoints([]);
-        setTeacherText([]);
     }
 
     return (
@@ -332,92 +300,10 @@ function GamePage() {
 
                 )}
             </div>
+                <h3 className="game-name">{data?.name}</h3>
+                <h3 className="game-description">KIRJELDUS{data?.description}</h3>
 
-            <h3 className="game-name">{data?.name}</h3>
-            <h3 className="game-description">Kirjeldus: {data?.description}</h3>
-
-            <div className="game-info-buttons">
-                <button
-                    onClick={() => {
-                        getQuestions();
-                        setActivePopup("questions");
-                    }}
-                    id="gameInfoButtons"
-                >
-                    <img src={questionImg} alt="Küsimused" />
-                </button>
-
-                <button
-                    onClick={() => {
-                        getPoints();
-                        setActivePopup("points");
-                    }}
-                    id="gameInfoButtons"
-                >
-                    <img src={discussionImg} alt="Arutelupunktid" />
-                </button>
-
-                <button
-                    onClick={() => {
-                        getTeacherText();
-                        setActivePopup("teacher");
-                    }}
-                    id="gameInfoButtons"
-                >
-                    <img src={teacherImg} alt="Info Õpetajale" />
-                </button>
-            </div>
-
-            {activePopup && (
-                <div className="side-popup">
-                    <button
-                        className="close-popup"
-                        onClick={() => setActivePopup(null)}
-                    >
-                        x
-                    </button>
-
-                    {activePopup === "questions" && (
-                        <>
-                            <h2>Küsimused</h2>
-                            <div className="side-popup-content">
-                                <ul>
-                                    {questions.map((question) => (
-                                        <li key={question.id}>{question.questionText}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </>
-                    )}
-
-                    {activePopup === "points" && (
-                        <>
-                            <h2>Arutelupunktid</h2>
-                            <div className="side-popup-content">
-                                <ul>
-                                    {points.map((point) => (
-                                        <li key={point.id}>{point.discussionText}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </>
-                    )}
-
-                    {activePopup === "teacher" && (
-                        <>
-                            <h2>Info õpetajale</h2>
-                            <div className="side-popup-content">
-                                <ul>
-                                    {teacherTexts.map((teacherText) => (
-                                        <li key={teacherText.id}>{teacherText.teacherText}</li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                        </>
-                    )}
-                </div>
-            )}
+                <InfoPanels step={step} />
         </div>
     );
 }
