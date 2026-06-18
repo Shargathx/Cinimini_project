@@ -39,7 +39,7 @@ Frontend:
 
 Tuleb rakenduse failid alla laadida, ning frontendi on võimalik jooksutada VsCodeis. Vaja on alla laadia Node, React ja Vite. 
 
-Nende allalaadimiseks on vaja terminalis jooksutada ["npm install"}(https://docs.npmjs.com/cli/v11/commands/npm-install) mis automaatselt laeb alla kõik vajalikud "package"-id
+Nende allalaadimiseks on vaja terminalis jooksutada ["npm install"](https://docs.npmjs.com/cli/v11/commands/npm-install) mis automaatselt laeb alla kõik vajalikud "package"-id
 
 ○ selgeid paigaldusjuhiseid ja arenduskeskkonna ülesseadmise juhised, et kes iganes saaks selle
 		vajadusel käima (näiteks andmebaasi tabelid jm info peaks olema teksti kujul, et saaks kopeerida, aga
