@@ -198,7 +198,7 @@ function EditView() {
         </button>}
         <div id="step-container">
             {steps.map((step, stepIndex) => (
-                <div key={step.id ?? `new-step-${stepIndex}`} id="singleStep">
+                <div key={`q-${step.id}-${stepIndex}`} id="singleStep">
                     <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
 
                     {<button
@@ -263,7 +263,7 @@ function EditView() {
 
                     <div>Küsimused:</div>
                     {step.questions.map((question, index) => (
-                        <div key={question.id ?? `new-q-${stepIndex}-${index}`}>
+                        <div key={`q-${question.id}-${index}`}>
                             <input
                                 value={question.questionText}
                                 onChange={(e) =>
