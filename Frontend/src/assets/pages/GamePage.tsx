@@ -27,7 +27,6 @@ import GreaterThanB from '../icons/GreaterThanB.svg';
 function GamePage() {
     const { id } = useParams<{ id: string }>();
     const { data, loading } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/category/games/${id}/steps`, [id]);
-    // const [data, setData] = useState<Game | null>(null);
     const [questions, setQuestions] = useState<Question[]>([]);
     const [points, setPoints] = useState<Discussion[]>([]);
     const [teacherTexts, setTeacherText] = useState<TeacherText[]>([]);
@@ -115,6 +114,7 @@ function GamePage() {
             case "video/mp4": {
                 const videoSrc = `data:video/mp4;base64,${media}`;
                 return (media && (<video
+                    controls
                     ref={videoRef}
                     width="320"
                     height="240"

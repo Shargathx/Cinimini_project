@@ -109,8 +109,6 @@ function AddGame() {
 
     <div id="generalContainer">
       <h1 id="addGameTitle">Loo mäng</h1>
-      <h2>Mode: {mode}</h2>
-      <button onClick={() => { console.log(game) }}>Get editable</button>
       <label id="gameNameLabel">Mängu nimi: </label>
       <input id="gameName" value={name} onChange={(e) => { setName(e.target.value) }}></input><br></br>
       <label id="gameCatLabel">Kategooria: </label>
