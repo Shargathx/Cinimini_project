@@ -17,7 +17,7 @@
 .category-card {
   width: clamp(300px, 25vw, 550px);
   height: clamp(350px, 27vw, 600px);
-  background: #FAFAFA;
+  
   border-radius: clamp(62px, 4vw, 90px);
 
   display: flex;
@@ -28,15 +28,20 @@
 
 .category-card.heli {
   border: clamp(10px, 0.75vw, 16px) solid rgba(124, 234, 255, 0.55);
-}
-
-.category-card.pilt {
-  border: clamp(10px, 0.75vw, 16px) solid rgba(220, 205, 244, 0.8);
+   background: #fbf7f5;
 }
 
 .category-card.video {
   border: clamp(10px, 0.75vw, 16px) solid rgba(247, 201, 204, 0.8);
+  background: #FAFAFA;
 }
+
+.category-card.pilt {
+  border: clamp(10px, 0.75vw, 16px) solid rgba(220, 205, 244, 0.8);
+  background: #F2F0EF;
+}
+
+
 
 .category-card:hover {
   transform: scale(1.05);
