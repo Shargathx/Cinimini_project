@@ -25,7 +25,7 @@ export default function TeacherTextManager({
                 onChange={(e) => onInputChange(e.target.value)}
             />
 
-            <button id="addTeachTextBtn"  type="button" onClick={onAdd}>
+            <button id="addTeachTextBtn" type="button" onClick={onAdd}>
                 Lisa õpetaja tekst
             </button>
 

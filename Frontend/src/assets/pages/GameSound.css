@@ -1,4 +1,4 @@
-.audio-slider-text{
+.audio-slider-text {
     font-size: clamp(0.8rem, 1vw, 1.5rem);
     margin-bottom: 1vh;
     width: 100%;
@@ -12,7 +12,7 @@
 }
 
 .audio-slider {
-    margin: clamp(10px, 1.5vh, 30px ); 
+    margin: clamp(10px, 1.5vh, 30px);
     appearance: none;
     -webkit-appearance: none;
     max-width: calc(var(--slider-size) * 10);
@@ -21,9 +21,9 @@
     cursor: pointer;
 }
 
-.reverb-silder-title{
+.reverb-silder-title {
     font-size: clamp(0.8rem, 1vw, 1.5rem);
-    
+
     width: 100%;
     white-space: nowrap;
 }
@@ -31,7 +31,7 @@
 
 .audio-slider::-webkit-slider-runnable-track {
     height: var(--slider-size);
-    background: rgb(255, 248,248 ,1);
+    background: rgb(255, 248, 248, 1);
     border-radius: 999px;
     outline: calc(var(--slider-size) * 0.25) solid rgba(124, 234, 255, 0.6);
 }
@@ -39,11 +39,10 @@
 .audio-slider::-moz-range-track {
     padding: 1vh;
     height: var(--slider-size);
-    background: rgb(255, 248,248 ,1);
+    background: rgb(255, 248, 248, 1);
     border-radius: 999px;
     border: calc(var(--slider-size) * 0.12) solid rgba(124, 234, 255, 0.6);
 }
-
 
 .audio-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -75,7 +74,7 @@
 }
 
 audio::-webkit-media-controls-panel {
-    background-color: rgb(255, 248,248 ,1);
+    background-color: rgb(255, 248, 248, 1);
 }
 
 audio::-webkit-media-controls-enclosure {
@@ -101,9 +100,9 @@ audio::-webkit-media-controls-enclosure {
     transform: scale(1.05);
 }
 
-.audio-container{
+.audio-container {
     padding: clamp(20px, 6vh, 40px) clamp(30px, 5vh, 60px);
-    background-color:#e8faff;
+    background-color: #e8faff;
     border: 1vh solid rgba(124, 234, 255, 0.6);
     border-radius: 6vh;
 }

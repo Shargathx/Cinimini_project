@@ -20,13 +20,13 @@
     position: relative;
 
     padding: 0;
-    width: fit-content; 
+    width: fit-content;
     max-width: 100%;
 }
 
-.game-function{
+.game-function {
     grid-column: 2 / 3;
-	grid-row: 3 / 4;
+    grid-row: 3 / 4;
     min-height: 0;
     margin: clamp(1rem, 1vw, 4rem);
     padding: clamp(0.5rem, 2vw, 2rem);
@@ -35,8 +35,8 @@
 }
 
 .game-function {
-    scrollbar-width: thin; 
-    scrollbar-color: rgba(197, 170, 241, 0.8) transparent; 
+    scrollbar-width: thin;
+    scrollbar-color: rgba(197, 170, 241, 0.8) transparent;
 }
 
 .game-function::-webkit-scrollbar {
@@ -58,31 +58,31 @@
     background: rgba(197, 170, 241, 1);
 }
 
-.media-count{
+.media-count {
     font-family: 'Courier New', Courier, monospace;
     font-size: clamp(14px, 1.4vw, 25px);
     font-weight: 700;
     color: #4A3E56;
-    
-    align-self:center;
+
+    align-self: center;
 
 }
 
-.counter-and-media{
+.counter-and-media {
     grid-column: 1 / 2;
     grid-row: 3 / 4;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: clamp(10px, 2vh, 20px); 
+    gap: clamp(10px, 2vh, 20px);
     min-width: 0;
     min-height: 0;
     overflow: hidden;
     width: 100%;
 }
 
-.steps-and-media{
+.steps-and-media {
     align-items: center;
     gap: 0;
 
@@ -95,7 +95,7 @@
 
     width: 100%;
     max-width: 100%;
-    margin: 0 auto; 
+    margin: 0 auto;
 }
 
 
@@ -132,10 +132,10 @@
 .previous-step:disabled,
 .next-step:disabled {
     opacity: 0.25;
-    cursor:default;
+    cursor: default;
 }
 
-.game-info-buttons{
+.game-info-buttons {
     grid-column: 1 / 2;
     grid-row: 4 / 5;
 
@@ -146,7 +146,7 @@
     flex-direction: row;
 
     gap: clamp(10px, 2vw, 20px);
-    width: fit-content; 
+    width: fit-content;
     max-width: 100%;
     margin: clamp(0px, 0.1vh, 16px) clamp(20px, 7vw, 15rem);
     z-index: 2;
@@ -155,11 +155,11 @@
     box-sizing: border-box;
 }
 
-#gameInfoButtons{
+#gameInfoButtons {
     scale: 0.7;
 }
 
-#gameInfoButtons:hover{
+#gameInfoButtons:hover {
     scale: 0.85;
 }
 
@@ -167,10 +167,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     width: clamp(36px, 5vw, 48px);
     height: clamp(36px, 5vw, 48px);
-    
+
     padding: 0;
     border: none;
     background: transparent;
@@ -194,7 +194,7 @@
     font-weight: bold;
     margin: 0;
     padding: clamp(0.2rem, 1vh, 0.5rem);
-    margin-left:2%;
+    margin-left: 2%;
     white-space: normal;
     overflow-wrap: break-word;
     min-width: 0;
@@ -213,7 +213,7 @@
     min-height: 0;
 }
 
-.text-and-slider{
+.text-and-slider {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -238,9 +238,10 @@
     flex-direction: column;
 
     z-index: 1000;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
 
-    overflow: hidden; /* important */
+    overflow: hidden;
+    /* important */
 }
 
 .side-popup h2 {

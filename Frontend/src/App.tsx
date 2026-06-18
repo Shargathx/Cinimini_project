@@ -14,7 +14,6 @@ import GamePage from './assets/pages/GamePage'
 function App() {
   return (
     <BrowserRouter>
-      {/* stiil tuleks pärast eraldi .css faili teha */}
       <div style={{
         display: "flex",
         flexDirection: "column",
@@ -22,7 +21,6 @@ function App() {
       }}>
         <Header />
 
-        {/* stiil tuleks pärast eraldi .css faili teha */}
         <main style={{ flex: 1, padding: "20px" }}>
           <Routes>
             <Route path='/' element={<Home />} />

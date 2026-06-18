@@ -40,7 +40,7 @@ export default function DiscussionPointManager({
             type="button"
             onClick={() => onDelete(Number(point.id))}
           >
-              x
+            x
           </button>
         </div>
       ))}

@@ -12,7 +12,6 @@ export function useAudioController({
         decay = 4
     ) {
         const length = context.sampleRate * duration;
-
         const impulse = context.createBuffer(
             2,
             length,
@@ -34,10 +33,8 @@ export function useAudioController({
 
     async function playReversed(url: string) {
         const audioContext = new AudioContext();
-
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
-
         const audioBuffer =
             await audioContext.decodeAudioData(arrayBuffer);
 
@@ -59,41 +56,28 @@ export function useAudioController({
 
     async function playWithReverb(url: string) {
         const audioContext = new AudioContext();
-
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
-
         const audioBuffer =
             await audioContext.decodeAudioData(arrayBuffer);
-
         const source =
             audioContext.createBufferSource();
-
         source.buffer = audioBuffer;
-
         const convolver =
             audioContext.createConvolver();
-
         convolver.buffer =
             createImpulseResponse(audioContext, 3, 4);
-
         const dryGain =
             audioContext.createGain();
-
         const wetGain =
             audioContext.createGain();
-
         dryGain.gain.value = 0.7;
         wetGain.gain.value = reverb / 100;
-
         source.connect(dryGain);
         source.connect(convolver);
-
         convolver.connect(wetGain);
-
         dryGain.connect(audioContext.destination);
         wetGain.connect(audioContext.destination);
-
         source.start();
     }
 

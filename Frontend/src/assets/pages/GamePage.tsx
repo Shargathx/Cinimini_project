@@ -22,6 +22,7 @@ function GamePage() {
     const { id } = useParams<{ id: string }>();
     const { data, loading } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/category/games/${id}/steps`, [id]);
 
+    // Image variables
     const [saturation, setSaturation] = useState(100);
     const [contrast, setContrast] = useState(100);
     const [exposure, setExposure] = useState(100);

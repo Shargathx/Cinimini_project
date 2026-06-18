@@ -7,20 +7,14 @@ import videoIcon from '../icons/video.svg';
 import './Categories.css';
 
 
-
 function Categories() {
-    // renderdamine -> esmakordne komponendi pealetulek (nt uuele lehele minnes tehakse üldine lehe renderdus)
-    // re-renderdamine -> komponendi HTMLs muutujate olekute muutmine (nt rippmenüüst millegi valimine uuendab ainult valitud asju või menüüd)
-
     const [categories, setCategories] = useState<Category[]>([]);
-    // uef -> enter
     useEffect(() => {
         fetch(import.meta.env.VITE_BACK_URL + "/categories")
             .then(res => res.json())
             .then(json => setCategories(json))
             .catch(err => console.error(err));
     }, []);
-
 
     return (
         <div className="categories-page">

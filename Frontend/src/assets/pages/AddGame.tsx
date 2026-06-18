@@ -54,7 +54,6 @@ function AddGame() {
     try {
       const formData = new FormData();
 
-      // 1. Convert your state to the exact structure the backend expects
       const gameData = {
         name,
         categoryId: Number(category),
@@ -75,10 +74,8 @@ function AddGame() {
         }))
       };
 
-      // 2. Append the JSON string
       formData.append("gameRequest", JSON.stringify(gameData));
 
-      // 3. Append the files using the expected index keys
       steps.forEach((step, stepIndex) => {
         step.images?.forEach((file: File) => {
           formData.append(
@@ -91,7 +88,6 @@ function AddGame() {
         console.log(key, value);
       }
 
-      // 4. Send
       const response = await fetch(`${import.meta.env.VITE_BACK_URL}/games/add-game`, {
         method: "POST",
         body: formData
@@ -106,7 +102,6 @@ function AddGame() {
   }
 
   return (<>
-
     <div id="generalContainer">
       <h1 id="addGameTitle">Loo mäng</h1>
       <label id="gameNameLabel">Mängu nimi: </label>
@@ -179,8 +174,6 @@ function AddGame() {
                   };
                 })
               );
-
-              // allow selecting same files again
               e.target.value = "";
             }}
           />
@@ -237,9 +230,6 @@ function AddGame() {
     >
       SALVESTA
     </button>
-
-
-
   </>
   )
 }

@@ -8,18 +8,14 @@ import { useGameSteps } from "../../components/hooks/useGameSteps";
 
 function EditView() {
     const [categories, setCategories] = useState<Category[]>([])
-    //Game file, name and category
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const [category, setCategory] = useState("");
 
     const { data } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/games/${localStorage.getItem("catid")}/${localStorage.getItem("id")}`, []);
-    //Game questions
-    // const [newQuestion, setNewQuestion] = useState("")
 
     const game = data;
     const currId = localStorage.getItem("id") ?? "";
-
 
     const {
         steps,
@@ -44,7 +40,6 @@ function EditView() {
         addTeacherTextEdit
     } = useGameSteps();
 
-
     //Form data
     useEffect(() => {
         fetch(import.meta.env.VITE_BACK_URL + "/categories")
@@ -52,7 +47,6 @@ function EditView() {
             .then(json => setCategories(json))
             .catch(err => console.error(err));
     }, []);
-
 
     useEffect(() => {
         if (!game) return;
@@ -89,8 +83,6 @@ function EditView() {
             }))
         );
     }, [game, setSteps]);
-
-
 
     function updateQuestionText(
         stepIndex: number,
@@ -400,9 +392,6 @@ function EditView() {
         >
             SALVESTA
         </button>
-
-
-
     </>
     )
 }

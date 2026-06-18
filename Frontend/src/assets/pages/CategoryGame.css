@@ -89,27 +89,27 @@ a.game-card .game-name {
 
 .editBtn,
 .deleteBtn {
-  margin-left: 0; 
+  margin-left: 0;
   background-color: rgb(236, 236, 236);
   border: clamp(3px, 0.2vw, 5px) solid rgba(157, 157, 156, 0.5);
 }
 
 .editBtn {
-    padding: clamp(10px, 0.5vw, 10px) clamp(20px, 1vw, 20px);
-    font-family: var(--font-heading);
-    font-weight: bold;
-    font-size: clamp(14px, 0.9vw, 24px);
-    color: black;
-    border-radius: clamp(30px, 2vw, 50px);
-    cursor: pointer;
+  padding: clamp(10px, 0.5vw, 10px) clamp(20px, 1vw, 20px);
+  font-family: var(--font-heading);
+  font-weight: bold;
+  font-size: clamp(14px, 0.9vw, 24px);
+  color: black;
+  border-radius: clamp(30px, 2vw, 50px);
+  cursor: pointer;
 }
 
 .deleteBtn {
-    padding: clamp(10px, 0.5vw, 10px) clamp(20px, 1vw, 20px);
-    font-family: var(--font-heading);
-    font-weight: bold;
-    font-size: clamp(14px, 0.9vw, 24px);
-    color: black;
-    border-radius: clamp(30px, 2vw, 50px);
-    cursor: pointer;
+  padding: clamp(10px, 0.5vw, 10px) clamp(20px, 1vw, 20px);
+  font-family: var(--font-heading);
+  font-weight: bold;
+  font-size: clamp(14px, 0.9vw, 24px);
+  color: black;
+  border-radius: clamp(30px, 2vw, 50px);
+  cursor: pointer;
 }
