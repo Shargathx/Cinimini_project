@@ -157,7 +157,6 @@ function AddGame() {
             accept="image/*"
             multiple
             id="img"
-            style={{ "display": "none" }}
             onChange={(e) => {
               const files = Array.from(e.target.files ?? []);
 

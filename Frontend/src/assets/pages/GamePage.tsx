@@ -18,6 +18,7 @@ import { useVideoController } from '../../components/hooks/useVideoController';
 import { useAudioController } from '../../components/hooks/useAudioController';
 import LessThanB from '../icons/LessThanB.svg';
 import GreaterThanB from '../icons/GreaterThanB.svg';
+import ImageBlur from '../../components/ImageFocus';
 
 function GamePage() {
     const { id } = useParams<{ id: string }>();
@@ -28,6 +29,7 @@ function GamePage() {
     const [contrast, setContrast] = useState(100);
     const [exposure, setExposure] = useState(100);
     const [zoom, setZoom] = useState(100);
+    const [blur, setBlur] = useState(0);
     const [currentStep, setCurrentStep] = useState(0);
 
     //Video variables
@@ -62,7 +64,6 @@ function GamePage() {
     const media = step?.mediaElements?.[0]?.fileData ?? "";
     const fileFormat = step?.mediaElements?.[0]?.mediaType ?? "";
 
-    // 1. Calculate media count on the fly during render
     const mediaCount = data?.gameSteps?.length ?? 0;
 
     function renderMediaComponent() {
@@ -82,6 +83,8 @@ function GamePage() {
                         setExposure={setExposure}
                         zoom={zoom}
                         setZoom={setZoom}
+                        blur={blur}
+                        setBlur={setBlur}
                     />
                 );
             case "audio/mpeg":
@@ -198,6 +201,11 @@ function GamePage() {
                                 value={zoom}
                                 onChange={setZoom}
                             />
+
+                        <ImageBlur
+                            value={blur}
+                            onChange={setBlur}
+                        />
                         </div>
                     )}
                     {fileFormat.startsWith("video/") && (
