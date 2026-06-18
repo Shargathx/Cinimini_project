@@ -48,6 +48,10 @@ Veel on pooleli
 		vajadusel käima (näiteks andmebaasi tabelid jm info peaks olema teksti kujul, et saaks kopeerida, aga
 		loomulikult ei saa suure andmebaasi loomise skript tervikuna README-failis olla), juhendi abil saab
 		"toote" peale koodi allalaadimist sobilikus kohas käima panna;
+
+## Testid
+
+Testide jaoks ei kasutanud me eraldi programme, vaid kõik testid mida tegime olid manuaal testid, vaadates ise kõik leheküljed üle ning otsides vigu
 		
 ## Litsents		
 
