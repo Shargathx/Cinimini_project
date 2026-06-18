@@ -283,7 +283,7 @@ function EditView() {
                                     )
                                 }
                             >
-                                Kustuta
+                                x
                             </button>
                         </div>
                     ))}
@@ -333,7 +333,7 @@ function EditView() {
                                     )
                                 }
                             >
-                                Kustuta
+                                x
                             </button>
                         </div>
                     ))}
@@ -383,7 +383,7 @@ function EditView() {
                                     )
                                 }
                             >
-                                Kustuta
+                                x
                             </button>
                         </div>
                     ))}
