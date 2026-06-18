@@ -1,7 +1,7 @@
 .fullscreen-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(0, 0, 0, 1);
     z-index: 9999;
     display: flex;
     justify-content: center;
@@ -27,9 +27,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
     overflow: hidden;
-
     flex-shrink: 0;
 }
 

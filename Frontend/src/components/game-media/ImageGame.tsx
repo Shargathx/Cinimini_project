@@ -4,6 +4,7 @@ import ImageSaturation from '../../components/ImageSaturation';
 import ImageContrast from '../../components/ImageContrast';
 import ImageExposure from '../../components/ImageExposure';
 import ImageZoom from '../../components/ImageZoom';
+import ImageBlur from '../ImageFocus';
 
 interface ImageGameProps {
     media: string;
@@ -11,6 +12,7 @@ interface ImageGameProps {
     contrast: number; setContrast: (v: number) => void;
     exposure: number; setExposure: (v: number) => void;
     zoom: number; setZoom: (v: number) => void;
+    blur: number; setBlur: (v: number) => void;
 }
 
 export default function ImageGame({
@@ -22,7 +24,9 @@ export default function ImageGame({
     exposure,
     setExposure,
     zoom,
-    setZoom
+    setZoom,
+    blur,
+    setBlur
 }: ImageGameProps) {
     const [fullscreen, setFullscreen] = useState(false);
 
@@ -36,7 +40,7 @@ export default function ImageGame({
     }, [fullscreen]);
 
     const filterStyles = {
-        filter: `saturate(${saturation}%) contrast(${contrast}%) brightness(${exposure}%)`,
+        filter: `saturate(${saturation}%) contrast(${contrast}%) brightness(${exposure}%) blur(${blur}px)`,
         transform: `scale(${zoom / 100})`,
         transformOrigin: "center"
     };
@@ -47,6 +51,7 @@ export default function ImageGame({
             <ImageContrast value={contrast} onChange={setContrast} />
             <ImageExposure value={exposure} onChange={setExposure} />
             <ImageZoom value={zoom} onChange={setZoom} />
+            <ImageBlur value={blur} onChange={setBlur} />
         </>
     );
 
@@ -58,7 +63,6 @@ export default function ImageGame({
                     alt="Game Visual"
                     style={filterStyles}
                 />
-                {/* Single button tied to the correct state */}
                 <button className="fullscreen-btn" onClick={() => setFullscreen(true)}>
                     <img src={fullscreenIcon} alt="Fullscreen" />
                 </button>
