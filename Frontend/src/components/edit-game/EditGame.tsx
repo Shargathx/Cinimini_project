@@ -35,20 +35,21 @@ async function EditGame(
         categoryId: Number(category),
         description,
         steps: (steps || []).map(step => ({
-            stepRequestId: step.id ?? null,
+            //For some reason this fixed it
+            // stepRequestId: step.id ?? null,
 
             questions: (step.questions || []).map(q => ({
-                id: q.id ?? null, // Preserves Question ID
+                id: q.id, // Preserves Question ID
                 questionText: q.questionText,
             })),
 
             discussionPoints: (step.discussionPoints || []).map(dp => ({
-                id: dp.id ?? null, // Preserves DiscussionPoint ID
+                id: dp.id, // Preserves DiscussionPoint ID
                 discussionText: dp.discussionText,
             })),
 
             teacherTexts: (step.teacherTexts || []).map(tt => ({
-                id: tt.id ?? null   , // Preserves TeacherText ID
+                id: tt.id, // Preserves TeacherText ID
                 teacherText: tt.teacherText,
             })),
         })),
@@ -77,13 +78,9 @@ async function EditGame(
         }
     );
 
-if (!response.ok) {
-    const error = await response.text();
-
-    console.log("BACKEND ERROR:", error);
-
-    throw new Error(error);
-}
+    if (!response.ok) {
+        throw new Error("Failed to update game");
+    }
     else {
         window.location.reload()
     }
