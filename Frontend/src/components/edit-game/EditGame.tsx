@@ -35,7 +35,8 @@ async function EditGame(
         categoryId: Number(category),
         description,
         steps: (steps || []).map(step => ({
-            stepRequestId: step.id ?? undefined,
+            //For some reason this fixed it
+            // stepRequestId: step.id ?? null,
 
             questions: (step.questions || []).map(q => ({
                 id: q.id, // Preserves Question ID
