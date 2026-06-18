@@ -38,21 +38,24 @@ Tuleb rakenduse failid alla laadida, ning frontendi on võimalik jooksutada VsCo
 
 Nende allalaadimiseks on vaja terminalis jooksutada ["npm install"](https://docs.npmjs.com/cli/v11/commands/npm-install) mis automaatselt laeb alla kõik vajalikud "package"-id. Peale kõikide vajalike "package"-ite allalaadimist tuleb terminalis jooksutada "npm run dev" mis paneb rakenduse tööle.
 
+Kui on eesmärk frontend kuskile serverisse vms saada, siis tuleks kasutada ka "npm run build", tekitab Frontend kausta "dist" kausta, mis on valmis edasi saatmiseks.
+
 (Veendu, et "directory"/kataloog kus olete on kindlasti "frontend"!!)
 
 ### Backend:
 
-Veel on pooleli
 
-○ selgeid paigaldusjuhiseid ja arenduskeskkonna ülesseadmise juhised, et kes iganes saaks selle
-		vajadusel käima (näiteks andmebaasi tabelid jm info peaks olema teksti kujul, et saaks kopeerida, aga
-		loomulikult ei saa suure andmebaasi loomise skript tervikuna README-failis olla), juhendi abil saab
-		"toote" peale koodi allalaadimist sobilikus kohas käima panna;
+Programmi kloonimisel tuleks teha järgnevad tegevused backendis (soovitatavalt IntelliJ-s, eeldan, et JDK ja muud sätted on eelnevalt paigas):
+### rename-ida application.properties.example -> application.properties
+### application.properties sees tuleks asendada []-s olevad väljad enda valiidsete andmebaasi andmetega (DB nimi, kasutaja, parool).
+### Seejärel tuleks ühendada andmebaas PostgreSQL-ga, peale mida jooksutada "database"-kaustas olevaid scripte, järjekorras 1, 2, 3. 
+
 
 ## Testid
 
-Testide jaoks ei kasutanud me eraldi programme, vaid kõik testid mida tegime olid manuaal testid, vaadates ise kõik leheküljed üle ning otsides vigu
+Testide jaoks ei kasutanud me eraldi programme, vaid kõik testid mida tegime olid manuaal testid, vaadates ise kõik leheküljed üle ning otsides vigu.
+Enamus vigadest või mingi komponendi katki minekust saime teada just siis, kui üritasime uusi mänge lisada või olemasolevaid mänge muuta. 
 		
 ## Litsents		
 
-kasutatav litsents on [creative commons](https://creativecommons.org/cc-licenses/).
+kasutatav litsents on [creative commons] (https://creativecommons.org/cc-licenses/).
