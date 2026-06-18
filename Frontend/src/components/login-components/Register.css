@@ -13,7 +13,7 @@
     width: clamp(300px, 25vw, 500px);
     padding: clamp(20px, 2vw, 40px) clamp(50px, 2vw, 60px);
 
-    background: rgb(255, 248, 248, 1);
+    background: #fbf7f5;
     border: 0.5vw solid rgb(145, 242, 190, 0.5);
 
     border-radius: clamp(30px, 2vw, 50px);

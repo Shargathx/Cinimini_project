@@ -1,14 +1,14 @@
 .image-container {
     width: clamp(300px, 80vw, 1400px);
     max-width: 100%;
-    height: clamp(300px, 50vh, 500px);
+    height: clamp(280px, 48vh, 500px);
 
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
 
-    background-color: rgb(255, 248, 248, 1);
+    background-color: #fbf7f5;
     border: clamp(8px, 0.5vw, 16px) solid rgb(213, 198, 237);
     border-radius: 20px;
     margin: 0;
@@ -62,14 +62,14 @@
 
 .image-slider::-webkit-slider-runnable-track {
     height: var(--slider-size);
-    background: rgb(255, 248, 248, 1);
+    background: #fbf7f5;
     border-radius: 999px;
     outline: calc(var(--slider-size) * 0.25) solid rgb(213, 198, 237);
 }
 
 .image-slider::-moz-range-track {
     height: var(--slider-size);
-    background: rgb(255, 248, 248, 1);
+    background: #fbf7f5;
     border-radius: 999px;
     border: calc(var(--slider-size) * 0.12) solid rgb(213, 198, 237);
 }

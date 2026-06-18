@@ -1,0 +1,181 @@
+.video-container {
+    width: auto;
+    /*max-width: 100%;*/
+    height: clamp(300px, 50vh, 500px);
+
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgb(255, 248,248 ,1);
+    border: clamp(8px, 0.5vw, 16px) solid rgba(247, 201, 204, 1);
+    border-radius: 20px;
+    margin: 0;
+    position: relative;
+}
+
+@media (min-width: 1800px) {
+    .video-container {
+        max-width: 80%;
+        min-height: 80%;
+    }
+}
+
+.video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transform-origin: center center !important;
+    backface-visibility: hidden;
+}
+
+.video-function{
+    display: flex;
+    flex-direction: column;
+    row-gap: clamp(0.5rem, 3vh, 5rem);
+    justify-content: center;
+}
+
+.play-and-progress{
+    max-width: calc(var(--slider-size) * 10);
+    border: calc(var(--slider-size) * 0.25) solid rgba(247, 201, 204, 0.8);
+    padding: clamp(7px, 1.1vh, 30px);
+    border-radius: 999px;
+    background-color: rgb(255, 248,248);
+    display: flex;
+    align-items: center;
+}
+
+.video-progress-bar {
+    -webkit-appearance: none;
+    appearance: none;
+    border: none;
+    
+    width: 70%;
+    height: 12px;
+    border-radius: 999px;
+    
+    background-color: rgba(235, 237, 239, 0.5); 
+    cursor: pointer;
+    margin-right: clamp(10px, 1.0vh, 20px);
+}
+
+.video-progress-bar::-webkit-progress-bar {
+    background-color: rgba(235, 237, 239, 0.5);
+    border-radius: 999px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.video-progress-bar::-webkit-progress-value {
+    background: rgb(212, 165, 168);
+    border-radius: 999px;
+    transition: width 0.1s linear; 
+}
+
+.video-progress-bar::-moz-progress-bar {
+    background: rgb(212, 165, 168);
+    border-radius: 999px;
+}
+
+.video-timer{
+    font-size: clamp(0.8rem, 1vw, 1.3rem)
+}
+
+.video-play{
+    font-size: clamp(2rem, 1vw, 1.5rem);
+    color: rgba(234, 179, 183, 0.9);
+    margin-right: clamp(10px, 1.0vh, 20px);
+    border: none;
+    background-color: transparent;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(2rem, 1vw, 1.5rem);
+    height: clamp(2rem, 1vw, 1.5rem);
+}
+
+.video-reverse-button{
+    padding: clamp(15px, 1.8vh, 30px);
+    font-size: clamp(0.8rem, 1vw, 1.5rem);
+    border-radius: 999px;
+    border: calc(var(--slider-size) * 0.25) solid rgba(247, 201, 204, 0.8);
+    background-color: rgba(250, 235, 236, 0.9);
+    font-weight: bold;
+}
+
+.video-speed-options {
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.video-speed-options p{
+    font-size: clamp(0.7rem, 0.8vw, 1.5rem);
+    font-weight: bold;
+    color:rgb(103, 101, 103);
+    text-transform: lowercase;
+}
+
+.video-speed-amount{
+    font-size: clamp(0.8rem, 1vw, 1.5rem);
+    margin-bottom: 1vh;
+    width: 100%;
+    white-space: nowrap;
+}
+
+
+@media (min-width: 1800px) {
+    .video-slider-text {
+        margin-bottom: 1.5vh;
+    }
+}
+
+.video-slider {
+    appearance: none;
+    -webkit-appearance: none;
+    max-width: calc(var(--slider-size) * 10);
+    width: 100%;
+    background: transparent;
+    cursor: pointer;
+}
+
+
+.video-slider::-webkit-slider-runnable-track {
+    height: var(--slider-size);
+    background: rgb(255, 248,248 ,1);
+    border-radius: 999px;
+    outline: calc(var(--slider-size) * 0.25) solid rgba(247, 201, 204, 0.8);
+}
+
+.video-slider::-moz-range-track {
+    height: var(--slider-size);
+    background: rgb(255, 248,248 ,1);
+    border-radius: 999px;
+    border: calc(var(--slider-size) * 0.12) solid rgba(247, 201, 204, 0.8);
+}
+
+
+.video-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+
+    height: calc(var(--slider-size) / 1.2);
+    width: calc(var(--slider-size) / 1.2);
+    border-radius: 50%;
+
+    background: rgba(234, 179, 183, 0.9);
+
+    margin-top: calc((var(--slider-size) - (var(--slider-size)/1.2)) / 2);
+}
+
+.video-slider::-moz-range-thumb {
+    width: calc(var(--slider-size) * 0.8);
+    height: calc(var(--slider-size) * 0.8);
+    border-radius: 50%;
+    background: rgba(234, 179, 183, 0.9);
+    border: none;
+}

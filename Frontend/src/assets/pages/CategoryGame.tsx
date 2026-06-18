@@ -4,6 +4,10 @@ import defaultGameIcon from '../icons/defaultGameIcon.svg';
 import './CategoryGame.css';
 import type { Game } from "../models/Game";
 
+import archiveIcon from "../icons/archive.svg";
+import deleteIcon from "../icons/delete.svg";
+import editIcon from "../icons/edit.svg";
+
 
 function CategoryGame() {
     const { catid } = useParams<{ catid: string }>();
@@ -61,16 +65,16 @@ function CategoryGame() {
 
                     <div className="gameButtons">
                         <button
-                            className="deleteBtn"
+                            className="archiveBtn"
                             onClick={() => softDelete(Number(game.id))}
                         >
-                            SOFT DELETE
+                            <img src={archiveIcon} alt="Archive" />
                         </button>
                         <button
                             className="deleteBtn"
                             onClick={() => hardDelete(Number(game.id))}
                         >
-                            HARD DELETE
+                            <img src={deleteIcon} alt="Delete" />
                         </button>
 
                         <Link to={`/update-game/${game.id}`}>
@@ -82,7 +86,7 @@ function CategoryGame() {
                                     localStorage.setItem("catid", String(catid));
                                 }}
                             >
-                                EDIT
+                                <img src={editIcon} alt="Edit" />
                             </button>
                         </Link>
                     </div>
