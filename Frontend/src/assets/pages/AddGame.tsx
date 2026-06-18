@@ -80,7 +80,7 @@ function AddGame() {
 
       // 3. Append the files using the expected index keys
       steps.forEach((step, stepIndex) => {
-        step.images?.forEach((file:File) => {
+        step.images?.forEach((file: File) => {
           formData.append(
             `steps[${stepIndex}].image`,
             file
@@ -109,8 +109,6 @@ function AddGame() {
 
     <div id="generalContainer">
       <h1 id="addGameTitle">Loo mäng</h1>
-      <h2>Mode: {mode}</h2>
-      <button onClick={() => { console.log(game) }}>Get editable</button>
       <label id="gameNameLabel">Mängu nimi: </label>
       <input id="gameName" value={name} onChange={(e) => { setName(e.target.value) }}></input><br></br>
       <label id="gameCatLabel">Kategooria: </label>
@@ -150,6 +148,7 @@ function AddGame() {
           <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
 
           {<button
+            id="bigEraseBtn"
             type="button"
             onClick={() => deleteStep(stepIndex)}
           >

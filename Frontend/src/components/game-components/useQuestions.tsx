@@ -37,10 +37,11 @@ export default function QuestionManager({
                     {question.questionText}
 
                     <button
+                        id="eraseBtn"
                         type="button"
                         onClick={() => onDelete(Number(question.id))}
                     >
-                        Kustuta
+                        x
                     </button>
                 </div>
             ))}
