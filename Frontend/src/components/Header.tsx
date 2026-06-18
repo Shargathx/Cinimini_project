@@ -15,17 +15,20 @@ function Header() {
     const showHomePage =
         path === "/categories" ||
         path === "/add-game" ||
+        path.startsWith("/update-game/")||
         path === "/register" ||
         path === "/login" ||
         path.startsWith("/categories/");
     const showCategories =
         path === "/add-game" ||
+         path.startsWith("/update-game/") ||
         path.startsWith("/categories/");
     const showPageInfo = path === "/";
     const showAbout = path === "/";
     const showCategoriesInfo = path === "/categories";
-    const showLoginAndRegister = path === "/" ||
-        path === "/register" || 
+    const showLogin = path === "/" ||
+        path === "/register";
+    const showRegister = path === "/" ||
         path === "/login";
 
     const [text, setText] = useState("");
@@ -45,22 +48,26 @@ function Header() {
     return (
         <header className="header">
             <nav className="nav">
-                {showLoginAndRegister && (
-                    <>
-                        <a href="/register" className="register-link">
-                            REGISTREERI
-                        </a>
-
-                        <a href="/login" className="login-link">
-                            LOGI SISSE
-                        </a>
-                    </>
-                )}
+               
 
                 {showHomePage && (
                     <a href="/" className="home-page-link">
                         AVALEHT
                     </a>
+
+                )} 
+                
+                {showLogin && (
+                        <a href="/login" className="login-link">
+                            LOGI SISSE
+                        </a>
+
+                )}
+
+                {showRegister && (
+                    <a href="/register" className="register-link">
+                            REGISTREERI
+                        </a>
 
                 )}
 
