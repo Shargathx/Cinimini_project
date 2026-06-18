@@ -1,21 +1,29 @@
 
 # Minikino veebileht
 
-<img src="./media/img1.PNG" width="400">
-<img src="./media/img2.PNG" width="400">
-<img src="./media/img3.PNG" width="500">
-○ ekraanipilti või eraldi loodud pilti lahendusest – ekraanipilt peab olema samas repos, et nad üks hetk ära ei
-kaoks (ära tee väga suuri pilte!);
-	(avaekraani pilt, kat menüü, män menüü,män
-○ eesmärki ja lühikirjeldust (3-4 lauset, mis probleemi rakendus lahendab);
+
+
+
+
+| Avaleht  | Kategooriad | Mäng |
+| ------------- | ------------- | ------------- |
+| <img src="./media/img1.PNG" width="300">  | <img src="./media/img2.PNG" width="400">  | <img src="./media/img3.PNG" width="500"> |
+
+## Eesmärk
 
 Minikino eesmärk on anda õpetajatele valmis ning lihtsasti kohandatav õppekeskkond, mille alusel saab õpetada lastele meediaelementide olemust ning, kuidas nende mõjutamisel muutub edastatav sõnum. Õppekeskkonna fookuses on kasutajasõbralik disain, mis on kasutatav ka õpetajatele ja huvijuhtidele, kellel on vähesem digipädevus. Mänge saab kasutada nii erinevate õppeainete teemade raames kui ka vahetunni tegevusena, mis on lastele huvitav ja õpetlik.
-○ viidet instituudile ja paar sõna sellest, mille raames projekt loodud (tehtud selle ja selle raames….);
-	Minikino veebileht on loodud Tallinna Ülikooli informaatika üliõpilaste poolt esimesel kursusel tarkvaraarenduse praktika raames koostöös meediaharidus OÜ-ga.
+
+Minikino veebileht on loodud Tallinna Ülikooli informaatika üliõpilaste poolt esimesel kursusel tarkvaraarenduse praktika raames koostöös meediaharidus OÜ-ga.
 
 ○ kasutatud tehnoloogiad ja nende versioonid(!);
-○ projekti autorite nimed;
-	Veebilehe koostajad on Martin Saareväli, Roland Piperal, Õnne Elisabeth Maripu, Anette Aruorg ja Carolina Treu. Projekti loomine andis meile kogemusi ka edaspidi suuremate projektidega tegelemiseks. 
+## Kasutatud Tehnoloogiad
+VsCode - Ver. 1.124.2
+
+IntelliJ IDEA ULTIMATE - Ver. 25.0.2+1-b329.117
+
+pgAdmin - Ver. 9.15
+## Autorid
+Veebilehe koostajad on Martin Saareväli, Roland Piperal, Õnne Elisabeth Maripu, Anette Aruorg ja Carolina Treu. Projekti loomine andis meile kogemusi ka edaspidi suuremate projektidega tegelemiseks. 
 
 
 veel teha		○ selgeid paigaldusjuhiseid ja arenduskeskkonna ülesseadmise juhised, et kes iganes saaks selle
@@ -23,6 +31,6 @@ veel teha		○ selgeid paigaldusjuhiseid ja arenduskeskkonna ülesseadmise juhis
 		loomulikult ei saa suure andmebaasi loomise skript tervikuna README-failis olla), juhendi abil saab
 		"toote" peale koodi allalaadimist sobilikus kohas käima panna;
 		
-		
-○ viidet litsentsile ning litsentsifail oleks repositooriumis (soovitavalt MIT litsents)
-	kasutatav litsents on creative commons.
+## Litsents		
+
+kasutatav litsents on creative commons.
