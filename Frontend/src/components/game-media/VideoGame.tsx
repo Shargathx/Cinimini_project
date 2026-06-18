@@ -26,12 +26,14 @@ export default function VideoGame({ media }: VideoGameProps) {
 
     return (
         <div className="video-game-container">
+            <div className="video-container">
             <video
                 ref={videoRef}
                 width="320"
                 height="240"
                 src={videoSrc}
             />
+            </div>
 
             <div
                 className="video-actions"

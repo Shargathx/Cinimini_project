@@ -3,6 +3,7 @@ import { useState, useRef } from 'react';
 import './GameSound.css';
 import './Game.css';
 import './GameImage.css';
+import './GameVideo.css';
 import './GameFullscreen.css';
 import { useFetch } from '../../components/hooks/useFetch';
 import type { Game } from '../models/Game';
@@ -35,6 +36,7 @@ function GamePage() {
     const [speed, setSpeed] = useState<number>(1);
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const reverseIntervalRef = useRef<number | null>(null);
+    const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
     //Audio variables
     const [reverb, setReverb] = useState<number>(0);
@@ -99,13 +101,17 @@ function GamePage() {
             }
             case "video/mp4": {
                 const videoSrc = `data:video/mp4;base64,${media}`;
-                return (media && (<video
-                    controls
-                    ref={videoRef}
-                    width="320"
-                    height="240"
-                    src={videoSrc}
-                />))
+                return (media && (
+                    <div className="video-container">
+                        <video
+                            controls
+                            ref={videoRef}
+                            width="320"
+                            height="240"
+                            src={videoSrc}
+                        />
+                    </div>
+                ))
             }
             default:
                 return <p>Unsupported format: {fileFormat}</p>;
@@ -126,195 +132,210 @@ function GamePage() {
         setCurrentStep(prev =>
             Math.min(prev + 1, data.gameSteps.length - 1)
         );
+        setIsPlaying(false);
     }
 
     function previousStep() {
         setCurrentStep(prev =>
             Math.max(prev - 1, 0)
         );
+        setIsPlaying(false);
+    }
+
+    function handlePlayPause() {
+        stopPlay();
+        setIsPlaying(prev => !prev);
     }
 
     return (
-        <div className="game-grid-container">
+        <div className="game-page-container">
+            <div className="game-grid-container">
 
-            <div className="counter-and-media">
-                <span className="media-count">
-                    {currentStep + 1}/{mediaCount}
-                </span>
+                <div className="counter-and-media">
+                    <span className="media-count">
+                        {currentStep + 1}/{mediaCount}
+                    </span>
 
-                <div className="steps-and-media">
-                    <button
-                        className="previous-step"
-                        onClick={previousStep}
-                        disabled={currentStep === 0}
-                    >
-                        <img src={LessThanB} alt="less-than-sign-black" />
-                    </button>
+                    <div className="steps-and-media">
+                        <button
+                            className="previous-step"
+                            onClick={previousStep}
+                            disabled={currentStep === 0}
+                        >
+                            <img src={LessThanB} alt="less-than-sign-black" />
+                        </button>
 
-                    <div className="game-content">
-                        {renderMediaComponent()}
+                        <div className="game-content">
+                            {renderMediaComponent()}
+                        </div>
+
+                        <button
+                            className="next-step"
+                            onClick={nextStep}
+                            disabled={currentStep >= mediaCount - 1}
+                        >
+                            <img src={GreaterThanB} alt="greater-than-sign-black" />
+                        </button>
+                        
                     </div>
-
-                    <button
-                        className="next-step"
-                        onClick={nextStep}
-                        disabled={currentStep >= mediaCount - 1}
-                    >
-                        <img src={GreaterThanB} alt="greater-than-sign-black" />
-                    </button>
                 </div>
-            </div>
 
-            <div className="game-function">
-                {fileFormat.startsWith("image/") && (
-                    <div className="image-function">
-                        <ImageSaturation
-                            value={saturation}
-                            onChange={setSaturation}
-                        />
+                <div className="game-function">
+                    {fileFormat.startsWith("image/") && (
+                        <div className="image-function">
+                            <ImageSaturation
+                                value={saturation}
+                                onChange={setSaturation}
+                            />
 
-                        <ImageContrast
-                            value={contrast}
-                            onChange={setContrast}
-                        />
+                            <ImageContrast
+                                value={contrast}
+                                onChange={setContrast}
+                            />
 
-                        <ImageExposure
-                            value={exposure}
-                            onChange={setExposure}
-                        />
+                            <ImageExposure
+                                value={exposure}
+                                onChange={setExposure}
+                            />
 
-                        <ImageZoom
-                            value={zoom}
-                            onChange={setZoom}
-                        />
+                            <ImageZoom
+                                value={zoom}
+                                onChange={setZoom}
+                            />
 
                         <ImageBlur
                             value={blur}
                             onChange={setBlur}
                         />
-                    </div>
-                )}
-                {fileFormat.startsWith("video/") && (
-                    <div className="video-function">
-                        <div
-                            className="video-actions"
-                            style={{ marginTop: '10px' }}
-                        >
-                            <button onClick={playReverse}>
-                                Play in Reverse
-                            </button>
                         </div>
-
-                        <div style={{ marginTop: '15px' }}>
-                            <label
-                                style={{
-                                    display: 'inline-block',
-                                    width: '160px',
-                                    fontVariantNumeric: 'tabular-nums',
-                                }}
+                    )}
+                    {fileFormat.startsWith("video/") && (
+                        <div className="video-function">
+                            <div
+                                className="video-actions"
+                                style={{ marginTop: '10px' }}
                             >
-                                Speed amount: {speed}
-                            </label>
+                                <button
+                                    className="video-reverse-button"
+                                    onClick={playReverse}>
+                                    MÄNGI TAGURPIDI
+                                </button>
+                            </div>
 
-                            <input
-                                type="range"
-                                min="1"
-                                max="2"
-                                step="0.1"
-                                value={speed}
-                                onChange={(e) => {
-                                    const newSpeed = Number(e.target.value);
-                                    setSpeed(newSpeed);
+                            <div>
+                                <div className="text-and-slider">
+                                    <label
+                                        className="video-speed-amount"
+                                    >
+                                        Speed amount: {speed}
+                                    </label>
 
-                                    setTimeout(() => playFast(), 0);
-                                }}
-                            />
+                                    <input
+                                        className="video-slider"
+                                        type="range"
+                                        min="1"
+                                        max="2"
+                                        step="0.1"
+                                        value={speed}
+                                        onChange={(e) => {
+                                            const newSpeed = Number(e.target.value);
+                                            setSpeed(newSpeed);
 
-                            <figure>
-                                <figcaption>
+                                            setTimeout(() => playFast(), 0);
+                                        }}
+                                    />
+                                    <div className="video-speed-options">
+                                        <p>1x</p>
+                                        <p>1.5x</p>
+                                        <p>2x</p>
+                                    </div>
+                                </div>
+
+                                <div className='play-and-progress'>
                                     <button
-                                        onClick={stopPlay}
+                                        className="video-play"
+                                        onClick={handlePlayPause}
                                         id="play"
-                                        aria-label="Play"
+                                        aria-label={isPlaying ? "Pause" : "Play"}
                                         role="button"
                                     >
-                                        ►
+                                        {isPlaying ? "❚❚" : "►"}
                                     </button>
 
                                     <progress
+                                        className="video-progress-bar"
                                         id="progress"
                                         value={0}
                                         max={1}
                                         onClick={changePosition}
                                     >
-                                        Progress
                                     </progress>
 
                                     <label
+                                        className="video-timer"
                                         id="timer"
                                         role="timer"
                                     >
                                         0
                                     </label>
-                                </figcaption>
-                            </figure>
-                        </div>
-                    </div>
-
-                )}
-
-                {fileFormat.startsWith("audio/") && (
-                    <div className="audio-function">
-                        <div
-                            className="audio-controls"
-                            style={{ marginTop: '10px' }}
-                        >
-                            <button className='controlBtnS'
-                                onClick={() =>
-                                    playReversed(audioSrc)
-                                }
-                            >
-                                Reverse
-                            </button>
-
-                            <button className='controlBtnS'
-                                onClick={() =>
-                                    playWithReverb(audioSrc)
-                                }
-                            >
-                                Reverb
-                            </button>
-                        </div>
-
-                        <div className='text-and-slider' style={{ marginTop: '15px' }}>
-                            <label className='reverb-slider-title'
-
-                            >
-                                Reverb amount: {reverb}%
-                            </label>
-                            <div className="slider-shell">
-                                <input className='audio-slider'
-                                    type="range"
-                                    min="0"
-                                    max="100"
-                                    value={reverb}
-                                    onChange={(e) =>
-                                        setReverb(
-                                            Number(e.target.value)
-                                        )
-                                    }
-
-                                />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
 
-                )}
+                    {fileFormat.startsWith("audio/") && (
+                        <div className="audio-function">
+                            <div
+                                className="audio-controls"
+                                style={{ marginTop: '10px' }}
+                            >
+                                <button className='controlBtnS'
+                                    onClick={() =>
+                                        playReversed(audioSrc)
+                                    }
+                                >
+                                    TAGURPIDI
+                                </button>
+
+                                <button className='controlBtnS'
+                                    onClick={() =>
+                                        playWithReverb(audioSrc)
+                                    }
+                                >
+                                    KAJA
+                                </button>
+                            </div>
+
+                            <div className='text-and-slider' style={{ marginTop: '15px' }}>
+                                <label className='reverb-slider-title'
+
+                                >
+                                    KAJA TUGEVUS: {reverb}%
+                                </label>
+                                <div className="slider-shell">
+                                    <input className='audio-slider'
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        value={reverb}
+                                        onChange={(e) =>
+                                            setReverb(
+                                                Number(e.target.value)
+                                            )
+                                        }
+
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                    )}
+                </div>
+                <h3 className="game-name">{data?.name}</h3>
+                <h3 className="game-description">KIRJELDUS: {data?.description}</h3>
+
+                <InfoPanels step={step} />
             </div>
-            <h3 className="game-name">{data?.name}</h3>
-            <h3 className="game-description">KIRJELDUS{data?.description}</h3>
-
-            <InfoPanels step={step} />
         </div>
     );
 }

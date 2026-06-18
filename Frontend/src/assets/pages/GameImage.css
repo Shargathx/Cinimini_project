@@ -1,7 +1,7 @@
 .image-container {
     width: clamp(300px, 80vw, 1400px);
     max-width: 100%;
-    height: clamp(300px, 50vh, 500px);
+    height: clamp(280px, 48vh, 500px);
 
     overflow: hidden;
     display: flex;

@@ -113,14 +113,19 @@ input[type="file"] {
     font-weight: 400;
 }
 
-input[type="file"]::file-selector-button {
-    margin: 10px 20px;
-    padding: clamp(5px, 0.8vw, 10px) clamp(10px, 1.5vw, 14px);
+.add-file-button {
+    display: inline-block;
+    padding: clamp(5px, 0.3vw, 10px) clamp(10px, 1.5vw, 14px);
+    margin: clamp(10px, 1.5vw, 8px);
     border: 3px solid rgb(145, 242, 190, 1);
     border-radius: 30px;
     font-size: clamp(14px, 1vw, 16px);
     background: #c2f2d7;
     cursor: pointer;
+}
+
+.hidden-file-input {
+    display: none;
 }
 
 #addQuestion,

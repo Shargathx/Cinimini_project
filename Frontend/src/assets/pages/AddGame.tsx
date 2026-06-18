@@ -150,8 +150,9 @@ function AddGame() {
             Kustuta samm
           </button>}
 
-          {/* <label htmlFor="img">Lisa Pilt</label> */}
+          <label htmlFor="img" className="add-file-button">LISA FAIL</label>
           <input
+            className="hidden-file-input"
             type="file"
             accept="image/*"
             multiple
