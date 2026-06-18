@@ -25,7 +25,7 @@ function EditView() {
         steps,
         setSteps,
 
-        // addStep,
+        addStep,
         deleteStep,
 
         // addQuestion,
@@ -193,9 +193,9 @@ function EditView() {
         </div>ˇ
         <hr></hr>
         {/*Ei taha lisada uut steppi*/}
-        {/* {<button type="button" id="stepBtn" onClick={addStep}>
+        {<button type="button" id="stepBtn" onClick={addStep}>
             Lisa uus samm
-        </button>} */}
+        </button>}
         <div id="step-container">
             {steps.map((step, stepIndex) => (
                 <div key={`q-${step.id}-${stepIndex}`} id="singleStep">
@@ -230,7 +230,6 @@ function EditView() {
                                 })
                             );
 
-                            // allow selecting same files again
                             e.target.value = "";
                         }}
                     />
