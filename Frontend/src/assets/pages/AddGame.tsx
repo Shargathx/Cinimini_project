@@ -155,10 +155,13 @@ function AddGame() {
             Kustuta samm
           </button>}
 
+          <label htmlFor="img">Lisa Pilt</label>
           <input
             type="file"
             accept="image/*"
             multiple
+            id="img"
+            style={{ "display": "none" }}
             onChange={(e) => {
               const files = Array.from(e.target.files ?? []);
 
