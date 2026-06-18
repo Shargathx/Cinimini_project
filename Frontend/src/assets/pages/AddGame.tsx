@@ -150,6 +150,7 @@ function AddGame() {
           <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
 
           {<button
+            id="bigEraseBtn"
             type="button"
             onClick={() => deleteStep(stepIndex)}
           >

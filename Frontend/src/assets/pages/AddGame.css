@@ -14,6 +14,7 @@
   width: 500px;
   margin:  auto;
   align-items: center;
+  
 }
 
 #gameNameLabel, #gameCatLabel{
@@ -49,7 +50,6 @@
 }
 
  #gameDescriptionBox {
-  
     margin-bottom: 0px;
     padding: 5px;
     font-size: 16px;
@@ -79,10 +79,37 @@
   margin-top: 50px;
 }
 
-#singleStep{
-border: 3px solid  rgba(157, 157, 156, 0.725);
-border-radius: 5px;
-padding: 2vw;
+#singleStep {
+    position: relative;
+    width: 450px;
+    border: 3px solid rgba(157, 157, 156, 0.725);
+    border-radius: 5px;
+    padding: 20px;
+}
+
+#bigEraseBtn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+
+    margin: 0;
+    padding: 5px;
+    font-size: 16px;
+    background-color: rgba(200, 220, 209, 0.5);
+    color: black;
+    border: 3px solid rgba(157, 157, 156, 0.5);
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+#bigEraseBtn:hover{
+    margin-right: 20px;
+    transform: scale(1.05);
+    background-color: rgba(157, 157, 156, 0.5);
+    color: black;
+
+    border-radius: 30px;
+    cursor: pointer;
 }
 
 #uploadImageTitle, #addQuestionTitle, #addDiscussionTitle, #addTeacherTextTitle {
@@ -139,12 +166,12 @@ input[type="file"]::file-selector-button:active {
 
 #eraseBtn{
     margin-left: 20px;
-    padding: 5px 10px;
-    font-size: 14px;
+    padding: 2px 4px;
+    font-size: 12px;
     background-color: rgba(200, 220, 209, 0.5);
     color: black;
     border: 3px solid rgba(157, 157, 156, 0.5);;
-    border-radius: 30px;
+    border-radius: 20px;
     cursor: pointer;
 }
 
@@ -184,16 +211,7 @@ input[type="file"]::file-selector-button:active {
     margin-bottom: 20px;
 }
 
-#deleteQuestionBtn, #deleteDiscussionBtn {
-    margin-left: 10px;
-    padding: 5px 10px;
-    font-size: 14px;
-    background-color: #c4c4c4af;
-    color: black;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+
 
 #saveGameBtn, #stepBtn {
     display: block;
@@ -209,4 +227,5 @@ input[type="file"]::file-selector-button:active {
 
 #saveGameBtn:hover, #stepBtn:hover {
     background-color: rgb(107, 215, 158);
+    transform: scale(1.05);
 }
