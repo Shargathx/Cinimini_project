@@ -1,8 +1,9 @@
 
 # Minikino veebileht
 
-<img src="./media/img1.PNG" width="300">
-<img src="./media/img2.PNG" width="300">
+<img src="./media/img1.PNG" width="400">
+<img src="./media/img2.PNG" width="400">
+<img src="./media/img3.PNG" width="500">
 ○ ekraanipilti või eraldi loodud pilti lahendusest – ekraanipilt peab olema samas repos, et nad üks hetk ära ei
 kaoks (ära tee väga suuri pilte!);
 	(avaekraani pilt, kat menüü, män menüü,män
