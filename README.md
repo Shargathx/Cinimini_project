@@ -1,6 +1,6 @@
 
 # Minikino veebileht
-![](readme-media/img.png)
+![Avaleht](./media/img1.png)
 ○ ekraanipilti või eraldi loodud pilti lahendusest – ekraanipilt peab olema samas repos, et nad üks hetk ära ei
 kaoks (ära tee väga suuri pilte!);
 	(avaekraani pilt, kat menüü, män menüü,män
