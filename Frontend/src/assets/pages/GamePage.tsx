@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useState, useRef } from 'react';
+import './GameSound.css';
 import './Game.css';
 import './GameImage.css';
 import './GameFullscreen.css';
@@ -83,10 +84,14 @@ function GamePage() {
             case "audio/mpeg":
             case "audio/mp3": {
                 if (!audioSrc) { setAudioSrc(`data:audio/mpeg;base64,${media}`) }
-                return (media && (<audio
-                    controls
-                    src={audioSrc}
-                />))
+                return (media && (
+                    <div className='audio-container'>
+                        <audio
+                            controls
+                            src={audioSrc}
+                        />
+                    </div>
+                ))
             }
             case "video/mp4": {
                 const videoSrc = `data:video/mp4;base64,${media}`;
@@ -181,7 +186,7 @@ function GamePage() {
                     </div>
                 )}
                 {fileFormat.startsWith("video/") && (
-                    <div className="image-function">
+                    <div className="video-function">
                         <div
                             className="video-actions"
                             style={{ marginTop: '10px' }}
@@ -250,12 +255,12 @@ function GamePage() {
                 )}
 
                 {fileFormat.startsWith("audio/") && (
-                    <div className="image-function">
+                    <div className="audio-function">
                         <div
                             className="audio-controls"
                             style={{ marginTop: '10px' }}
                         >
-                            <button
+                            <button className='controlBtnS'
                                 onClick={() =>
                                     playReversed(audioSrc)
                                 }
@@ -263,7 +268,7 @@ function GamePage() {
                                 Reverse
                             </button>
 
-                            <button
+                            <button className='controlBtnS'
                                 onClick={() =>
                                     playWithReverb(audioSrc)
                                 }
@@ -272,38 +277,35 @@ function GamePage() {
                             </button>
                         </div>
 
-                        <div style={{ marginTop: '15px' }}>
-                            <label
-                                style={{
-                                    display: "inline-block",
-                                    width: "160px",
-                                    fontVariantNumeric:
-                                        "tabular-nums"
-                                }}
+                        <div className='text-and-slider' style={{ marginTop: '15px' }}>
+                            <label className='reverb-slider-title'
+
                             >
                                 Reverb amount: {reverb}%
                             </label>
+                            <div className="slider-shell">
+                                <input className='audio-slider'
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    value={reverb}
+                                    onChange={(e) =>
+                                        setReverb(
+                                            Number(e.target.value)
+                                        )
+                                    }
 
-                            <input
-                                type="range"
-                                min="0"
-                                max="100"
-                                value={reverb}
-                                onChange={(e) =>
-                                    setReverb(
-                                        Number(e.target.value)
-                                    )
-                                }
-                            />
+                                />
+                            </div>
                         </div>
                     </div>
 
                 )}
             </div>
-                <h3 className="game-name">{data?.name}</h3>
-                <h3 className="game-description">KIRJELDUS{data?.description}</h3>
+            <h3 className="game-name">{data?.name}</h3>
+            <h3 className="game-description">KIRJELDUS{data?.description}</h3>
 
-                <InfoPanels step={step} />
+            <InfoPanels step={step} />
         </div>
     );
 }
