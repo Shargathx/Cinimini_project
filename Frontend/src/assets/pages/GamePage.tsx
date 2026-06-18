@@ -176,6 +176,7 @@ function GamePage() {
                         >
                             <img src={GreaterThanB} alt="greater-than-sign-black" />
                         </button>
+                        
                     </div>
                 </div>
 

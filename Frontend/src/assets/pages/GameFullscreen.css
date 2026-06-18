@@ -51,6 +51,10 @@
     z-index: 10;
 }
 
+.fullscreen-controls label{
+    color: aliceblue;
+}
+
 .slider-control {
     display: flex;
     flex-direction: column;
