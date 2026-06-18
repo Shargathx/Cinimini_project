@@ -23,12 +23,19 @@ IntelliJ IDEA ULTIMATE - Ver. 25.0.2+1-b329.117
 
 pgAdmin - Ver. 9.15
 
-ZONE - Ver.
+ZONE - Ver.????
+
 ## Autorid
 Veebilehe koostajad on Martin Saareväli, Roland Piperal, Õnne Elisabeth Maripu, Anette Aruorg ja Carolina Treu. Projekti loomine andis meile kogemusi ka edaspidi suuremate projektidega tegelemiseks. 
 
+## Paigaldamine
+Frontend:
 
-veel teha		○ selgeid paigaldusjuhiseid ja arenduskeskkonna ülesseadmise juhised, et kes iganes saaks selle
+Tuleb rakenduse failid alla laadida, ning frontendi on võimalik jooksutada VsCodeis. Vaja on alla laadia Node, React ja Vite. 
+
+Nende allalaadimiseks on vaja terminalis jooksutada "npm install" mis automaatselt laeb alla kõik vajalikud "package"-id
+
+○ selgeid paigaldusjuhiseid ja arenduskeskkonna ülesseadmise juhised, et kes iganes saaks selle
 		vajadusel käima (näiteks andmebaasi tabelid jm info peaks olema teksti kujul, et saaks kopeerida, aga
 		loomulikult ei saa suure andmebaasi loomise skript tervikuna README-failis olla), juhendi abil saab
 		"toote" peale koodi allalaadimist sobilikus kohas käima panna;
