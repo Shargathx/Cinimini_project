@@ -91,13 +91,17 @@ function GamePage() {
             }
             case "video/mp4": {
                 const videoSrc = `data:video/mp4;base64,${media}`;
-                return (media && (<video
-                    controls
-                    ref={videoRef}
-                    width="320"
-                    height="240"
-                    src={videoSrc}
-                />))
+                return (media && (
+                    <div className="video-container">
+                        <video
+                            controls
+                            ref={videoRef}
+                            width="320"
+                            height="240"
+                            src={videoSrc}
+                        />
+                    </div>
+                ))
             }
             default:
                 return <p>Unsupported format: {fileFormat}</p>;
@@ -216,7 +220,7 @@ function GamePage() {
                                         setTimeout(() => playFast(), 0);
                                     }}
                                 />
-                                <div className= "video-speed-options">
+                                <div className="video-speed-options">
                                     <p>1x</p>
                                     <p>1.5x</p>
                                     <p>2x</p>
@@ -310,10 +314,10 @@ function GamePage() {
 
                 )}
             </div>
-                <h3 className="game-name">{data?.name}</h3>
-                <h3 className="game-description">KIRJELDUS{data?.description}</h3>
+            <h3 className="game-name">{data?.name}</h3>
+            <h3 className="game-description">KIRJELDUS: {data?.description}</h3>
 
-                <InfoPanels step={step} />
+            <InfoPanels step={step} />
         </div>
     );
 }
