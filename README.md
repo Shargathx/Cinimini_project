@@ -5,8 +5,8 @@
 
 
 
-| Avaleht  | Kategooriad | Mäng |
-| ------------- | ------------- | ------------- |
+| Avaleht  									| 	Kategooriad 							| Mäng 									   |
+| ----------------------------------------- | ----------------------------------------- | ------------- 						   |
 | <img src="./media/img1.PNG" width="300">  | <img src="./media/img2.PNG" width="400">  | <img src="./media/img3.PNG" width="500"> |
 
 ## Eesmärk
