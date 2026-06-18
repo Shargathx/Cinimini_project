@@ -23,6 +23,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background:#fbf7f5 ;
 
   padding: clamp(16px, 1.5vw, 28px);
   box-sizing: border-box;
