@@ -47,6 +47,13 @@
     text-align: center;
 }
 
+.user-input:focus, 
+.password-input:focus{
+    outline: none;
+    border: 3px solid rgba(85, 85, 85, 0.65);
+}
+
+
 .login-button {
     margin-top: clamp(10px, 1vw, 20px);
     background-color: rgb(145, 242, 190, 0.5);
