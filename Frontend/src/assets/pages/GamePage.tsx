@@ -34,6 +34,7 @@ function GamePage() {
     const [speed, setSpeed] = useState<number>(1);
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const reverseIntervalRef = useRef<number | null>(null);
+    const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
     //Audio variables
     const [reverb, setReverb] = useState<number>(0);
@@ -128,12 +129,19 @@ function GamePage() {
         setCurrentStep(prev =>
             Math.min(prev + 1, data.gameSteps.length - 1)
         );
+        setIsPlaying(false);
     }
 
     function previousStep() {
         setCurrentStep(prev =>
             Math.max(prev - 1, 0)
         );
+        setIsPlaying(false);
+    }
+
+    function handlePlayPause() {
+        stopPlay();
+        setIsPlaying(prev => !prev);
     }
 
     return (
@@ -237,12 +245,12 @@ function GamePage() {
                                 <div className='play-and-progress'>
                                     <button
                                         className="video-play"
-                                        onClick={stopPlay}
+                                        onClick={handlePlayPause}
                                         id="play"
-                                        aria-label="Play"
+                                        aria-label={isPlaying ? "Pause" : "Play"}
                                         role="button"
                                     >
-                                        ►
+                                        {isPlaying ? "❚❚" : "►"}
                                     </button>
 
                                     <progress
@@ -252,7 +260,6 @@ function GamePage() {
                                         max={1}
                                         onClick={changePosition}
                                     >
-                                        Progress
                                     </progress>
 
                                     <label
@@ -265,54 +272,53 @@ function GamePage() {
                                 </div>
                             </div>
                         </div>
-
                     )}
 
-                {fileFormat.startsWith("audio/") && (
-                    <div className="audio-function">
-                        <div
-                            className="audio-controls"
-                            style={{ marginTop: '10px' }}
-                        >
-                            <button className='controlBtnS'
-                                onClick={() =>
-                                    playReversed(audioSrc)
-                                }
+                    {fileFormat.startsWith("audio/") && (
+                        <div className="audio-function">
+                            <div
+                                className="audio-controls"
+                                style={{ marginTop: '10px' }}
                             >
-                                Reverse
-                            </button>
-
-                            <button className='controlBtnS'
-                                onClick={() =>
-                                    playWithReverb(audioSrc)
-                                }
-                            >
-                                Reverb
-                            </button>
-                        </div>
-
-                        <div className='text-and-slider' style={{ marginTop: '15px' }}>
-                            <label className='reverb-slider-title'
-
-                            >
-                                Reverb amount: {reverb}%
-                            </label>
-                            <div className="slider-shell">
-                                <input className='audio-slider'
-                                    type="range"
-                                    min="0"
-                                    max="100"
-                                    value={reverb}
-                                    onChange={(e) =>
-                                        setReverb(
-                                            Number(e.target.value)
-                                        )
+                                <button className='controlBtnS'
+                                    onClick={() =>
+                                        playReversed(audioSrc)
                                     }
+                                >
+                                    TAGURPIDI
+                                </button>
 
-                                />
+                                <button className='controlBtnS'
+                                    onClick={() =>
+                                        playWithReverb(audioSrc)
+                                    }
+                                >
+                                    KAJA
+                                </button>
+                            </div>
+
+                            <div className='text-and-slider' style={{ marginTop: '15px' }}>
+                                <label className='reverb-slider-title'
+
+                                >
+                                    KAJA TUGEVUS: {reverb}%
+                                </label>
+                                <div className="slider-shell">
+                                    <input className='audio-slider'
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        value={reverb}
+                                        onChange={(e) =>
+                                            setReverb(
+                                                Number(e.target.value)
+                                            )
+                                        }
+
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
 
                     )}
                 </div>
