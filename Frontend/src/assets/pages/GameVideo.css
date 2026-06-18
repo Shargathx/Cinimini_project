@@ -37,8 +37,12 @@
     row-gap: clamp(0.5rem, 3vh, 5rem);
 }
 
-.video-progress-bar{
-
+.play-and-progress{
+    max-width: calc(var(--slider-size) * 10);
+    border: calc(var(--slider-size) * 0.25) solid rgba(247, 201, 204, 0.8);
+    padding: clamp(7px, 1.1vh, 30px);
+    border-radius: 999px;
+    background-color: rgb(255, 248,248);
 }
 
 .video-timer{
@@ -46,11 +50,23 @@
 }
 
 .video-play{
-
+    /*padding: clamp(10px, 1.0vh, 20px);*/
+    font-size: clamp(2rem, 1vw, 1.5rem);
+    /*border-radius: 50px;
+    border: calc(var(--slider-size) * 0.25) solid rgba(247, 201, 204, 0.8);
+    background-color: rgb(255, 248,248);*/
+    color: rgba(234, 179, 183, 0.8);
+    margin-right: clamp(10px, 1.0vh, 20px);
+    border: none;
+    background-color: transparent;
 }
 
 .video-reverse-button{
-
+    padding: clamp(15px, 1.8vh, 30px);
+    font-size: clamp(0.8rem, 1vw, 1.5rem);
+    border-radius: 999px;
+    border: calc(var(--slider-size) * 0.25) solid rgba(247, 201, 204, 0.8);
+    background-color: rgb(255, 248,248);
 }
 
 .video-speed-options{

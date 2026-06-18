@@ -1,8 +1,5 @@
-.game-page-container {
-    min-height: calc(100vh - 15vh - clamp(40px, 4vw, 64px));
-    display: flex;
-    justify-content: center;
-    align-items: center;
+*{
+    text-transform: uppercase;
 }
 
 .game-grid-container {
@@ -13,7 +10,7 @@
     --slider-size: clamp(30px, 3.5vh, 60px);
     padding: 0 clamp(0.5rem, 1vw, 2rem);
     padding-top:0;
-    text-transform: uppercase;
+    
 }
 
 .game-content {

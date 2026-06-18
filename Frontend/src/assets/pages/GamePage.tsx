@@ -131,7 +131,7 @@ function GamePage() {
     }
 
     return (
-        <div>
+        <div className="game-page-container">
             <div className="game-grid-container">
 
                 <div className="counter-and-media">
@@ -195,7 +195,7 @@ function GamePage() {
                                 <button
                                     className="video-reverse-button"
                                     onClick={playReverse}>
-                                    Play in Reverse
+                                    MÄNGI TAGURPIDI
                                 </button>
                             </div>
 
@@ -228,37 +228,35 @@ function GamePage() {
                                     </div>
                                 </div>
 
-                                <figure>
-                                    <figcaption>
-                                        <button
-                                            className="video-play"
-                                            onClick={stopPlay}
-                                            id="play"
-                                            aria-label="Play"
-                                            role="button"
-                                        >
-                                            ►
-                                        </button>
+                                <div className='play-and-progress'>
+                                    <button
+                                        className="video-play"
+                                        onClick={stopPlay}
+                                        id="play"
+                                        aria-label="Play"
+                                        role="button"
+                                    >
+                                        ►
+                                    </button>
 
-                                        <progress
-                                            className="video-progress-bar"
-                                            id="progress"
-                                            value={0}
-                                            max={1}
-                                            onClick={changePosition}
-                                        >
-                                            Progress
-                                        </progress>
+                                    <progress
+                                        className="video-progress-bar"
+                                        id="progress"
+                                        value={0}
+                                        max={1}
+                                        onClick={changePosition}
+                                    >
+                                        Progress
+                                    </progress>
 
-                                        <label
-                                            className="video-timer"
-                                            id="timer"
-                                            role="timer"
-                                        >
-                                            0
-                                        </label>
-                                    </figcaption>
-                                </figure>
+                                    <label
+                                        className="video-timer"
+                                        id="timer"
+                                        role="timer"
+                                    >
+                                        0
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
