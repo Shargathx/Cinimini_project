@@ -105,7 +105,8 @@ export function useGameSteps() {
                         questions: [
                             ...step.questions,
                             {
-                                questionText
+                                id: Date.now(), // or uuid()
+                                questionText: step.questionInput
                             }
                         ]
                     }
@@ -177,6 +178,7 @@ export function useGameSteps() {
                         teacherTexts: [
                             ...step.teacherTexts,
                             {
+                                id: Date.now(), // or uuid()
                                 teacherText: text
                             }
                         ]
@@ -270,6 +272,7 @@ export function useGameSteps() {
                         discussionPoints: [
                             ...step.discussionPoints,
                             {
+                                id: Date.now(), // or uuid()
                                 discussionText
                             }
                         ]

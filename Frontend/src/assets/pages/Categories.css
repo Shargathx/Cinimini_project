@@ -35,7 +35,7 @@
 }
 
 .category-card.video {
-  border: clamp(10px, 0.75vw, 16px) solid rgba(145, 242, 190, 0.55);
+  border: clamp(10px, 0.75vw, 16px) solid rgba(247, 201, 204, 0.8);
 }
 
 .category-card:hover {
