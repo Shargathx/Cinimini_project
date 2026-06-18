@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import type { Category } from "../../assets/models/Category";
-import "../../assets/pages/AddGame.css";
+import "./editGame.css";
 import type { Game } from "../../assets/models/Game";
 import { useFetch } from '../../components/hooks/useFetch';
 import EditGame from "./EditGame";
@@ -198,10 +198,11 @@ function EditView() {
         </button>}
         <div id="step-container">
             {steps.map((step, stepIndex) => (
-                <div key={step.id ?? `new-step-${stepIndex}`} id="singleStep">
+                <div key={`q-${step.id}-${stepIndex}`} id="singleStep">
                     <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
 
                     {<button
+                        id="bigEraseBtn"
                         type="button"
                         onClick={() => deleteStep(stepIndex)}
                     >
@@ -262,7 +263,7 @@ function EditView() {
 
                     <div>Küsimused:</div>
                     {step.questions.map((question, index) => (
-                        <div key={question.id ?? `new-q-${stepIndex}-${index}`}>
+                        <div key={`q-${question.id}-${index}`}>
                             <input
                                 value={question.questionText}
                                 onChange={(e) =>
@@ -283,7 +284,7 @@ function EditView() {
                                     )
                                 }
                             >
-                                Kustuta
+                                x
                             </button>
                         </div>
                     ))}
@@ -333,7 +334,7 @@ function EditView() {
                                     )
                                 }
                             >
-                                Kustuta
+                                x
                             </button>
                         </div>
                     ))}
@@ -383,7 +384,7 @@ function EditView() {
                                     )
                                 }
                             >
-                                Kustuta
+                                x
                             </button>
                         </div>
                     ))}

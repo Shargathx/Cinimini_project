@@ -66,7 +66,7 @@
     justify-content: center;
     flex-wrap: wrap;
     gap: clamp(20px, 3vw, 40px);
-    margin-top: clamp(50px, 5vw, 80px);
+    margin-top: clamp(30px, 5vw, 60px);
 }
 
 #singleStep {
@@ -103,8 +103,8 @@
 #addQuestionTitle,
 #addDiscussionTitle,
 #addTeacherTextTitle {
-    font-size: clamp(18px, 1.2vw, 22px);
-    margin-left: clamp(20px, 2vw, 28px);
+    font-size: clamp(16px, 1.2vw, 18px);
+    margin-left: clamp(10px, 2vw, 20px);
 }
 
 input[type="file"] {
@@ -126,8 +126,8 @@ input[type="file"]::file-selector-button {
 #addQuestion,
 #addDiscussion,
 #addTeachText {
-    margin-left: clamp(20px, 2vw, 28px);
-    width: clamp(200px, 20vw, 280px);
+    margin-left: clamp(10px, 2vw, 20px);
+    width: clamp(180px, 20vw, 260px);
     margin-bottom: 10px;
     padding: clamp(5px, 0.6vw, 10px);
     font-size: clamp(14px, 1vw, 16px);
@@ -136,47 +136,43 @@ input[type="file"]::file-selector-button {
     background-color: rgba(255, 248, 248, 0.90);
 }
 
-#addQuestion:focus,
-#addDiscussion:focus,
-#addTeachText:focus {
-    border: 3px solid rgb(134, 220, 174);
-    outline: none;
+#editAreas {
+    margin-left: clamp(10px, 2vw, 20px);
+    width: clamp(180px, 20vw, 260px);
+    margin-bottom: 10px;
+    padding: clamp(5px, 0.6vw, 10px);
+    font-size: clamp(14px, 1vw, 16px);
+    border: 3px solid rgb(145, 242, 190, 1);
+    border-radius: 5px;
+    background-color: black;
 }
 
 #eraseBtn {
-    margin-left: clamp(20px, 2vw, 28px);
+    margin-left: clamp(10px, 2vw, 20px);
     font-size: clamp(14px, 1vw, 16px);
     font-weight: bold;
-    background: transparent;
     color: red;
     border: none;
+    background: transparent;
     cursor: pointer;
 }
 
 #addQuestionBtn,
 #addDiscussionBtn,
 #addTeachTextBtn {
-    margin-left: clamp(20px, 2vw, 28px);
+    margin-left: clamp(10px, 2vw, 20px);
     padding: clamp(5px, 0.6vw, 10px) clamp(10px, 1.2vw, 16px);
     font-size: clamp(14px, 1vw, 16px);
     background-color: #c2f2d7;
-    color: black;
     border: 3px solid rgb(145, 242, 190, 1);
     border-radius: 30px;
     cursor: pointer;
 }
 
-#addQuestionBtn:hover,
-#addDiscussionBtn:hover,
-#addTeachTextBtn:hover {
-    transform: scale(1.05);
-    background-color: rgb(145, 242, 190, 1);
-}
-
 #questionsList,
 #discussionPointsList,
 #teacherTextList {
-    margin-left: clamp(20px, 2vw, 28px);
+    margin-left: clamp(10px, 2vw, 20px);
     margin-bottom: clamp(10px, 2vw, 20px);
 }
 
@@ -184,16 +180,10 @@ input[type="file"]::file-selector-button {
 #stepBtn {
     display: block;
     margin: 10px auto 20px auto;
-    padding: clamp(10px, 1vw, 14px) clamp(20px, 2vw, 28px);
-    font-size: clamp(16px, 1.2vw, 20px);
+    padding: clamp(8px, 1vw, 12px) clamp(16px, 2vw, 24px);
+    font-size: clamp(16px, 1.2vw, 18px);
     background-color: rgb(128, 240, 180);
     border: none;
     border-radius: 30px;
     cursor: pointer;
-}
-
-#saveGameBtn:hover,
-#stepBtn:hover {
-    background-color: rgb(107, 215, 158);
-    transform: scale(1.05);
 }
