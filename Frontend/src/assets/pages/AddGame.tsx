@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react"
 import type { Category } from "../models/Category"
 import "./AddGame.css";
-import type { Game } from "../models/Game";
-import { useFetch } from '../../components/hooks/useFetch';
+// import type { Game } from "../models/Game";
+// import { useFetch } from '../../components/hooks/useFetch';
 import QuestionManager from "../../components/game-components/useQuestions";
 import TeacherTextManager from "../../components/game-components/useTeacher";
 import DiscussionPointManager from "../../components/game-components/useDiscussionPointManager";
 import { useGameSteps } from "../../components/hooks/useGameSteps";
+import { apiGet } from "../../api/client";
 
 function AddGame() {
   const [categories, setCategories] = useState<Category[]>([])
@@ -15,11 +16,11 @@ function AddGame() {
   const [description, setDescription] = useState("")
   const [category, setCategory] = useState("");
 
-  const { data } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/games/${localStorage.getItem("catid")}/${localStorage.getItem("id")}`, []);
+  // const { data } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/games/${localStorage.getItem("catid")}/${localStorage.getItem("id")}`, []);
   //Game questions
 
-  const game = data;
-  const mode = localStorage.getItem("mode")
+  // const game = data;
+  // const mode = localStorage.getItem("mode")
 
   const {
     steps,
@@ -43,10 +44,9 @@ function AddGame() {
 
   //Form data
   useEffect(() => {
-    fetch(import.meta.env.VITE_BACK_URL + "/categories")
-      .then(res => res.json())
-      .then(json => setCategories(json))
-      .catch(err => console.error(err));
+    apiGet<Category[]>("/categories")
+      .then(setCategories)
+      .catch(console.error);
   }, []);
 
 
