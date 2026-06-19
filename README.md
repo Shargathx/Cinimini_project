@@ -46,9 +46,13 @@ Kui on eesmärk frontend kuskile serverisse vms saada, siis tuleks kasutada ka "
 
 
 Programmi kloonimisel tuleks teha järgnevad tegevused backendis (soovitatavalt IntelliJ-s, eeldan, et JDK ja muud sätted on eelnevalt paigas):
-### rename-ida application.properties.example -> application.properties
-### application.properties sees tuleks asendada []-s olevad väljad enda valiidsete andmebaasi andmetega (DB nimi, kasutaja, parool).
-### Seejärel tuleks ühendada andmebaas PostgreSQL-ga, peale mida jooksutada "database"-kaustas olevaid scripte, järjekorras 1, 2, 3. 
+
+1. rename-ida application.properties.example -> application.properties
+
+2. application.properties sees tuleks asendada []-s olevad väljad enda valiidsete andmebaasi andmetega (DB nimi, kasutaja, parool).
+
+3. Seejärel tuleks ühendada andmebaas PostgreSQL-ga, peale mida jooksutada "database"-kaustas olevaid scripte, järjekorras 1, 2, 3. 
+
 
 
 ## Testid
@@ -58,4 +62,4 @@ Enamus vigadest või mingi komponendi katki minekust saime teada just siis, kui 
 		
 ## Litsents		
 
-kasutatav litsents on [creative commons] (https://creativecommons.org/cc-licenses/).
+kasutatav litsents on [creative commons](https://creativecommons.org/cc-licenses/).
