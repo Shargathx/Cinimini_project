@@ -2,24 +2,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Sono:wght@200;300;400;500;600;700;800&display=swap');
 
 
-.app-layout {
+.app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.header {
-  height: clamp(30px, 11.5vh, 160px);
-  flex-shrink: 0;
-}
-
-.main-container {
+main {
   flex: 1;
-  min-height: 0;
-  padding: 10px;
 }
 
 .footer {
-  height: clamp(30px, 10vh, 90px);
   flex-shrink: 0;
 }

@@ -18,10 +18,9 @@ interface GameStepLike {
 
 interface InfoPanelsProps {
     step: GameStepLike | undefined;
-    category?: number;
 }
 
-export default function InfoPanels({ step, category }: InfoPanelsProps) {
+export default function InfoPanels({ step }: InfoPanelsProps) {
     const [activePopup, setActivePopup] = useState<ActivePopup>(null);
 
     return (
@@ -50,7 +49,7 @@ export default function InfoPanels({ step, category }: InfoPanelsProps) {
             </div>
 
             {activePopup && (
-                <div className={`side-popup category-${category}`}>
+                <div className="side-popup">
                     <button
                         className="close-popup"
                         onClick={() => setActivePopup(null)}

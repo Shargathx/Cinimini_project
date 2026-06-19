@@ -1,7 +1,5 @@
-.add-game-page {
-    height: 100%;
-    min-height: 0;
-    overflow-y: auto;
+* {
+    box-sizing: border-box;
 }
 
 #addGameTitle {

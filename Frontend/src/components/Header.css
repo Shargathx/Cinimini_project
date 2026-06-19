@@ -1,23 +1,24 @@
+* {
+    box-sizing: border-box;
+}
+
 .header {
-    min-height: 0;
-    display: flex;
+    max-height: 15vh;
     background-color: rgb(217, 217, 217, 0.2);
     border-bottom-left-radius: 0.5vw;
     border-bottom-right-radius: 1vw;
     border-bottom: 0.05vw solid rgb(58, 58, 58, 0.03);
-    padding: clamp(3px, 1vw, 10px);
-    align-items: center;
+    padding: clamp(10px, 1vw, 14px);
 }
 
 
 .nav {
-    display: flex;
     width: 100%;
-    
+    height: clamp(46px, 3.75vw, 92px);
+    display: flex;
     justify-content: center;
     gap: 1.5vw;
     align-items: center;
-    margin: 0;
 
 }
 
@@ -32,22 +33,16 @@
 .add-game-link {
     background-color: rgb(145, 242, 190, 0.5);
     color: var(--text-h);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
     font-family: 'Sono', sans-serif;
     font-weight: bold;
     font-size: clamp(14px, 1.25vw, 30px);
-
+    text-align: center;
     border-radius: 6vw;
-    border: 0.2vw solid rgb(145, 242, 190);
+    border: 0.2vw solid rgb(145, 242, 190, 1);
     padding: clamp(8px, 1vw, 20px) clamp(12px, 1.5vw, 36px);
-
-    text-decoration: none;
     cursor: pointer;
-    box-sizing: border-box;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .home-page-link:hover,
