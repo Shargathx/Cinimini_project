@@ -227,7 +227,7 @@ function GamePage() {
                                     <label
                                         className="video-speed-amount"
                                     >
-                                        Speed amount: {speed}
+                                        TÄPNE KIIRUS: {speed}
                                     </label>
 
                                     <input

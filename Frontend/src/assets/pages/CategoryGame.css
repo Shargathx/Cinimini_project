@@ -106,6 +106,31 @@ a.game-card .game-name {
   cursor: pointer;
 }
 
+.active-inactive-buttons{
+  display: flex;
+  align-items:center;
+  justify-content:center;
+  gap: 10px;
+}
+
+
+
+.active-inactive-buttons button{
+  display: inline-block;
+  padding: clamp(5px, 0.3vw, 10px) clamp(10px, 1.5vw, 14px);
+  margin: clamp(10px, 1.5vw, 8px);
+  border: 3px solid rgba(157, 157, 156, 0.5);
+  border-radius: 30px;
+  font-size: clamp(14px, 1vw, 16px);
+  background: rgba(227, 229, 228, 0.9);
+  cursor: pointer;
+}
+
+.active-inactive-buttons button:hover{
+  scale: 1.05;
+  cursor: pointer;
+}
+
 .gameButtons {
   display: flex;
   align-items: center;

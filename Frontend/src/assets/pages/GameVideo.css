@@ -95,6 +95,11 @@
     justify-content: center;
     width: clamp(2rem, 1vw, 1.5rem);
     height: clamp(2rem, 1vw, 1.5rem);
+    cursor: pointer;
+}
+
+.video-play:hover{
+    cursor: pointer;
 }
 
 .video-reverse-button{
@@ -104,6 +109,11 @@
     border: calc(var(--slider-size) * 0.25) solid rgba(247, 201, 204, 0.8);
     background-color: rgba(250, 235, 236, 0.9);
     font-weight: bold;
+}
+
+.video-reverse-button:hover{
+    scale: 1.05;
+    cursor: pointer;
 }
 
 .video-speed-options {

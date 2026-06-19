@@ -15,7 +15,7 @@
     margin: clamp(10px, 1.5vh, 30px);
     appearance: none;
     -webkit-appearance: none;
-    max-width: calc(var(--slider-size) * 10);
+    max-width: calc(var(--slider-size) * 12);
     width: 100%;
     background: transparent;
     cursor: pointer;
