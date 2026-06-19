@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import gameStartIcon from '../icons/startGame.svg';
 import './Home.css';
-import gameLogo from '../logos/logo.svg';
+import gameLogo from '../logos/Logo.svg';
 
 function Home() {
     const navigate = useNavigate();
