@@ -334,7 +334,7 @@ function GamePage() {
                 <h3 className="game-name">{data?.name}</h3>
                 <h3 className="game-description">KIRJELDUS: {data?.description}</h3>
 
-                <InfoPanels step={step} category={data?.categoryId} />
+                <InfoPanels step={step} />
             </div>
         </div>
     );
