@@ -91,7 +91,7 @@ audio::-webkit-media-controls-enclosure {
     text-align: center;
     text-transform: uppercase;
     border-radius: 6vw;
-    border: 0.4vw solid rgba(124, 234, 255, 0.6);
+    border: 5px solid rgba(124, 234, 255, 0.6);
     padding: clamp(6px, 1vw, 12px) clamp(10px, 1.2vw, 20px);
     cursor: pointer;
 }
@@ -103,6 +103,6 @@ audio::-webkit-media-controls-enclosure {
 .audio-container {
     padding: clamp(20px, 6vh, 40px) clamp(30px, 5vh, 60px);
     background-color: #e8faff;
-    border: 1vh solid rgba(124, 234, 255, 0.6);
+    border: 6px solid rgba(124, 234, 255, 0.6);
     border-radius: 6vh;
 }

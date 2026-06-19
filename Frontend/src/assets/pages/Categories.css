@@ -1,6 +1,7 @@
 .categories-page {
-  min-height: calc(100vh - 15vh - clamp(40px, 4vw, 64px));
+  height: 100%;
   display: flex;
+   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -12,6 +13,11 @@
   align-items: center;
   flex-wrap: wrap;
   gap: clamp(40px, 2.5vw, 60px);
+}
+
+.categories-page h1 {
+    margin-bottom: 4vh;
+    z-index: 1;
 }
 
 .category-card {

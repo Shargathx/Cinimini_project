@@ -102,134 +102,136 @@ function AddGame() {
   }
 
   return (<>
-    <div id="generalContainer">
-      <h1 id="addGameTitle">Loo mäng</h1>
-      <label id="gameNameLabel">Mängu nimi: </label>
-      <input id="gameName" value={name} onChange={(e) => { setName(e.target.value) }}></input><br></br>
-      <label id="gameCatLabel">Kategooria: </label>
-      <select
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-        id="gameCat"
-        name="gameCat"
-      >
-        <option value="" disabled>
-          Vali kategooria
-        </option>
-
-        {categories.map((category) => (
-          <option key={category.id} value={category.id}>
-            {category.name}
+    <div className="add-game-page">
+      <div id="generalContainer">
+        <h1 id="addGameTitle">Loo mäng</h1>
+        <label id="gameNameLabel">Mängu nimi: </label>
+        <input id="gameName" value={name} onChange={(e) => { setName(e.target.value) }}></input><br></br>
+        <label id="gameCatLabel">Kategooria: </label>
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          id="gameCat"
+          name="gameCat"
+        >
+          <option value="" disabled>
+            Vali kategooria
           </option>
-        ))}
-      </select>
 
-      <br />
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
 
-      <label id="gameDescriptionLabel">Kirjeldus: </label>
-      <textarea
-        id="gameDescriptionBox"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-    </div>ˇ
-    <hr></hr>
-    {<button type="button" id="stepBtn" onClick={addStep}>
-      Lisa uus samm
-    </button>}
-    <div id="step-container">
-      {steps.map((step, stepIndex) => (
-        <div key={step.id} id="singleStep">
-          <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
+        <br />
 
-          {<button
-            id="bigEraseBtn"
-            type="button"
-            onClick={() => deleteStep(stepIndex)}
-          >
-            Kustuta samm
-          </button>}
+        <label id="gameDescriptionLabel">Kirjeldus: </label>
+        <textarea
+          id="gameDescriptionBox"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </div>ˇ
+      <hr></hr>
+      {<button type="button" id="stepBtn" onClick={addStep}>
+        Lisa uus samm
+      </button>}
+      <div id="step-container">
+        {steps.map((step, stepIndex) => (
+          <div key={step.id} id="singleStep">
+            <h2 id="stepTitle">Samm {stepIndex + 1}</h2>
 
-          <label htmlFor="img" className="add-file-button">LISA FAIL</label>
-          <input
-            className="hidden-file-input"
-            type="file"
-            accept="image/*"
-            multiple
-            id="img"
-            onChange={(e) => {
-              const files = Array.from(e.target.files ?? []);
+            {<button
+              id="bigEraseBtn"
+              type="button"
+              onClick={() => deleteStep(stepIndex)}
+            >
+              Kustuta samm
+            </button>}
 
-              setSteps(prev =>
-                prev.map((s, index) => {
-                  if (index !== stepIndex) return s;
+            <label htmlFor="img" className="add-file-button">LISA FAIL</label>
+            <input
+              className="hidden-file-input"
+              type="file"
+              accept="image/*"
+              multiple
+              id="img"
+              onChange={(e) => {
+                const files = Array.from(e.target.files ?? []);
 
-                  return {
-                    ...s,
+                setSteps(prev =>
+                  prev.map((s, index) => {
+                    if (index !== stepIndex) return s;
 
-                    images: [
-                      ...(s.images ?? []),
-                      ...files
-                    ]
-                  };
-                })
-              );
-              e.target.value = "";
-            }}
-          />
+                    return {
+                      ...s,
 
-          <div>
-            {(step.images ?? []).map((img, i) => (
-              <div key={i}>{img.name}</div>
-            ))}
+                      images: [
+                        ...(s.images ?? []),
+                        ...files
+                      ]
+                    };
+                  })
+                );
+                e.target.value = "";
+              }}
+            />
+
+            <div>
+              {(step.images ?? []).map((img, i) => (
+                <div key={i}>{img.name}</div>
+              ))}
+            </div>
+            <QuestionManager
+              value={step.questionInput}
+              questions={step.questions}
+              onInputChange={(value) =>
+                updateQuestionInput(stepIndex, value)
+              }
+              onAdd={() => addQuestion(stepIndex)}
+              onDelete={(id) =>
+                deleteQuestion(stepIndex, id)
+              }
+            />
+
+            <DiscussionPointManager
+              value={step.discussionInput}
+              points={step.discussionPoints}
+              onInputChange={(value) =>
+                updateDiscussionInput(stepIndex, value)
+              }
+              onAdd={() => addDiscussionPoint(stepIndex)}
+              onDelete={(id) =>
+                deletePoint(stepIndex, id)
+              }
+            />
+
+            <TeacherTextManager
+              value={step.teacherTextInput}
+              texts={step.teacherTexts}
+              onInputChange={(value) =>
+                updateTeacherTextInput(stepIndex, value)
+              }
+              onAdd={() => addTeacherText(stepIndex)}
+              onDelete={(id) =>
+                deleteTeacherText(stepIndex, id)
+              }
+            />
           </div>
-          <QuestionManager
-            value={step.questionInput}
-            questions={step.questions}
-            onInputChange={(value) =>
-              updateQuestionInput(stepIndex, value)
-            }
-            onAdd={() => addQuestion(stepIndex)}
-            onDelete={(id) =>
-              deleteQuestion(stepIndex, id)
-            }
-          />
-
-          <DiscussionPointManager
-            value={step.discussionInput}
-            points={step.discussionPoints}
-            onInputChange={(value) =>
-              updateDiscussionInput(stepIndex, value)
-            }
-            onAdd={() => addDiscussionPoint(stepIndex)}
-            onDelete={(id) =>
-              deletePoint(stepIndex, id)
-            }
-          />
-
-          <TeacherTextManager
-            value={step.teacherTextInput}
-            texts={step.teacherTexts}
-            onInputChange={(value) =>
-              updateTeacherTextInput(stepIndex, value)
-            }
-            onAdd={() => addTeacherText(stepIndex)}
-            onDelete={(id) =>
-              deleteTeacherText(stepIndex, id)
-            }
-          />
-        </div>
-      ))}
+        ))}
+      </div>
+      <hr />
+      <button id="saveGameBtn"
+        type="button"
+        onClick={() =>
+          handleSubmit()
+        }
+      >
+        SALVESTA
+      </button>
     </div>
-    <hr />
-    <button id="saveGameBtn"
-      type="button"
-      onClick={() =>
-        handleSubmit()
-      }
-    >
-      SALVESTA
-    </button>
   </>
   )
 }

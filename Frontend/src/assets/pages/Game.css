@@ -1,7 +1,6 @@
-*{
-    text-transform: uppercase;
-    color: var(--text-h);
-    font-family: 'Sono', sans-serif;
+.game-page-container {
+    height: 100%;
+    min-height: 0;
 }
 
 main {
@@ -10,14 +9,16 @@ main {
 }
 
 .game-grid-container {
+    height: 100%;
+    max-height: 100%;
+    min-height: 0;
+
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto minmax(0, 1fr) minmax(0, max-content);
-    max-height: 100vh;
     --slider-size: clamp(23px, 2.5vh, 38px);
     padding: 0 clamp(0.5rem, 1vw, 2rem);
-    padding-top:0;
-    
+
 }
 
 .game-content {
@@ -40,7 +41,7 @@ main {
     grid-column: 2 / 3;
     grid-row: 3 / 4;
     min-height: 0;
-    margin: clamp(1rem, 1vw, 4rem);
+    margin: 0;
     padding: clamp(0.5rem, 2vw, 2rem);
     overflow-y: auto;
     overflow-x: hidden;
@@ -257,7 +258,6 @@ main {
     height: calc(100vh - 20vh);
 
     background: #fbf7f5;
-    border: 8px solid #d8c2ff;
     border-radius: 30px 0 0 30px;
 
     padding: 24px;
@@ -270,7 +270,18 @@ main {
     box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
 
     overflow: hidden;
-    /* important */
+}
+
+.category-1 {
+  border: 8px solid rgba(124, 234, 255, 0.55);
+}
+
+.category-2 {
+  border: 8px solid rgba(247, 201, 204, 0.8);
+}
+
+.category-3 {
+  border: 8px solid rgba(220, 205, 244, 0.8);
 }
 
 .side-popup h2 {
