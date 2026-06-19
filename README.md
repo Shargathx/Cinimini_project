@@ -20,11 +20,19 @@ IntelliJ IDEA ULTIMATE - Ver. 25.0.2+1-b329.117
 
 pgAdmin - Ver. 9.15
 
+postgreSQL - Ver. 18.3
+
 ZONE - Ver.????
 
 TypeScript - Ver. 5.9.3
 
 React - Ver. 19.2.4
+
+Vite - ver. ????
+
+Node - ver. ????
+
+express - ver.????
 
 Java - Ver. Oracle OpenJDK 21.0.4
 
