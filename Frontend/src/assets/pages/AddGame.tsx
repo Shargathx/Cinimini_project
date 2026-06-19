@@ -18,8 +18,8 @@ function AddGame() {
   const { data } = useFetch<Game>(`${import.meta.env.VITE_BACK_URL}/games/${localStorage.getItem("catid")}/${localStorage.getItem("id")}`, []);
   //Game questions
 
-  const game = data;
-  const mode = localStorage.getItem("mode")
+  const _game = data;
+  const _mode = localStorage.getItem("mode")
 
   const {
     steps,
