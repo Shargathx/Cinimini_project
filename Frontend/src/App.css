@@ -9,7 +9,7 @@
 }
 
 .header {
-  height: clamp(30px, 12vh, 160px);
+  height: clamp(30px, 11.5vh, 160px);
   flex-shrink: 0;
 }
 
