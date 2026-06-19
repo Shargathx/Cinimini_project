@@ -20,6 +20,8 @@ IntelliJ IDEA ULTIMATE - Ver. 25.0.2+1-b329.117
 
 pgAdmin - Ver. 9.15
 
+postgresql - Ver. 18.3
+
 ZONE - Ver.????
 
 TypeScript - Ver. 5.9.3
