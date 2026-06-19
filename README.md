@@ -28,6 +28,12 @@ TypeScript - Ver. 5.9.3
 
 React - Ver. 19.2.4
 
+Vite - ver. ????
+
+Node - ver. ????
+
+express - ver.????
+
 Java - Ver. Oracle OpenJDK 21.0.4
 
 ## Autorid
