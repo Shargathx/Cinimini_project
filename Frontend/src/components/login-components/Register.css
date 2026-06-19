@@ -11,9 +11,8 @@
     flex-direction: column;
     align-items: center;
 
-    max-height: 100%;
-    box-sizing: border-box;
-    padding: clamp(20px, 2vw, 40px) clamp(50px, 2vw, 60px);
+    width: clamp(300px, 25vw, 500px);
+    padding: clamp(20px, 2vw, 30px) clamp(40px, 2vw, 50px);
 
     background: #fbf7f5;
     border: 0.5vw solid rgb(145, 242, 190, 0.5);
