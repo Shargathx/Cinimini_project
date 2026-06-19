@@ -139,6 +139,7 @@ main {
 .previous-step img:hover,
 .next-step img:hover {
     transform: scale(1.15);
+    cursor: pointer;
 }
 
 .previous-step:disabled,

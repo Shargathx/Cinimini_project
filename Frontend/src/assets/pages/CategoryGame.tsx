@@ -42,8 +42,10 @@ function CategoryGame() {
     }
 
     return (<>
-        <button onClick={() => { setGames(activegames) }}>Active games</button>
-        <button onClick={() => { setGames(inactivegames) }}>Inactive games</button>
+        <div className="active-inactive-buttons">
+            <button onClick={() => { setGames(activegames) }}>AKTIIVSED MÄNGUD</button>
+            <button onClick={() => { setGames(inactivegames) }}>ARHIVEERITUD MÄNGUD</button>
+        </div>
         <div id="gameContainer" className="games-container">
             {games.map((game) => (
                 <div className="game-item" key={game.id}>
