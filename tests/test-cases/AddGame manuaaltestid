@@ -1,0 +1,117 @@
+# AddGame – Manuaalsed testid
+
+## Ülevaade
+Lihtsad testid AddGame komponendi jaoks (mängu loomine, sammud, salvestamine).
+
+## 1. Lehe laadimine
+
+### TC-1: Leht avaneb korrektselt
+- Navigeeri AddGame lehele
+- **Oodatav tulemus:**
+  - Pealkiri on nähtav (LOO MÄNG)
+  - Väljad "nimi", "kategooria" ja "kirjeldus" on olemas
+  - Nupud "Lisa uus samm" ja "SALVESTA" on nähtavad
+
+
+### TC-2: Kategooriad laetakse
+- Kliki "vali kategooria" _dropdown_ ribal
+- **Oodatav tulemus:**
+  - Kategooria rippmenüü sisaldab andmeid API-st (heli, pilt, video)
+
+
+## 2. Mängu üldandmed
+
+### TC-3: Mängu nimi
+- Sisesta nimi
+- Kliki "Salvesta"
+- **Oodatav tulemus:**
+  - Puuduvate andmete tõttu ei saadeta päringut (kõik väljad peavad olema täidetud)
+
+### TC-4: Kirjeldus
+- Sisesta kirjeldus
+- Kliki "Salvesta"
+- **Oodatav tulemus:**
+  - Puuduvate andmete tõttu ei saadeta päringut (kõik väljad peavad olema täidetud)
+
+### TC-5: Kategooria valimine
+- Vali kategooria
+- **Oodatav tulemus:**
+  - Valik salvestub
+
+## 3. Sammud
+
+### TC-6: Lisa samm
+- Vajuta "Lisa uus samm"
+- **Oodatav tulemus:**
+  - Uus tühi samm ilmub
+
+### TC-7: Kustuta samm
+- Vajuta "Kustuta samm"
+- **Oodatav tulemus:**
+  - Samm eemaldatakse
+
+## 4. Pildid
+
+### TC-8: Pildi lisamine
+- Lisa sammule pilt ("browse..." nupp)
+- Vali kohalikust arvutist pildifail
+- **Oodatav tulemus:**
+  - Faili nimi kuvatakse
+
+### TC-9: Mitme pildi lisamine
+- Lisa mitu pilti
+- **Oodatav tulemus:**
+  - Kõik failid kuvatakse
+
+## 5. Küsimused
+
+### TC-10: Küsimuse lisamine
+- Sisesta küsimus ja lisa
+- **Oodatav tulemus:**
+  - Küsimus ilmub loendisse
+
+### TC-11: Küsimuse kustutamine
+- Kustuta küsimus
+- **Oodatav tulemus:**
+  - Küsimus kaob
+
+## 6. Arutelupunktid
+
+### TC-12: Lisa arutelupunkt
+- Sisesta tekst ja kliki lisa
+- **Oodatav tulemus:**
+  - Punkt ilmub loendisse
+
+### TC-13: Kustuta arutelupunkt
+- Kustuta punkt
+- **Oodatav tulemus:**
+  - Punkt eemaldatakse
+
+## 7. Õpetaja tekst
+
+### TC-14: Lisa õpetaja tekst
+- Sisesta tekst ja kliki lisa
+- **Oodatav tulemus:**
+  - Tekst ilmub loendisse
+
+### TC-15: Kustuta õpetaja tekst
+- Kustuta tekst
+- **Oodatav tulemus:**
+  - Tekst eemaldatakse
+
+## 8. Salvestamine
+
+### TC-16: Mängu salvestamine õnnestub
+- Täida vorm ja vajuta "SALVESTA"
+- **Oodatav tulemus:**
+  - Mäng salvestatakse
+  - Kuvatakse alert "Game saved"
+
+### TC-17: Tühja vormiga salvestamine
+- Vajuta "SALVESTA" ilma andmeteta
+- **Oodatav tulemus:**
+  - Salvestamine ebaõnnestub või blokeeritakse
+
+## Märkused
+- Iga samm on eraldi andmestruktuur
+- Salvestamine kasutab FormData-t + JSON-it
