@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import type { Category } from "../../assets/models/Category";
-import "./editGame.css";
+import "./EditGame.css";
 import type { Game } from "../../assets/models/Game";
 import { useFetch } from '../../components/hooks/useFetch';
 import EditGame from "./EditGame";

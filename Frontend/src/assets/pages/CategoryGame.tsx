@@ -4,9 +4,9 @@ import defaultGameIcon from '../icons/defaultGameIcon.svg';
 import './CategoryGame.css';
 import type { Game } from "../models/Game";
 
-import archiveIcon from "../icons/archive.svg";
-import deleteIcon from "../icons/delete.svg";
-import editIcon from "../icons/edit.svg";
+import archiveIcon from "../icons/Archive.svg";
+import deleteIcon from "../icons/Delete.svg";
+import editIcon from "../icons/Edit.svg";
 
 
 function CategoryGame() {
