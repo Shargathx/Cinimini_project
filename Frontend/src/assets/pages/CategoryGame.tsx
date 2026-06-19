@@ -43,6 +43,7 @@ function CategoryGame() {
 
     return (<>
         <div className="category-game-page">
+            <h1>VALI MÄNG</h1>
             <button onClick={() => { setGames(activegames) }}>Active games</button>
             <button onClick={() => { setGames(inactivegames) }}>Inactive games</button>
             <div id="gameContainer" className="games-container">
