@@ -93,9 +93,16 @@ function AddGame() {
         body: formData
       })
 
-      if (!response.ok) throw new Error("Failed to save game");
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.log("Backend error: ", errorText);
+        throw new Error("Failed to save game, check console log");
+      };
       alert("Game saved!");
-    } catch (err) {
+      window.location.reload();
+    } 
+    
+    catch (err) {
       console.error(err);
 
     };

@@ -3,8 +3,8 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-/src/main/resources/application.properties
-application.properties
+/src/main/resources/application-prod.properties
+application-local.properties
 !**/src/main/**/application.properties
 
 
@@ -35,4 +35,5 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/main/resources/application-prod.properties
 /src/main/resources/application.properties

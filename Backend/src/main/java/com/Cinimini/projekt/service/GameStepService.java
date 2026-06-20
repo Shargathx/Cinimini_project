@@ -30,21 +30,20 @@ public class GameStepService {
                 throw new RuntimeException("Media file is empty");
             }
             String contentType = mediaFile.getContentType();
-//            Long categoryId = gameRequest.getCategoryId();
 
             switch (gameRequest.getCategoryId().intValue()) { // intValue to get around Long -> int conversion
                 case 1: // Check for audio
-                    if (contentType != null && !contentType.startsWith("audio/")) {
+                    if (contentType == null || !contentType.startsWith("audio/")) {
                         throw new RuntimeException("CategoryId 1 requires audio");
                     }
                     break;
                 case 2: // Check for video
-                    if (contentType != null && !contentType.startsWith("video/")) {
+                    if (contentType == null || !(contentType.startsWith("video/") || contentType.equals("image/gif"))) {
                         throw new RuntimeException("CategoryId 2 requires video");
                     }
                     break;
                 case 3: // Check for image
-                    if (contentType != null && !contentType.startsWith("image/")) {
+                    if (contentType != null || !contentType.startsWith("image/") || contentType.equals("image/gif")) {
                         throw new RuntimeException("CategoryId 3 requires image");
                     }
                     break;

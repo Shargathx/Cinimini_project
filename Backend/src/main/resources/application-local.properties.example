@@ -1,8 +1,8 @@
 spring.application.name=Cinimini pilootprojekt
 
-spring.datasource.url=jdbc:postgresql://localhost:5432/DATABASE_NAME
-spring.datasource.username=YOUR_USERNAME
-spring.datasource.password=YOUR_PASSWORD
+spring.datasource.url=jdbc:postgresql://localhost:5432/DATABASE_NAME-CHANGE-ME
+spring.datasource.username=YOUR_USERNAME-CHANGE-ME
+spring.datasource.password=YOUR_PASSWORD-CHANGE-ME
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 
