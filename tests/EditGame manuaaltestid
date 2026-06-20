@@ -1,1 +1,73 @@
+# Mängu redigeerimise ja halduse testid
 
+## Ülevaade
+Lihtsad testid EditGame ja EditView komponentide jaoks (mängu redigeerimine/muutmine, sammude haldus, salvestamine).
+
+# 1. Lehe laadimine
+
+### TC-1: Leht avaneb korrektselt
+- Navigeeri vastava mängu EditView lehele
+- **Oodatav tulemus:**
+  - Pealkiri "Uuenda mängu" on nähtav
+  - Väljad "nimi", "kategooria" ja "kirjeldus" on eeltäidetud mängu olemasolevate andmetega
+  - Mängu sammud on (kaartidena) nähtavad
+
+### TC-2: Kategooriad laetakse
+- Kliki "kategooria" rippmenüül
+- **Oodatav tulemus:**
+  - Rippmenüü sisaldab kõiki andmebaasist laetud kategooriaid (pilt, heli, video)
+
+# 2. Mängu üldandmed
+
+### TC-3: Mängu nime muutmine
+- Muuda mängu nime
+- Kliki nupul "Salvesta"
+- **Oodatav tulemus:**
+  - Komponendi olek (state) uueneb vastavalt sisestatud väärtusele
+
+### TC-4: Kirjelduse muutmine
+- Muuda mängu kirjeldust
+- Kliki nupul "Salvesta"
+- **Oodatav tulemus:**
+  - Komponendi olek (state) uueneb vastavalt sisestatud väärtusele
+
+### TC-5: Kategooria valimine
+- Vali uus kategooria
+- Meedia peab vastama kategooria tüübile (pilt -> saadetav fail peab olema .png või .jpg)
+- Kliki nupul "Salvesta"
+- **Oodatav tulemus:**
+  - Valik salvestub komponendi olekusse
+
+# 3. Sammude ja sisu haldus
+
+### TC-6: Sammude redigeerimine
+- Muuda olemasoleva sammu küsimust, arutelupunkti või õpetaja teksti
+- Kliki nupul "Salvesta"
+- **Oodatav tulemus:**
+  - Tekstiväljade väärtused uuenevad korrektselt
+
+### TC-7: Uue sisu lisamine
+- Sisesta tekst "Lisa küsimus", "Lisa arutelupunkt" või "Lisa õpetaja tekst" väljadele ja kliki vastaval nupul
+- Kliki nupul "Salvesta"
+- **Oodatav tulemus:**
+  - Uus element ilmub vastava sammu sisulisti alla
+
+### TC-8: Kustutamine
+- Kliki "x" nupul küsimuse, arutelupunkti või õpetaja teksti kõrval
+- Kliki nupul "Salvesta"
+- **Oodatav tulemus:**
+  - Element eemaldatakse koheselt vaatest
+
+### TC-9: Piltide lisamine
+- Vali faili sisestusväljalt (file input) pildifailid
+- **Oodatav tulemus:**
+  - Piltide nimed ilmuvad vastava sammu piltide nimekirja
+
+# 4. Salvestamine
+
+### TC-10: Muudatuste salvestamine
+- Kliki nupul "Salvesta"
+- **Oodatav tulemus:**
+  - Konsoolis kuvatakse korrektselt koostatud JSON-päring (PAYLOAD BEING SENT)
+  - Kuvatakse teade "Game updated!"
+  - Leht laetakse uuesti
