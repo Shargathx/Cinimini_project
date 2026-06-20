@@ -10,6 +10,7 @@ import './Categories.css';
 function Categories() {
     const [categories, setCategories] = useState<Category[]>([]);
     useEffect(() => {
+        console.log("BACK_URL:", import.meta.env.VITE_BACK_URL);
         fetch(import.meta.env.VITE_BACK_URL + "/categories")
             .then(res => res.json())
             .then(json => setCategories(json))
