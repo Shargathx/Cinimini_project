@@ -1,0 +1,53 @@
+# GamePage komponendi testid
+
+## Ülevaade
+Lihtsad testid GamePage komponendi jaoks (meedia kuvamine, interaktsioonid ja navigeerimine).
+
+# 1. Lehe laadimine
+
+### TC-1: Mängu laadimine
+- Navigeeri enda poolt valitud mängu lehele
+- **Oodatav tulemus:**
+  - Kuvatakse laadimisindikaator "Laeb mängu asju..."
+  - Pärast laadimist kuvatakse mängu nimi ja kirjeldus
+  - Kuvatakse vastava mängu funktsioonid
+
+### TC-2: Sammude navigeerimine
+- Kui mängul on mitu meediafaili, siis kasuta nuppe "eelmine samm" ja "järgmine samm"
+- **Oodatav tulemus:**
+  - currentStep väärtus muutub -> meediafaili vahetatakse
+  - Loendur (nt 1/5) uueneb vastavalt
+  - Esimene samm keelab eelmise sammu nupu ja viimane samm keelab järgmise sammu nupu (greyed out)
+
+# 2. Pildimeedia testid
+
+### TC-3: Pildi redigeerimise tööriistad
+- Ava mäng, mis sisaldab pilti
+- **Oodatav tulemus:**
+  - Pildi funktsioonide paneel on nähtav (värviküllasus, kontrast, särisus, suurendamine, hägusus)
+  - Liugurite (sliderite) muutmine uuendab vastavat state väärtust, mis saadetakse ImageGame komponendile
+
+# 3. Videomeedia testid
+
+### TC-4: Video taasesitus
+- Ava mäng, mis sisaldab videot
+- **Oodatav tulemus:**
+  - Video juhtnupud (esita/paus, kiirus, tagurpidi) on nähtavad
+  - "Mängi tagurpidi" nupp käivitab tagurpidi esituse
+  - Kiiruse liuguri muutmine uuendab videot
+
+# 4. Audiomeedia testid
+
+### TC-5: Audio efektid
+- Ava mäng, mis sisaldab audiot
+- **Oodatav tulemus:**
+  - Audio juhtnupud (TAGURPIDI, KAJA) on nähtavad
+  - "Kaja" nupp ja kaja tugevuse liugur toimivad
+  - Audiokontroller reageerib sisendile
+
+# 5. Info paneelid
+
+### TC-6: InfoPanels kuvamine
+- Kontrolli sammu all olevat infot
+- **Oodatav tulemus:**
+  - InfoPanels komponent renderdab vastava sammu andmed, vastav sisu ilmub paremale hüpikaknasse
