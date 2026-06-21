@@ -22,7 +22,9 @@ pgAdmin - Ver. 9.15
 
 postgreSQL - Ver. 18.3
 
-ZONE - Ver.????
+ZONE – Veebimajutus- ja domeeniteenus
+
+Railway – Pilvepõhine rakenduse majutusteenus (PaaS)
 
 TypeScript - Ver. 5.9.3
 
@@ -70,8 +72,8 @@ Programmi kloonimisel tuleks teha järgnevad tegevused backendis (kui on soov ka
 
 Testide jaoks ei kasutanud me eraldi programme, vaid kõik testid mida tegime olid manuaal testid, vaadates ise kõik leheküljed üle ning otsides vigu.
 Enamus vigadest või mingi komponendi katki minekust saime teada just siis, kui üritasime uusi mänge lisada või olemasolevaid mänge muuta. 
-Manuaal testid on kirjas "tests" kaustas
+Manuaal testid on kirjas ["tests"](https://github.com/Shargathx/Cinimini_project/tree/main/tests) kaustas.
 		
 ## Litsents		
 
-kasutatav litsents on [creative commons](https://creativecommons.org/cc-licenses/).
+kasutatav litsents on [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
