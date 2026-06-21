@@ -1,25 +1,22 @@
-* {
-    box-sizing: border-box;
-}
-
 .header {
-    max-height: 15vh;
+    min-height: 0;
+    display: flex;
     background-color: rgb(217, 217, 217, 0.2);
     border-bottom-left-radius: 0.5vw;
     border-bottom-right-radius: 1vw;
     border-bottom: 0.05vw solid rgb(58, 58, 58, 0.03);
-    padding: clamp(10px, 1vw, 14px);
+    padding: clamp(3px, 1vw, 10px);
+    align-items: center;
 }
 
 
 .nav {
-    width: 100%;
-    height: clamp(46px, 3.75vw, 92px);
+    width: 100%;    
     display: flex;
     justify-content: center;
     gap: 1.5vw;
     align-items: center;
-
+    margin: 0;
 }
 
 .home-page-link,
@@ -31,18 +28,21 @@
 .register-link,
 .login-link,
 .add-game-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     background-color: rgb(145, 242, 190, 0.5);
     color: var(--text-h);
     font-family: 'Sono', sans-serif;
     font-weight: bold;
     font-size: clamp(14px, 1.25vw, 30px);
-    text-align: center;
     border-radius: 6vw;
     border: 0.2vw solid rgb(145, 242, 190, 1);
     padding: clamp(8px, 1vw, 20px) clamp(12px, 1.5vw, 36px);
     cursor: pointer;
     text-decoration: none;
-    display: inline-block;
+    box-sizing: border-box;
 }
 
 .home-page-link:hover,

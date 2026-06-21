@@ -14,14 +14,10 @@ import GamePage from './assets/pages/GamePage'
 function App() {
   return (
     <BrowserRouter>
-      <div style={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh" // makes the container full viewport height
-      }}>
+        <div className="app-layout">
         <Header />
 
-        <main style={{ flex: 1, padding: "20px" }}>
+        <main className="main-conteiner">
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/register' element={<Register />} />
@@ -34,8 +30,8 @@ function App() {
           </Routes>
         </main>
 
-        <Footer />
-      </div>
+        <Footer /> 
+        </div>
     </BrowserRouter>
   )
 }

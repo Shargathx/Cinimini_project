@@ -23,15 +23,17 @@ html, body {
   background: url('/assets/background.svg') no-repeat center center fixed;
   background-size: cover;
   color: var(--text);
-  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 html,
 body,
 #root {
-  min-height: 100vh;
+  height: 100%;
   margin: 0;
-  padding: 0;
 }
 
 body {
@@ -39,6 +41,11 @@ body {
   background: url('/assets/background.svg') no-repeat center center fixed;
   background-size: cover;
   color: var(--text);
+}
+
+main {
+  flex: 1;
+  padding: 20px;
 }
 
 #root {

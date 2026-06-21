@@ -19,6 +19,7 @@ function Categories() {
 
     return (
         <div className="categories-page">
+            <h1>VALI KATEGOORIA</h1>
             <div className="categories-container">
                 {categories.map((category) => (
                     <Link
