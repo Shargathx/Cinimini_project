@@ -43,7 +43,7 @@ public class GameStepService {
                     }
                     break;
                 case 3: // Check for image
-                    if (contentType != null || !contentType.startsWith("image/") || contentType.equals("image/gif")) {
+                    if (contentType == null || !contentType.startsWith("image/") || contentType.equals("image/gif")) {
                         throw new RuntimeException("CategoryId 3 requires image");
                     }
                     break;
@@ -62,7 +62,6 @@ public class GameStepService {
         if (multipartFile == null || multipartFile.isEmpty()) {
             return;
         }
-//        String fileName = multipartFile.getOriginalFilename();
         Optional<MediaElement> existingMediaElement = mediaRepository.findByGameStep(savedStep);
         MediaElement mediaElement;
         if (existingMediaElement.isPresent()) {
