@@ -204,31 +204,26 @@ public class GameService {
             existingGame.setDescription(updateRequest.getDescription());
         }
 
-        // 1. Load into map for easy lookup
         Map<Long, GameStep> existingStepsMap = gameStepRepository.getGameStepsByGame_Id(gameId)
                 .stream()
                 .collect(Collectors.toMap(GameStep::getId, step -> step));
 
-        // 2. Identify and Remove
         Set<Long> incomingIds = updateRequest.getSteps().stream()
                 .map(GameStepRequest::getStepRequestId)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
-        // Remove from DB and List
         existingStepsMap.forEach((id, step) -> {
             if (!incomingIds.contains(id)) {
-                existingGame.getGameSteps().remove(step); // Remove from parent collection
-                gameStepRepository.delete(step);          // Remove from DB
+                existingGame.getGameSteps().remove(step);
+                gameStepRepository.delete(step);
             }
         });
 
-        // 3. Process list
         List<GameStepRequest> steps = updateRequest.getSteps();
         for (int i = 0; i < steps.size(); i++) {
             GameStepRequest stepRequest = steps.get(i);
 
-            // A. Identify or Create
             GameStep targetStep = (stepRequest.getStepRequestId() != null)
                     ? existingStepsMap.get(stepRequest.getStepRequestId())
                     : null;
@@ -236,7 +231,6 @@ public class GameService {
             if (targetStep == null) {
                 targetStep = new GameStep();
                 targetStep.setGame(existingGame);
-                // Save immediately to get ID
                 targetStep.setStepOrder(i);
                 targetStep = gameStepRepository.save(targetStep);
                 if (existingGame.getGameSteps() == null) {
@@ -250,8 +244,6 @@ public class GameService {
             syncQuestions(targetStep, stepRequest.getQuestions());
             syncDiscussions(targetStep, stepRequest.getDiscussionPoints());
         }
-
-        // Final merge to handle collection reordering
         gameRepository.save(existingGame);
     }
 

@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GameStepRequest {
+
     private Long stepRequestId;
     private MultipartFile media;
     private Long existingImageId;
