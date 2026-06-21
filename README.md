@@ -28,11 +28,9 @@ TypeScript - Ver. 5.9.3
 
 React - Ver. 19.2.4
 
-Vite - ver. ????
+Vite - ver. 8.0.0
 
-Node - ver. ????
-
-express - ver.????
+Node - ver. 24.12.0.
 
 Java - Ver. Oracle OpenJDK 21.0.4
 
@@ -42,7 +40,7 @@ Veebilehe koostajad on Martin Saareväli, Roland Piperal, Õnne Elisabeth Maripu
 ## Paigaldamine
 ### Frontend:
 
-Tuleb rakenduse failid alla laadida, ning frontendi on võimalik jooksutada VsCodeis. Vaja on alla laadia Node, React ja Vite. 
+Tuleb rakenduse failid alla laadida, vajutades Githubis "Code" nuppu ja siis "download zip". "Vscode"-iga tuleb avada "frontend" kaust, kuid programmi jooksutamiseks on vaja [node](https://nodejs.org/en), [React](https://react.dev/) ja [Vite](https://vite.dev/) 
 
 Nende allalaadimiseks on vaja terminalis jooksutada ["npm install"](https://docs.npmjs.com/cli/v11/commands/npm-install) mis automaatselt laeb alla kõik vajalikud "package"-id. Peale kõikide vajalike "package"-ite allalaadimist tuleb terminalis jooksutada "npm run dev" mis paneb rakenduse tööle.
 
@@ -67,6 +65,7 @@ Programmi kloonimisel tuleks teha järgnevad tegevused backendis (soovitatavalt 
 
 Testide jaoks ei kasutanud me eraldi programme, vaid kõik testid mida tegime olid manuaal testid, vaadates ise kõik leheküljed üle ning otsides vigu.
 Enamus vigadest või mingi komponendi katki minekust saime teada just siis, kui üritasime uusi mänge lisada või olemasolevaid mänge muuta. 
+Manuaal testid on kirjas "tests" kaustas
 		
 ## Litsents		
 
