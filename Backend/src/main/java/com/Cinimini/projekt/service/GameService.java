@@ -45,7 +45,17 @@ public class GameService {
     }
 
     private List<GameSummaryDto> toSummaries(List<Game> games) {
-        return games.stream().map(GameSummaryDto::from).toList();
+        List<GameSummaryDto> summaries = new ArrayList<>();
+        for (Game game : games) {
+            GameSummaryDto dto = new GameSummaryDto();
+            dto.setId(game.getId());
+            dto.setName(game.getName());
+            dto.setCategoryId(game.getCategoryId());
+            dto.setDescription(game.getDescription());
+            dto.setActive(game.isActive());
+            summaries.add(dto);
+        }
+        return summaries;
     }
 
     public SingleGameDto getSingleGame(Long categoryId, Long gameId) {
@@ -187,8 +197,11 @@ public class GameService {
         if (gameRequest.getName() == null || gameRequest.getName().isEmpty()) {
             throw new RuntimeException("Game name is empty");
         }
-        if (gameRequest.getCategoryId() == null || gameRequest.getCategoryId() <= 0 || gameRequest.getCategoryId() >= 4) {
-            throw new RuntimeException("Category id is out of range or missing");
+        Set<Long> activeCategoryIds = categoryRepository.findAllByActiveTrue().stream()
+                .map(Category::getId)
+                .collect(Collectors.toSet());
+        if (gameRequest.getCategoryId() == null || !activeCategoryIds.contains(gameRequest.getCategoryId())) {
+            throw new RuntimeException("Category is missing or not an active category");
         }
         if (gameRequest.getSteps() == null || gameRequest.getSteps().isEmpty()) {
             throw new RuntimeException("Game steps are empty");
