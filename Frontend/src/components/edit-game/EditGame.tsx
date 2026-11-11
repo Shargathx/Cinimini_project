@@ -80,13 +80,13 @@ async function EditGame(
     );
 
     if (!response.ok) {
+        const errorText = await response.text();
+        console.log("Backend error: ", errorText);
         throw new Error("Failed to update game");
-    }
-    else {
-        window.location.reload()
     }
 
     alert("Game updated!");
+    window.location.reload();
 }
 
 export default EditGame;

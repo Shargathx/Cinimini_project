@@ -148,7 +148,12 @@ function EditView() {
     }
 
     const handleSubmit = async () => {
-        EditGame(currId, name, category, description, steps)
+        try {
+            await EditGame(currId, name, category, description, steps);
+        } catch (err) {
+            console.error(err);
+            alert("Mängu salvestamine ebaõnnestus.");
+        }
     }
 
     return (<>
