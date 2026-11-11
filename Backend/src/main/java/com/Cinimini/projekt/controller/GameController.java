@@ -27,22 +27,22 @@ public class GameController {
     GameService gameService;
 
     @GetMapping("category/games")
-    public List<GameSummaryDto>getActiveGames() {
+    public List<GameSummaryDto> getAllGames() {
         return gameService.getAllGames();
     }
 
     @GetMapping("category/active-games")
-    public List<GameSummaryDto>getAllGames() {
+    public List<GameSummaryDto> getAllActiveGames() {
         return gameService.getAllActiveGames();
     }
 
     @GetMapping("category/inactive-games")
-    public List<GameSummaryDto>getAllInactiveGames() {
+    public List<GameSummaryDto> getAllInactiveGames() {
         return gameService.getAllInactiveGames();
     }
 
     @GetMapping("category/games/{catId}")
-    public List<GameSummaryDto>getActiveGamesByCategory(@PathVariable Long catId) {
+    public List<GameSummaryDto> getActiveGamesByCategory(@PathVariable Long catId) {
         return gameService.getAllActiveGamesByCategory(catId);
     }
 
