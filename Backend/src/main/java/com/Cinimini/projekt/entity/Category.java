@@ -19,4 +19,7 @@ public class Category {
     private String description;
     @Column(name = "is_active")
     private Boolean active;
+    // Which media the category's games use: "audio", "video" or "image"
+    @Column(name = "media_type")
+    private String mediaType;
 }

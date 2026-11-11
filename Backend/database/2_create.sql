@@ -13,6 +13,7 @@ CREATE TABLE category
     name        varchar(100) NOT NULL,
     description varchar(100) NOT NULL,
     is_active   boolean      NOT NULL,
+    media_type  varchar(20),
     CONSTRAINT category_pk PRIMARY KEY (id)
 );
 

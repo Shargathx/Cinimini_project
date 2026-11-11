@@ -154,16 +154,14 @@ public class GameService {
         if (gameRequest.getName() == null || gameRequest.getName().isEmpty()) {
             throw new RuntimeException("Game name is empty");
         }
-        Set<Long> activeCategoryIds = categoryRepository.findAllByActiveTrue().stream()
-                .map(Category::getId)
-                .collect(Collectors.toSet());
-        if (gameRequest.getCategoryId() == null || !activeCategoryIds.contains(gameRequest.getCategoryId())) {
-            throw new RuntimeException("Category is missing or not an active category");
-        }
+        Category category = categoryRepository.findAllByActiveTrue().stream()
+                .filter(activeCategory -> activeCategory.getId().equals(gameRequest.getCategoryId()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Category is missing or not an active category"));
         if (gameRequest.getSteps() == null || gameRequest.getSteps().isEmpty()) {
             throw new RuntimeException("Game steps are empty");
         }
-        gameStepService.validateAddGameStepsData(gameRequest);
+        gameStepService.validateAddGameStepsData(gameRequest, category);
     }
 
     @Transactional

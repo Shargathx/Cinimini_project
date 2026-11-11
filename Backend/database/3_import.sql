@@ -7,14 +7,14 @@ VALUES (default, 'teacher');
 */
 
 
-INSERT INTO public.category (id, name, description, is_active)
-VALUES (default, 'Heli', 'See mäng on heli baasil', true);
-INSERT INTO public.category (id, name, description, is_active)
-VALUES (default, 'Video', 'See mäng on video baasil', true);
-INSERT INTO public.category (id, name, description, is_active)
-VALUES (default, 'Pilt', 'See mäng on pildi baasil', true);
-INSERT INTO public.category (id, name, description, is_active)
-VALUES (default, 'Anomaalia', 'Mitteaktiivne kategooria, testimiseks', false);
+INSERT INTO public.category (id, name, description, is_active, media_type)
+VALUES (default, 'Heli', 'See mäng on heli baasil', true, 'audio');
+INSERT INTO public.category (id, name, description, is_active, media_type)
+VALUES (default, 'Video', 'See mäng on video baasil', true, 'video');
+INSERT INTO public.category (id, name, description, is_active, media_type)
+VALUES (default, 'Pilt', 'See mäng on pildi baasil', true, 'image');
+INSERT INTO public.category (id, name, description, is_active, media_type)
+VALUES (default, 'Anomaalia', 'Mitteaktiivne kategooria, testimiseks', false, null);
 /*
 INSERT INTO public.game (id, name, category_id, description, is_active)
 VALUES (default, 'Mida näed pildilt?', 1,

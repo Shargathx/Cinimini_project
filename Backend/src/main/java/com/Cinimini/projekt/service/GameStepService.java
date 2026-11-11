@@ -23,7 +23,7 @@ public class GameStepService {
     private final jakarta.persistence.EntityManager entityManager;
 
 
-    public void validateAddGameStepsData(CreateGameRequest gameRequest) {
+    public void validateAddGameStepsData(CreateGameRequest gameRequest, Category category) {
         for (GameStepRequest stepRequest : gameRequest.getSteps()) {
             MultipartFile mediaFile = stepRequest.getMedia();
             if (mediaFile == null || mediaFile.isEmpty()) {
@@ -31,22 +31,28 @@ public class GameStepService {
             }
             String contentType = mediaFile.getContentType();
 
-            switch (gameRequest.getCategoryId().intValue()) { // intValue to get around Long -> int conversion
-                case 1: // Check for audio
+            String categoryMediaType = category.getMediaType();
+            if (categoryMediaType == null) {
+                throw new RuntimeException("Category '" + category.getName() + "' has no media type set");
+            }
+            switch (categoryMediaType) {
+                case "audio":
                     if (contentType == null || !contentType.startsWith("audio/")) {
-                        throw new RuntimeException("CategoryId 1 requires audio");
+                        throw new RuntimeException("Category '" + category.getName() + "' requires audio");
                     }
                     break;
-                case 2: // Check for video
+                case "video": // gifs count as video
                     if (contentType == null || !(contentType.startsWith("video/") || contentType.equals("image/gif"))) {
-                        throw new RuntimeException("CategoryId 2 requires video");
+                        throw new RuntimeException("Category '" + category.getName() + "' requires video");
                     }
                     break;
-                case 3: // Check for image
+                case "image":
                     if (contentType == null || !contentType.startsWith("image/") || contentType.equals("image/gif")) {
-                        throw new RuntimeException("CategoryId 3 requires image");
+                        throw new RuntimeException("Category '" + category.getName() + "' requires image");
                     }
                     break;
+                default:
+                    throw new RuntimeException("Unknown category media type: " + categoryMediaType);
             }
             if (stepRequest.getDiscussionPoints() == null || stepRequest.getDiscussionPoints().isEmpty()) {
                 throw new RuntimeException("Discussion points are empty");
