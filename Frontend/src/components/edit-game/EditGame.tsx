@@ -35,6 +35,10 @@ async function EditGame(
         description,
         steps: (steps || []).map(step => ({
             
+            // Without this the backend treats every step as new: it deletes the
+            // existing steps (with their media) and recreates everything under new ids.
+            stepRequestId: step.id,
+
             questions: (step.questions || []).map(q => ({
                 id: q.id,
                 questionText: q.questionText,

@@ -220,9 +220,15 @@ public class GameService {
             }
         });
 
-        List<GameStepRequest> steps = updateRequest.getSteps();
-        for (int i = 0; i < steps.size(); i++) {
-            GameStepRequest stepRequest = steps.get(i);
+        // New steps continue after the highest existing order (removed steps included,
+        // since their rows are deleted only after the inserts) to respect UNIQUE (game_id, step_order).
+        int maxStepOrder = existingStepsMap.values().stream()
+                .map(GameStep::getStepOrder)
+                .filter(Objects::nonNull)
+                .mapToInt(Integer::intValue)
+                .max().orElse(0);
+
+        for (GameStepRequest stepRequest : updateRequest.getSteps()) {
 
             GameStep targetStep = (stepRequest.getStepRequestId() != null)
                     ? existingStepsMap.get(stepRequest.getStepRequestId())
@@ -231,13 +237,13 @@ public class GameService {
             if (targetStep == null) {
                 targetStep = new GameStep();
                 targetStep.setGame(existingGame);
-                targetStep.setStepOrder(i);
+                targetStep.setStepOrder(++maxStepOrder);
                 targetStep = gameStepRepository.save(targetStep);
                 if (existingGame.getGameSteps() == null) {
                     existingGame.setGameSteps(new ArrayList<>());
                 }
+                existingGame.getGameSteps().add(targetStep);
             }
-            existingGame.getGameSteps().add(targetStep);
             gameStepService.handleAndSaveMediaFiles(stepRequest, targetStep);
 
             syncTeacherTexts(targetStep, stepRequest.getTeacherTexts());
@@ -423,6 +429,9 @@ public class GameService {
         }
     }
 
+    // The @Transactional on validateAndSaveEditGameData is bypassed by the self-call below,
+    // so the transaction has to start here for the edit to be atomic.
+    @Transactional(rollbackFor = Exception.class)
     public void updateGame(Long gameId, CreateGameRequest updateGameRequestJson) throws IOException {
         Game existingGame = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
         validateAndSaveEditGameData(gameId, updateGameRequestJson);
