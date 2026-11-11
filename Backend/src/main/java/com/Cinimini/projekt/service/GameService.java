@@ -28,20 +28,24 @@ public class GameService {
     private final QuestionRepository questionRepository;
     private final DiscussionPointRepository discussionPointRepository;
 
-    public List<Game> getAllActiveGames() {
-        return gameRepository.findAllByActiveTrue();
+    public List<GameSummaryDto> getAllActiveGames() {
+        return toSummaries(gameRepository.findAllByActiveTrue());
     }
 
-    public List<Game> getAllInactiveGames() {
-        return gameRepository.findAllByActiveFalse();
+    public List<GameSummaryDto> getAllInactiveGames() {
+        return toSummaries(gameRepository.findAllByActiveFalse());
     }
 
-    public List<Game> getAllGames() {
-        return gameRepository.findAll();
+    public List<GameSummaryDto> getAllGames() {
+        return toSummaries(gameRepository.findAll());
     }
 
-    public List<Game> getAllActiveGamesByCategory(Long catId) {
-        return gameRepository.getActiveGamesByCategory(catId);
+    public List<GameSummaryDto> getAllActiveGamesByCategory(Long catId) {
+        return toSummaries(gameRepository.getActiveGamesByCategory(catId));
+    }
+
+    private List<GameSummaryDto> toSummaries(List<Game> games) {
+        return games.stream().map(GameSummaryDto::from).toList();
     }
 
     public SingleGameDto getSingleGame(Long categoryId, Long gameId) {

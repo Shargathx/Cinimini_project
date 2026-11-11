@@ -3,7 +3,7 @@ package com.Cinimini.projekt.controller;
 import com.Cinimini.projekt.dto.CreateGameRequest;
 import com.Cinimini.projekt.dto.GameDto;
 import com.Cinimini.projekt.dto.SingleGameDto;
-import com.Cinimini.projekt.entity.Game;
+import com.Cinimini.projekt.dto.GameSummaryDto;
 import com.Cinimini.projekt.repository.GameRepository;
 import com.Cinimini.projekt.service.GameService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,22 +27,22 @@ public class GameController {
     GameService gameService;
 
     @GetMapping("category/games")
-    public List<Game> getActiveGames() {
+    public List<GameSummaryDto>getActiveGames() {
         return gameService.getAllGames();
     }
 
     @GetMapping("category/active-games")
-    public List<Game> getAllGames() {
+    public List<GameSummaryDto>getAllGames() {
         return gameService.getAllActiveGames();
     }
 
     @GetMapping("category/inactive-games")
-    public List<Game> getAllInactiveGames() {
+    public List<GameSummaryDto>getAllInactiveGames() {
         return gameService.getAllInactiveGames();
     }
 
     @GetMapping("category/games/{catId}")
-    public List<Game> getActiveGamesByCategory(@PathVariable Long catId) {
+    public List<GameSummaryDto>getActiveGamesByCategory(@PathVariable Long catId) {
         return gameService.getAllActiveGamesByCategory(catId);
     }
 
