@@ -78,6 +78,29 @@ public class GameService {
         singleGameDto.setName(game.getName());
         singleGameDto.setDescription(game.getDescription());
 
+        singleGameDto.setGameSteps(toStepDtos(gameSteps));
+        return singleGameDto;
+    }
+
+    public GameDto getActiveGameSteps(Long gameId) {
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> new RuntimeException("Game not found"));
+
+        List<GameStep> allSteps = gameStepRepository.findAllByGame_Id(gameId);
+        if (allSteps.isEmpty()) {
+            throw new RuntimeException("No steps found for game: " + gameId);
+        }
+
+        GameDto gameDto = new GameDto();
+        gameDto.setGameId(game.getId());
+        gameDto.setName(game.getName());
+        gameDto.setCategoryId(game.getCategoryId());
+        gameDto.setDescription(game.getDescription());
+        gameDto.setGameSteps(toStepDtos(allSteps));
+        return gameDto;
+    }
+
+    private List<GameStepDto> toStepDtos(List<GameStep> gameSteps) {
         List<GameStepDto> stepDtos = new ArrayList<>();
         for (GameStep gameStep : gameSteps) {
             GameStepDto gameStepDto = new GameStepDto();
@@ -93,10 +116,10 @@ public class GameService {
 
             List<DiscussionDto> discussionDtos = new ArrayList<>();
             for (DiscussionPoint discussion : gameStep.getDiscussionPoints()) {
-                DiscussionDto discussionPointDto = new DiscussionDto();
-                discussionPointDto.setId(discussion.getId());
-                discussionPointDto.setDiscussionText(discussion.getDiscussionText());
-                discussionDtos.add(discussionPointDto);
+                DiscussionDto discussionDto = new DiscussionDto();
+                discussionDto.setId(discussion.getId());
+                discussionDto.setDiscussionText(discussion.getDiscussionText());
+                discussionDtos.add(discussionDto);
             }
 
             List<TeacherTextDto> teacherTextDtos = new ArrayList<>();
@@ -116,6 +139,7 @@ public class GameService {
                 mediaDto.setFileData(media.getFileData());
                 mediaDtos.add(mediaDto);
             }
+
             gameStepDto.setQuestions(questionDtos);
             gameStepDto.setDiscussionPoints(discussionDtos);
             gameStepDto.setTeacherTexts(teacherTextDtos);
@@ -123,74 +147,7 @@ public class GameService {
 
             stepDtos.add(gameStepDto);
         }
-        singleGameDto.setGameSteps(stepDtos);
-        return singleGameDto;
-    }
-
-    public GameDto getActiveGameSteps(Long gameId) {
-        Game game = gameRepository.findById(gameId)
-                .orElseThrow(() -> new RuntimeException("Game not found"));
-
-        List<GameStep> allSteps = gameStepRepository.findAllByGame_Id(gameId);
-        if (allSteps.isEmpty()) {
-            throw new RuntimeException("No steps found for game: " + gameId);
-        }
-
-        List<GameStepDto> gameStepDtos = new ArrayList<>();
-
-        for (GameStep step : allSteps) {
-            GameStepDto stepDto = new GameStepDto();
-            stepDto.setStepId(step.getId());
-
-            List<QuestionDto> questionDtos = new ArrayList<>();
-            for (Question question : step.getQuestions()) {
-                QuestionDto dto = new QuestionDto();
-                dto.setId(question.getId());
-                dto.setQuestionText(question.getQuestionText());
-                questionDtos.add(dto);
-            }
-
-            List<DiscussionDto> discussionDtos = new ArrayList<>();
-            for (DiscussionPoint discussionPoint : step.getDiscussionPoints()) {
-                DiscussionDto dto = new DiscussionDto();
-                dto.setId(discussionPoint.getId());
-                dto.setDiscussionText(discussionPoint.getDiscussionText());
-                discussionDtos.add(dto);
-            }
-
-            List<TeacherTextDto> teacherTextDtos = new ArrayList<>();
-            for (TeacherText teacherText : step.getTeacherText()) {
-                TeacherTextDto teacherTextDto = new TeacherTextDto();
-                teacherTextDto.setId(teacherText.getId());
-                teacherTextDto.setTeacherText(teacherText.getTeacherText());
-                teacherTextDtos.add(teacherTextDto);
-            }
-
-            List<MediaDto> mediaDtos = new ArrayList<>();
-            for (MediaElement mediaElement : step.getMediaElements()) {
-                MediaDto dto = new MediaDto();
-                dto.setId(mediaElement.getId());
-                dto.setMediaType(mediaElement.getMediaType());
-                dto.setFileName(mediaElement.getFileName());
-                dto.setFileData(mediaElement.getFileData());
-                mediaDtos.add(dto);
-            }
-
-            stepDto.setQuestions(questionDtos);
-            stepDto.setDiscussionPoints(discussionDtos);
-            stepDto.setTeacherTexts(teacherTextDtos);
-            stepDto.setMediaElements(mediaDtos);
-
-            gameStepDtos.add(stepDto);
-        }
-
-        GameDto gameDto = new GameDto();
-        gameDto.setGameId(game.getId());
-        gameDto.setName(game.getName());
-        gameDto.setCategoryId(game.getCategoryId());
-        gameDto.setDescription(game.getDescription());
-        gameDto.setGameSteps(gameStepDtos);
-        return gameDto;
+        return stepDtos;
     }
 
     private void validateAddGameData(CreateGameRequest gameRequest) {
