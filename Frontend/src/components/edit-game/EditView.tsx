@@ -188,7 +188,7 @@ function EditView() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                 />
-            </div>ˇ
+            </div>
             <hr></hr>
             {/*Ei taha lisada uut steppi*/}
             {<button type="button" id="stepBtn" onClick={addStep}>
