@@ -1,6 +1,5 @@
 package com.Cinimini.projekt.service;
 
-import com.Cinimini.projekt.dto.GameStepDto;
 import com.Cinimini.projekt.dto.*;
 import com.Cinimini.projekt.entity.*;
 import com.Cinimini.projekt.repository.*;
@@ -371,12 +370,6 @@ public class GameService {
         game.setDescription(gameRequest.getDescription());
         game.setActive(true);
         Game savedGame = gameRepository.save(game);
-
-//        // testing rollback
-//        System.out.println("Before exception");
-//        if (true) {
-//            throw new RuntimeException("Transaction test");
-//        }
 
         int stepOrder = 1;
         for (GameStepRequest stepRequest : gameRequest.getSteps()) {

@@ -83,7 +83,6 @@ public class GameStepService {
         mediaRepository.save(mediaElement);
     }
 
-
     public void handleSavingNewQuestions(GameStepRequest stepRequest, GameStep savedStep) {
         var questionOrder = 1;
 
@@ -103,7 +102,7 @@ public class GameStepService {
     public void handleSavingNewDiscussionPoints(GameStepRequest stepRequest, GameStep savedStep) {
         var questionOrder = 1;
 
-        if(stepRequest.getDiscussionPoints() != null) {
+        if (stepRequest.getDiscussionPoints() != null) {
             for (DiscussionDto discussionDto : stepRequest.getDiscussionPoints()) {
                 DiscussionPoint toBeSavedDiscussionPoint = new DiscussionPoint();
 
